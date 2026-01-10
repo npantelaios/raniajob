@@ -1,0 +1,176 @@
+schedule:
+  days_back: 2
+  sleep_seconds: 1.0
+
+# Keywords matched against title + description.
+include_keywords:
+  - CRISPR
+  - gene editing
+  - functional genomics
+  - CRISPR screen
+  - molecular biology
+  - microbiology
+  - therapeutics
+  - discovery
+  - biotech
+  - genomics
+  - life sciences
+
+# Keywords that exclude listings even if they match include_keywords.
+exclude_keywords:
+  - pharmacology
+  - oncology
+  - protein
+  - chemistry
+  - human cells
+  - rodents
+  - rodent
+  - QC
+
+# Job titles matched against the title only.
+job_titles:
+  - Scientist
+  - Research Scientist
+  - Molecular Biologist
+  - Functional Genomics Scientist
+  - Discovery Scientist
+  - Project Manager
+  - CRISPR Scientist
+  - Genome Editing
+  - Therapeutics Scientist
+  - Microbiology Researcher
+  - Biology Scientist
+
+sites:
+  - name: biospace
+    type: generic
+    enabled: true
+    base_url: https://jobs.biospace.com
+    start_urls:
+      - https://jobs.biospace.com/searchjobs/
+    max_pages: 1
+    list_item_selector: TODO_LIST_ITEM_SELECTOR
+    title_selector: TODO_TITLE_SELECTOR
+    company_selector: TODO_COMPANY_SELECTOR
+    date_selector: TODO_DATE_SELECTOR
+    date_attr: TODO_DATE_ATTR
+    url_selector: TODO_URL_SELECTOR
+    url_attr: href
+    description_selector: TODO_DESCRIPTION_SELECTOR
+    detail_page:
+      enabled: false
+      description_selector: TODO_DETAIL_DESCRIPTION_SELECTOR
+
+  - name: work_in_biotech
+    type: generic
+    enabled: true
+    base_url: https://workinbiotech.com
+    start_urls:
+      - https://workinbiotech.com
+    max_pages: 1
+    list_item_selector: TODO_LIST_ITEM_SELECTOR
+    title_selector: TODO_TITLE_SELECTOR
+    company_selector: TODO_COMPANY_SELECTOR
+    date_selector: TODO_DATE_SELECTOR
+    date_attr: TODO_DATE_ATTR
+    url_selector: TODO_URL_SELECTOR
+    url_attr: href
+    description_selector: TODO_DESCRIPTION_SELECTOR
+    detail_page:
+      enabled: false
+      description_selector: TODO_DETAIL_DESCRIPTION_SELECTOR
+
+  - name: biotech_careers
+    type: generic
+    enabled: true
+    base_url: https://biotech-careers.org
+    start_urls:
+      - https://biotech-careers.org/job-board
+    max_pages: 1
+    list_item_selector: TODO_LIST_ITEM_SELECTOR
+    title_selector: TODO_TITLE_SELECTOR
+    company_selector: TODO_COMPANY_SELECTOR
+    date_selector: TODO_DATE_SELECTOR
+    date_attr: TODO_DATE_ATTR
+    url_selector: TODO_URL_SELECTOR
+    url_attr: href
+    description_selector: TODO_DESCRIPTION_SELECTOR
+    detail_page:
+      enabled: false
+      description_selector: TODO_DETAIL_DESCRIPTION_SELECTOR
+
+  - name: hire_lifescience
+    type: generic
+    enabled: true
+    base_url: https://hirelifescience.com
+    start_urls:
+      - https://hirelifescience.com/candidate/job_search/quick/results?Specialty=-1&job_type=-1&state=-1&sort_field=post_date&sort_dir=desc
+    max_pages: 1
+    list_item_selector: TODO_LIST_ITEM_SELECTOR
+    title_selector: TODO_TITLE_SELECTOR
+    company_selector: TODO_COMPANY_SELECTOR
+    date_selector: TODO_DATE_SELECTOR
+    date_attr: TODO_DATE_ATTR
+    url_selector: TODO_URL_SELECTOR
+    url_attr: href
+    description_selector: TODO_DESCRIPTION_SELECTOR
+    detail_page:
+      enabled: false
+      description_selector: TODO_DETAIL_DESCRIPTION_SELECTOR
+
+  - name: massbio
+    type: generic
+    enabled: true
+    base_url: https://careers.massbio.org
+    start_urls:
+      - https://careers.massbio.org/jobs/
+    max_pages: 1
+    list_item_selector: TODO_LIST_ITEM_SELECTOR
+    title_selector: TODO_TITLE_SELECTOR
+    company_selector: TODO_COMPANY_SELECTOR
+    date_selector: TODO_DATE_SELECTOR
+    date_attr: TODO_DATE_ATTR
+    url_selector: TODO_URL_SELECTOR
+    url_attr: href
+    description_selector: TODO_DESCRIPTION_SELECTOR
+    detail_page:
+      enabled: false
+      description_selector: TODO_DETAIL_DESCRIPTION_SELECTOR
+
+  - name: f6s
+    type: generic
+    enabled: true
+    base_url: https://www.f6s.com
+    start_urls:
+      - https://www.f6s.com/jobs
+    max_pages: 1
+    list_item_selector: TODO_LIST_ITEM_SELECTOR
+    title_selector: TODO_TITLE_SELECTOR
+    company_selector: TODO_COMPANY_SELECTOR
+    date_selector: TODO_DATE_SELECTOR
+    date_attr: TODO_DATE_ATTR
+    url_selector: TODO_URL_SELECTOR
+    url_attr: href
+    description_selector: TODO_DESCRIPTION_SELECTOR
+    detail_page:
+      enabled: false
+      description_selector: TODO_DETAIL_DESCRIPTION_SELECTOR
+
+  - name: biopharmguy
+    type: generic
+    enabled: false
+    base_url: https://biopharmguy.com
+    start_urls:
+      - https://biopharmguy.com/links/state-ny-all-geo.php
+    max_pages: 1
+    list_item_selector: TODO_LIST_ITEM_SELECTOR
+    title_selector: TODO_TITLE_SELECTOR
+    company_selector: TODO_COMPANY_SELECTOR
+    date_selector: TODO_DATE_SELECTOR
+    date_attr: TODO_DATE_ATTR
+    url_selector: TODO_URL_SELECTOR
+    url_attr: href
+    description_selector: TODO_DESCRIPTION_SELECTOR
+    detail_page:
+      enabled: false
+      description_selector: TODO_DETAIL_DESCRIPTION_SELECTOR

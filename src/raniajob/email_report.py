@@ -1,15 +1,26 @@
 """Email reporting module for job scraping results."""
+
 from __future__ import annotations
 
 import os
 import smtplib
 import sys
-from collections import defaultdict
-from datetime import datetime
+import csv
+from pathlib import Path
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+from collections import defaultdict
+from datetime import datetime
 from typing import Dict, List, Optional
 from urllib.parse import urlparse
+
+# PDF generation imports
+from reportlab.lib.pagesizes import LETTER
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
 
 from .models import JobPosting
 
@@ -54,11 +65,83 @@ def _count_by_domain(items: List[JobPosting]) -> dict:
     return counts
 
 
+def _write_jobs_csv(jobs: List[JobPosting], output_path: str) -> str:
+    """Write job postings to a CSV file and return the file path."""
+    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+
+    with open(output_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(["#", "Title", "Company", "URL", "Location"])
+        for idx, job in enumerate(jobs, 1):
+            writer.writerow(
+                [
+                    idx,
+                    job.title,
+                    job.company,
+                    job.url,
+                    job.location or "N/A",
+                ]
+            )
+    return output_path
+
+
+# PDF writing helper
+def _write_jobs_pdf(jobs: List[JobPosting], output_path: str, title: str) -> str:
+    """Write job postings to a PDF file and return the file path."""
+    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+
+    doc = SimpleDocTemplate(output_path, pagesize=LETTER)
+    styles = getSampleStyleSheet()
+    elements = []
+
+    elements.append(Paragraph(title, styles["Title"]))
+    elements.append(
+        Paragraph(
+            f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+            styles["Normal"],
+        )
+    )
+    elements.append(Paragraph(" ", styles["Normal"]))
+
+    table_data = [["#", "Title", "Company", "URL", "Location"]]
+    for idx, job in enumerate(jobs, 1):
+        table_data.append(
+            [
+                str(idx),
+                job.title,
+                job.company,
+                job.url,
+                job.location or "N/A",
+            ]
+        )
+
+    table = Table(table_data, repeatRows=1)
+    table.setStyle(
+        TableStyle(
+            [
+                ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
+                ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+                ("FONT", (0, 0), (-1, 0), "Helvetica-Bold"),
+                ("VALIGN", (0, 0), (-1, -1), "TOP"),
+                ("LEFTPADDING", (0, 0), (-1, -1), 6),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+                ("TOPPADDING", (0, 0), (-1, -1), 4),
+            ]
+        )
+    )
+
+    elements.append(table)
+    doc.build(elements)
+
+    return output_path
+
+
 def generate_report_html(
     unfiltered: List[JobPosting],
     filtered: List[JobPosting],
     unfiltered_path: str,
-    filtered_path: str
+    filtered_path: str,
 ) -> str:
     """Generate an HTML report of job scraping results, grouped by domain."""
     unfiltered_by_domain = _count_by_domain(unfiltered)
@@ -204,7 +287,7 @@ def send_email_report(
     filtered_path: str,
     recipient_emails: Optional[List[str]] = None,
     sender_email: Optional[str] = None,
-    app_password: Optional[str] = None
+    app_password: Optional[str] = None,
 ) -> bool:
     """Send an email report with job scraping results.
 
@@ -225,25 +308,55 @@ def send_email_report(
         recipients = recipient_emails
     else:
         recipients_str = os.environ.get("REPORT_RECIPIENTS", "")
-        recipients = [email.strip() for email in recipients_str.split(",") if email.strip()]
+        recipients = [
+            email.strip() for email in recipients_str.split(",") if email.strip()
+        ]
 
     if not sender or not password:
-        print("Email error: Missing credentials. Set GMAIL_ADDRESS and GMAIL_APP_PASSWORD environment variables.", file=sys.stderr)
+        print(
+            "Email error: Missing credentials. Set GMAIL_ADDRESS and GMAIL_APP_PASSWORD environment variables.",
+            file=sys.stderr,
+        )
         return False
 
     if not recipients:
-        print("Email error: No recipients specified. Set REPORT_RECIPIENTS environment variable (comma-separated for multiple).", file=sys.stderr)
+        print(
+            "Email error: No recipients specified. Set REPORT_RECIPIENTS environment variable (comma-separated for multiple).",
+            file=sys.stderr,
+        )
         return False
+
+    # Prepare output directory and file paths
+    output_dir = Path("outputs_csv_format")
+    date_str = datetime.now().strftime("%Y%m%d")
+
+    filtered_csv_path = output_dir / f"filtered_jobs_{date_str}.csv"
+    unfiltered_csv_path = output_dir / f"unfiltered_jobs_{date_str}.csv"
+
+    filtered_pdf_path = output_dir / f"filtered_jobs_{date_str}.pdf"
+    unfiltered_pdf_path = output_dir / f"unfiltered_jobs_{date_str}.pdf"
+
+    # Write CSV files
+    _write_jobs_csv(filtered, str(filtered_csv_path))
+    _write_jobs_csv(unfiltered, str(unfiltered_csv_path))
+
+    # Write PDF files
+    _write_jobs_pdf(filtered, str(filtered_pdf_path), "Filtered Job Results")
+    _write_jobs_pdf(unfiltered, str(unfiltered_pdf_path), "Unfiltered Job Results")
 
     try:
         # Create message
         msg = MIMEMultipart("alternative")
-        msg["Subject"] = f"🔬 Job Scraping Report - {datetime.now().strftime('%Y-%m-%d')} - {len(filtered)} jobs found"
+        msg["Subject"] = (
+            f"🔬 Job Scraping Report - {datetime.now().strftime('%Y-%m-%d')} - {len(filtered)} jobs found"
+        )
         msg["From"] = sender
         msg["To"] = ", ".join(recipients)
 
         # Generate HTML report
-        html_content = generate_report_html(unfiltered, filtered, unfiltered_path, filtered_path)
+        html_content = generate_report_html(
+            unfiltered, filtered, unfiltered_path, filtered_path
+        )
 
         # Group by domain for text version
         filtered_by_domain = _count_by_domain(filtered)
@@ -271,12 +384,31 @@ Jobs by Domain:
         msg.attach(MIMEText(text_content, "plain"))
         msg.attach(MIMEText(html_content, "html"))
 
+        # Attach CSV and PDF files
+        for path in [
+            filtered_csv_path,
+            unfiltered_csv_path,
+            filtered_pdf_path,
+            unfiltered_pdf_path,
+        ]:
+            with open(path, "rb") as f:
+                part = MIMEBase("application", "octet-stream")
+                part.set_payload(f.read())
+            encoders.encode_base64(part)
+            part.add_header(
+                "Content-Disposition", f'attachment; filename="{path.name}"'
+            )
+            msg.attach(part)
+
         # Send email via Gmail SMTP
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
             server.login(sender, password)
             server.sendmail(sender, recipients, msg.as_string())
 
-        print(f"✉️  Email report sent successfully to: {', '.join(recipients)}", file=sys.stderr)
+        print(
+            f"✉️  Email report sent successfully to: {', '.join(recipients)}",
+            file=sys.stderr,
+        )
         return True
 
     except Exception as e:

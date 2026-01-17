@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import sys
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Iterable, List, Set
 
 from .config import AppConfig, load_config
@@ -13,6 +14,7 @@ from .models import JobPosting
 from .parser import extract_detail_description
 from .sites.registry import get_parser
 from .storage import write_csv, write_json
+from .email_report import send_email_report
 
 
 def _dedupe(items: Iterable[JobPosting]) -> List[JobPosting]:
@@ -87,14 +89,14 @@ def _apply_filters(
         filtered.append(item)
 
     # Log comprehensive filtering statistics
-    print(f"\\nFILTER STATISTICS:", file=sys.stderr)
+    print("\nFILTER STATISTICS:", file=sys.stderr)
     print(f"  Total input jobs: {filter_stats['total_input']}", file=sys.stderr)
     print(f"  Date filtered: {filter_stats['date_filtered']}", file=sys.stderr)
     print(f"  Job title filtered: {filter_stats['job_title_filtered']}", file=sys.stderr)
     print(f"  Include keyword filtered: {filter_stats['include_keyword_filtered']}", file=sys.stderr)
     print(f"  Exclude keyword filtered: {filter_stats['exclude_keyword_filtered']}", file=sys.stderr)
     print(f"  Passed all filters: {filter_stats['passed_all_filters']}", file=sys.stderr)
-    print(f"", file=sys.stderr)
+    print("", file=sys.stderr)
 
     return filtered
 
@@ -103,7 +105,67 @@ def _sort_items(items: Iterable[JobPosting]) -> List[JobPosting]:
     return sorted(items, key=lambda item: item.posted_at or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
 
 
-def run_pipeline(config: AppConfig, output_path: str, output_format: str, extra_keywords: List[str]) -> List[JobPosting]:
+def _count_by_domain(items: List[JobPosting]) -> dict:
+    """Count jobs by URL domain."""
+    from urllib.parse import urlparse
+    counts: dict = {}
+    for item in items:
+        try:
+            domain = urlparse(item.url).netloc or "unknown"
+            if domain.startswith("www."):
+                domain = domain[4:]
+        except Exception:
+            domain = "unknown"
+        counts[domain] = counts.get(domain, 0) + 1
+    return counts
+
+
+def _print_stats_report(unfiltered: List[JobPosting], filtered: List[JobPosting], unfiltered_path: str, filtered_path: str) -> None:
+    """Print a summary stats report."""
+    unfiltered_by_domain = _count_by_domain(unfiltered)
+    filtered_by_domain = _count_by_domain(filtered)
+
+    print("\n" + "=" * 60, file=sys.stderr)
+    print("                    JOB SCRAPING REPORT", file=sys.stderr)
+    print("=" * 60, file=sys.stderr)
+
+    print(f"\nUNFILTERED RESULTS: {len(unfiltered)} total jobs", file=sys.stderr)
+    print(f"  File: {unfiltered_path}", file=sys.stderr)
+    print("  By domain:", file=sys.stderr)
+    for domain, count in sorted(unfiltered_by_domain.items(), key=lambda x: -x[1]):
+        print(f"    - {domain}: {count} jobs", file=sys.stderr)
+
+    print(f"\nFILTERED RESULTS: {len(filtered)} total jobs", file=sys.stderr)
+    print(f"  File: {filtered_path}", file=sys.stderr)
+    print("  By domain:", file=sys.stderr)
+    for domain, count in sorted(filtered_by_domain.items(), key=lambda x: -x[1]):
+        print(f"    - {domain}: {count} jobs", file=sys.stderr)
+
+    print("\n" + "=" * 60, file=sys.stderr)
+
+
+def _generate_output_paths(base_name: str, output_format: str) -> tuple:
+    """Generate timestamped output paths for filtered and unfiltered results."""
+    # Get project root and create outputs directory
+    project_root = Path(__file__).parent.parent.parent
+    outputs_dir = project_root / "outputs"
+    outputs_dir.mkdir(exist_ok=True)
+
+    # Generate timestamp
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    # Create filenames with timestamp at the end
+    ext = f".{output_format}"
+    filtered_filename = f"{base_name}_{timestamp}{ext}"
+    unfiltered_filename = f"NO_FILTERING_{base_name}_{timestamp}{ext}"
+
+    filtered_path = outputs_dir / filtered_filename
+    unfiltered_path = outputs_dir / unfiltered_filename
+
+    return str(filtered_path), str(unfiltered_path)
+
+
+def run_pipeline(config: AppConfig, output_base_name: str, output_format: str, extra_keywords: List[str], send_email: bool = False) -> List[JobPosting]:
     include_keywords = normalize_keywords(config.include_keywords + extra_keywords)
     exclude_keywords = normalize_keywords(config.exclude_keywords)
     job_titles = normalize_keywords(config.job_titles)
@@ -145,6 +207,17 @@ def run_pipeline(config: AppConfig, output_path: str, output_format: str, extra_
 
     deduped = _dedupe(all_items)
 
+    # Generate output paths with timestamps
+    filtered_path, unfiltered_path = _generate_output_paths(output_base_name, output_format)
+
+    # Write unfiltered results (all deduped items, sorted by date)
+    unfiltered_sorted = _sort_items(deduped)
+    if output_format == "json":
+        write_json(unfiltered_path, unfiltered_sorted)
+    elif output_format == "csv":
+        write_csv(unfiltered_path, unfiltered_sorted)
+    print(f"Wrote {len(unfiltered_sorted)} unfiltered jobs to: {unfiltered_path}", file=sys.stderr)
+
     # Apply location filtering to ensure only NY, NJ, PA, MA jobs
     target_states = get_default_target_states()
     location_filtered = filter_jobs_by_location(deduped, target_states)
@@ -154,12 +227,22 @@ def run_pipeline(config: AppConfig, output_path: str, output_format: str, extra_
     filtered = _apply_filters(location_filtered, include_keywords, exclude_keywords, job_titles, config.schedule.days_back)
     ordered = _sort_items(filtered)
 
+    # Write filtered results
     if output_format == "json":
-        write_json(output_path, ordered)
+        write_json(filtered_path, ordered)
     elif output_format == "csv":
-        write_csv(output_path, ordered)
+        write_csv(filtered_path, ordered)
     else:
         raise ValueError(f"Unsupported output format: {output_format}")
+
+    print(f"Wrote {len(ordered)} filtered jobs to: {filtered_path}", file=sys.stderr)
+
+    # Print final stats report
+    _print_stats_report(unfiltered_sorted, ordered, unfiltered_path, filtered_path)
+
+    # Send email report if requested
+    if send_email:
+        send_email_report(unfiltered_sorted, ordered, unfiltered_path, filtered_path)
 
     return ordered
 
@@ -167,14 +250,15 @@ def run_pipeline(config: AppConfig, output_path: str, output_format: str, extra_
 def main() -> int:
     parser = argparse.ArgumentParser(description="Daily job aggregation and filtering.")
     parser.add_argument("--config", required=True, help="Path to YAML config file.")
-    parser.add_argument("--output", required=True, help="Output file path.")
+    parser.add_argument("--output", default="jobs", help="Base name for output files (without extension). Files will be saved to outputs/ folder with timestamp.")
     parser.add_argument("--format", choices=["json", "csv"], default="json", help="Output format.")
     parser.add_argument("--keyword", action="append", default=[], help="Extra keyword to filter on.")
+    parser.add_argument("--email", action="store_true", help="Send email report after scraping. Requires GMAIL_ADDRESS, GMAIL_APP_PASSWORD, and REPORT_RECIPIENT environment variables.")
 
     args = parser.parse_args()
 
     app_config = load_config(args.config)
-    run_pipeline(app_config, args.output, args.format, args.keyword)
+    run_pipeline(app_config, args.output, args.format, args.keyword, send_email=args.email)
     return 0
 
 

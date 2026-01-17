@@ -69,148 +69,148 @@ sites:
     type: jobspy
     enabled: true
     search_terms:
-      - "CRISPR"
+      - "biotech scientist"
       - "molecular biology"
-      - "functional genomics"
-      - "biotech"
-      - "gene editing"
-      - "scientist"
-      - "researcher"
-      - "biologist"
       - "genomics"
-      - "therapeutics"
-      - "pharmaceuticals"
       - "life sciences"
     locations:
       - "New York, NY"
       - "Boston, MA"
       - "Philadelphia, PA"
-      - "Newark, NJ"
-      - "Cambridge, MA"
-      - "Pittsburgh, PA"
-      - "Jersey City, NJ"
-      - "Albany, NY"
+      - "New Jersey"
     job_sites:
       - "indeed"
-      - "glassdoor"
       - "zip_recruiter"
     results_wanted: 100
     hours_old: 168
 
+  # Disabled: Requires JavaScript rendering (jobs loaded via JS)
   - name: biospace
     type: generic
-    enabled: true
+    enabled: false
     base_url: https://jobs.biospace.com
     start_urls:
-      - https://jobs.biospace.com/searchjobs/
+      - https://jobs.biospace.com/jobs/
     max_pages: 1
-    list_item_selector: TODO_LIST_ITEM_SELECTOR
-    title_selector: TODO_TITLE_SELECTOR
-    company_selector: TODO_COMPANY_SELECTOR
-    date_selector: TODO_DATE_SELECTOR
-    date_attr: TODO_DATE_ATTR
-    url_selector: TODO_URL_SELECTOR
+    list_item_selector: "li[data-job-id]"
+    title_selector: "h3 a"
+    company_selector: ".company"
+    date_selector: ""
+    date_attr: ""
+    url_selector: "h3 a"
     url_attr: href
-    description_selector: TODO_DESCRIPTION_SELECTOR
+    location_selector: ".location"
+    description_selector: ""
     detail_page:
       enabled: false
-      description_selector: TODO_DETAIL_DESCRIPTION_SELECTOR
+      description_selector: ""
 
+  # Disabled: Uses dynamic CSS class names that change frequently
   - name: work_in_biotech
     type: generic
-    enabled: true
+    enabled: false
     base_url: https://workinbiotech.com
     start_urls:
       - https://workinbiotech.com
     max_pages: 1
-    list_item_selector: TODO_LIST_ITEM_SELECTOR
-    title_selector: TODO_TITLE_SELECTOR
-    company_selector: TODO_COMPANY_SELECTOR
-    date_selector: TODO_DATE_SELECTOR
-    date_attr: TODO_DATE_ATTR
-    url_selector: TODO_URL_SELECTOR
+    list_item_selector: ".css-1vktrai"
+    title_selector: ".css-35ezg3"
+    company_selector: ""
+    date_selector: ""
+    date_attr: ""
+    url_selector: "a"
     url_attr: href
-    description_selector: TODO_DESCRIPTION_SELECTOR
+    location_selector: ""
+    description_selector: ""
     detail_page:
       enabled: false
-      description_selector: TODO_DETAIL_DESCRIPTION_SELECTOR
+      description_selector: ""
 
+  # Disabled: SSL handshake failure (site has SSL issues)
   - name: biotech_careers
     type: generic
-    enabled: true
+    enabled: false
     base_url: https://biotech-careers.org
     start_urls:
       - https://biotech-careers.org/job-board
     max_pages: 1
-    list_item_selector: TODO_LIST_ITEM_SELECTOR
-    title_selector: TODO_TITLE_SELECTOR
-    company_selector: TODO_COMPANY_SELECTOR
-    date_selector: TODO_DATE_SELECTOR
-    date_attr: TODO_DATE_ATTR
-    url_selector: TODO_URL_SELECTOR
+    list_item_selector: ".job-item"
+    title_selector: "h3"
+    company_selector: ".company"
+    date_selector: ""
+    date_attr: ""
+    url_selector: "a"
     url_attr: href
-    description_selector: TODO_DESCRIPTION_SELECTOR
+    location_selector: ".location"
+    description_selector: ""
     detail_page:
       enabled: false
-      description_selector: TODO_DETAIL_DESCRIPTION_SELECTOR
+      description_selector: ""
 
+  # Disabled: Requires JavaScript rendering
   - name: hire_lifescience
     type: generic
-    enabled: true
+    enabled: false
     base_url: https://hirelifescience.com
     start_urls:
       - https://hirelifescience.com/candidate/job_search/quick/results?Specialty=-1&job_type=-1&state=-1&sort_field=post_date&sort_dir=desc
     max_pages: 1
-    list_item_selector: TODO_LIST_ITEM_SELECTOR
-    title_selector: TODO_TITLE_SELECTOR
-    company_selector: TODO_COMPANY_SELECTOR
-    date_selector: TODO_DATE_SELECTOR
-    date_attr: TODO_DATE_ATTR
-    url_selector: TODO_URL_SELECTOR
+    list_item_selector: ".job-listing"
+    title_selector: "a[href*='/career/']"
+    company_selector: ""
+    date_selector: ""
+    date_attr: ""
+    url_selector: "a[href*='/career/']"
     url_attr: href
-    description_selector: TODO_DESCRIPTION_SELECTOR
+    location_selector: ""
+    description_selector: ""
     detail_page:
       enabled: false
-      description_selector: TODO_DETAIL_DESCRIPTION_SELECTOR
+      description_selector: ""
 
+  # Disabled: Returns 403 Forbidden (aggressive anti-bot protection)
   - name: massbio
     type: generic
-    enabled: true
+    enabled: false
     base_url: https://careers.massbio.org
     start_urls:
       - https://careers.massbio.org/jobs/
     max_pages: 1
-    list_item_selector: TODO_LIST_ITEM_SELECTOR
-    title_selector: TODO_TITLE_SELECTOR
-    company_selector: TODO_COMPANY_SELECTOR
-    date_selector: TODO_DATE_SELECTOR
-    date_attr: TODO_DATE_ATTR
-    url_selector: TODO_URL_SELECTOR
+    list_item_selector: ".job-listing"
+    title_selector: ".job-title"
+    company_selector: ".company-name"
+    date_selector: ""
+    date_attr: ""
+    url_selector: "a"
     url_attr: href
-    description_selector: TODO_DESCRIPTION_SELECTOR
+    location_selector: ".location"
+    description_selector: ""
     detail_page:
       enabled: false
-      description_selector: TODO_DETAIL_DESCRIPTION_SELECTOR
+      description_selector: ""
 
+  # Disabled: Returns 405 Method Not Allowed (blocks scraping)
   - name: f6s
     type: generic
-    enabled: true
+    enabled: false
     base_url: https://www.f6s.com
     start_urls:
       - https://www.f6s.com/jobs
     max_pages: 1
-    list_item_selector: TODO_LIST_ITEM_SELECTOR
-    title_selector: TODO_TITLE_SELECTOR
-    company_selector: TODO_COMPANY_SELECTOR
-    date_selector: TODO_DATE_SELECTOR
-    date_attr: TODO_DATE_ATTR
-    url_selector: TODO_URL_SELECTOR
+    list_item_selector: ".job-card"
+    title_selector: ".job-title"
+    company_selector: ".company"
+    date_selector: ""
+    date_attr: ""
+    url_selector: "a"
     url_attr: href
-    description_selector: TODO_DESCRIPTION_SELECTOR
+    location_selector: ".location"
+    description_selector: ""
     detail_page:
       enabled: false
-      description_selector: TODO_DETAIL_DESCRIPTION_SELECTOR
+      description_selector: ""
 
+  # Disabled: Company directory, not a job board
   - name: biopharmguy
     type: generic
     enabled: false
@@ -218,14 +218,15 @@ sites:
     start_urls:
       - https://biopharmguy.com/links/state-ny-all-geo.php
     max_pages: 1
-    list_item_selector: TODO_LIST_ITEM_SELECTOR
-    title_selector: TODO_TITLE_SELECTOR
-    company_selector: TODO_COMPANY_SELECTOR
-    date_selector: TODO_DATE_SELECTOR
-    date_attr: TODO_DATE_ATTR
-    url_selector: TODO_URL_SELECTOR
+    list_item_selector: ".company-item"
+    title_selector: ".title"
+    company_selector: ".company"
+    date_selector: ""
+    date_attr: ""
+    url_selector: "a"
     url_attr: href
-    description_selector: TODO_DESCRIPTION_SELECTOR
+    location_selector: ".location"
+    description_selector: ""
     detail_page:
       enabled: false
-      description_selector: TODO_DETAIL_DESCRIPTION_SELECTOR
+      description_selector: ""

@@ -63,9 +63,17 @@ def parse_posted_date(raw: str, now: Optional[datetime] = None) -> Optional[date
     return None
 
 
-def filter_by_date(posted_at: Optional[datetime], days_back: int, now: Optional[datetime] = None) -> bool:
+def filter_by_date(posted_at: Optional[datetime], days_back: int, now: Optional[datetime] = None, allow_no_date: bool = True) -> bool:
+    """Filter jobs by posted date.
+
+    Args:
+        posted_at: The posting date of the job
+        days_back: Number of days back to allow
+        now: Current time (defaults to now)
+        allow_no_date: If True, jobs with no date pass the filter (default True)
+    """
     if posted_at is None:
-        return False
+        return allow_no_date  # Allow jobs with unknown posting dates
     now = now or datetime.now(timezone.utc)
     cutoff = now - timedelta(days=days_back)
     return posted_at >= cutoff

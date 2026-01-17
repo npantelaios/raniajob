@@ -37,9 +37,10 @@ def extract_job_fields(node, config, base_url: Optional[str]):
     date_raw = _select_first_attr(node, config.date_selector, config.date_attr) if config.date_selector else ""
     url_raw = _select_first_attr(node, config.url_selector, config.url_attr)
     description = _select_first_text(node, config.description_selector) if config.description_selector else ""
+    location = _select_first_text(node, config.location_selector) if config.location_selector else ""
 
     url = urljoin(base_url, url_raw) if base_url else url_raw
-    return title, company, date_raw, url, description
+    return title, company, date_raw, url, description, location
 
 
 def extract_detail_description(html: str, selector: Optional[str]) -> str:

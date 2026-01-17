@@ -33,6 +33,7 @@ class SiteConfig:
     url_selector: str
     url_attr: Optional[str]
     description_selector: Optional[str]
+    location_selector: Optional[str]
     detail_page: DetailPageConfig
     # JobSpy-specific fields
     search_terms: Optional[List[str]] = None
@@ -111,6 +112,7 @@ def _load_site(raw: Dict[str, Any]) -> SiteConfig:
         url_selector=url_selector,
         url_attr=raw.get("url_attr"),
         description_selector=raw.get("description_selector"),
+        location_selector=raw.get("location_selector"),
         detail_page=_load_detail_page(raw.get("detail_page")),
         # JobSpy-specific configuration
         search_terms=raw.get("search_terms"),

@@ -34,6 +34,12 @@ class SiteConfig:
     url_attr: Optional[str]
     description_selector: Optional[str]
     detail_page: DetailPageConfig
+    # JobSpy-specific fields
+    search_terms: Optional[List[str]] = None
+    locations: Optional[List[str]] = None
+    job_sites: Optional[List[str]] = None
+    results_wanted: Optional[int] = None
+    hours_old: Optional[int] = None
 
 
 @dataclass
@@ -43,8 +49,17 @@ class ScheduleConfig:
 
 
 @dataclass
+class FetcherConfig:
+    sleep_seconds: float
+    rotate_user_agents: bool
+    use_cloudscraper: bool
+    timeout: int
+
+
+@dataclass
 class AppConfig:
     schedule: ScheduleConfig
+    fetcher: FetcherConfig
     include_keywords: List[str]
     exclude_keywords: List[str]
     job_titles: List[str]
@@ -67,22 +82,42 @@ def _load_detail_page(raw: Dict[str, Any]) -> DetailPageConfig:
 
 
 def _load_site(raw: Dict[str, Any]) -> SiteConfig:
+    site_type = raw.get("type", "generic")
+
+    # For JobSpy sites, make certain fields optional
+    if site_type == "jobspy":
+        list_item_selector = raw.get("list_item_selector", "")
+        title_selector = raw.get("title_selector", "")
+        url_selector = raw.get("url_selector", "")
+        start_urls = raw.get("start_urls", [""])
+    else:
+        list_item_selector = _require(raw, "list_item_selector", "site")
+        title_selector = _require(raw, "title_selector", "site")
+        url_selector = _require(raw, "url_selector", "site")
+        start_urls = list(_require(raw, "start_urls", "site"))
+
     return SiteConfig(
         name=_require(raw, "name", "site"),
-        type=raw.get("type", "generic"),
+        type=site_type,
         enabled=bool(raw.get("enabled", True)),
         base_url=raw.get("base_url"),
-        start_urls=list(_require(raw, "start_urls", "site")),
+        start_urls=start_urls,
         max_pages=int(raw.get("max_pages", 1)),
-        list_item_selector=_require(raw, "list_item_selector", "site"),
-        title_selector=_require(raw, "title_selector", "site"),
+        list_item_selector=list_item_selector,
+        title_selector=title_selector,
         company_selector=raw.get("company_selector"),
         date_selector=raw.get("date_selector"),
         date_attr=raw.get("date_attr"),
-        url_selector=_require(raw, "url_selector", "site"),
+        url_selector=url_selector,
         url_attr=raw.get("url_attr"),
         description_selector=raw.get("description_selector"),
         detail_page=_load_detail_page(raw.get("detail_page")),
+        # JobSpy-specific configuration
+        search_terms=raw.get("search_terms"),
+        locations=raw.get("locations"),
+        job_sites=raw.get("job_sites"),
+        results_wanted=raw.get("results_wanted"),
+        hours_old=raw.get("hours_old"),
     )
 
 
@@ -96,6 +131,14 @@ def load_config(path: str) -> AppConfig:
         sleep_seconds=float(schedule_raw.get("sleep_seconds", 0.0)),
     )
 
+    fetcher_raw = raw.get("fetcher", {})
+    fetcher = FetcherConfig(
+        sleep_seconds=float(fetcher_raw.get("sleep_seconds", schedule.sleep_seconds)),
+        rotate_user_agents=bool(fetcher_raw.get("rotate_user_agents", True)),
+        use_cloudscraper=bool(fetcher_raw.get("use_cloudscraper", False)),
+        timeout=int(fetcher_raw.get("timeout", 20)),
+    )
+
     include_keywords_raw = raw.get("include_keywords", raw.get("keywords", []))
     include_keywords = [str(item).strip() for item in include_keywords_raw if str(item).strip()]
     exclude_keywords = [str(item).strip() for item in raw.get("exclude_keywords", []) if str(item).strip()]
@@ -106,6 +149,7 @@ def load_config(path: str) -> AppConfig:
 
     return AppConfig(
         schedule=schedule,
+        fetcher=fetcher,
         include_keywords=include_keywords,
         exclude_keywords=exclude_keywords,
         job_titles=job_titles,

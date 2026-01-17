@@ -3,10 +3,12 @@ from __future__ import annotations
 from typing import Callable, Dict
 
 from .generic import parse_generic_site
+from .jobspy import parse_jobspy_sites
 
 
 PARSERS: Dict[str, Callable] = {
     "generic": parse_generic_site,
+    "jobspy": parse_jobspy_sites,
 }
 
 

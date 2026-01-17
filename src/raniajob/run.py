@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from datetime import datetime, timezone
 from typing import Iterable, List, Set
 
 from .config import AppConfig, load_config
 from .fetcher import Fetcher
 from .filters import exclude_keyword_match, filter_by_date, include_keyword_match, normalize_keywords
+from .location_filters import filter_jobs_by_location, get_default_target_states
 from .models import JobPosting
 from .parser import extract_detail_description
 from .sites.registry import get_parser
@@ -42,17 +44,58 @@ def _apply_filters(
 ) -> List[JobPosting]:
     now = datetime.now(timezone.utc)
     filtered: List[JobPosting] = []
+
+    # Debugging counters
+    filter_stats = {
+        'total_input': 0,
+        'date_filtered': 0,
+        'job_title_filtered': 0,
+        'include_keyword_filtered': 0,
+        'exclude_keyword_filtered': 0,
+        'passed_all_filters': 0
+    }
+
     for item in items:
+        filter_stats['total_input'] += 1
+
+        # Date filtering
         if not filter_by_date(item.posted_at, days_back, now=now):
+            filter_stats['date_filtered'] += 1
+            print(f"DEBUG: Date filtered out: {item.title} (posted: {item.posted_at})", file=sys.stderr)
             continue
+
+        # Job title filtering (only if job_titles is not empty)
         if job_titles and not include_keyword_match(item.title, job_titles):
+            filter_stats['job_title_filtered'] += 1
+            print(f"DEBUG: Job title filtered out: {item.title}", file=sys.stderr)
             continue
+
+        # Include keyword filtering
         combined_text = f"{item.title} {item.description}"
         if not include_keyword_match(combined_text, include_keywords):
+            filter_stats['include_keyword_filtered'] += 1
+            print(f"DEBUG: Include keyword filtered out: {item.title} (no match in: {combined_text[:100]}...)", file=sys.stderr)
             continue
+
+        # Exclude keyword filtering
         if not exclude_keyword_match(combined_text, exclude_keywords):
+            filter_stats['exclude_keyword_filtered'] += 1
+            print(f"DEBUG: Exclude keyword filtered out: {item.title} (excluded term found)", file=sys.stderr)
             continue
+
+        filter_stats['passed_all_filters'] += 1
         filtered.append(item)
+
+    # Log comprehensive filtering statistics
+    print(f"\\nFILTER STATISTICS:", file=sys.stderr)
+    print(f"  Total input jobs: {filter_stats['total_input']}", file=sys.stderr)
+    print(f"  Date filtered: {filter_stats['date_filtered']}", file=sys.stderr)
+    print(f"  Job title filtered: {filter_stats['job_title_filtered']}", file=sys.stderr)
+    print(f"  Include keyword filtered: {filter_stats['include_keyword_filtered']}", file=sys.stderr)
+    print(f"  Exclude keyword filtered: {filter_stats['exclude_keyword_filtered']}", file=sys.stderr)
+    print(f"  Passed all filters: {filter_stats['passed_all_filters']}", file=sys.stderr)
+    print(f"", file=sys.stderr)
+
     return filtered
 
 
@@ -64,7 +107,12 @@ def run_pipeline(config: AppConfig, output_path: str, output_format: str, extra_
     include_keywords = normalize_keywords(config.include_keywords + extra_keywords)
     exclude_keywords = normalize_keywords(config.exclude_keywords)
     job_titles = normalize_keywords(config.job_titles)
-    fetcher = Fetcher(sleep_seconds=config.schedule.sleep_seconds)
+    fetcher = Fetcher(
+        sleep_seconds=config.fetcher.sleep_seconds,
+        timeout=config.fetcher.timeout,
+        rotate_user_agents=config.fetcher.rotate_user_agents,
+        use_cloudscraper=config.fetcher.use_cloudscraper
+    )
 
     all_items: List[JobPosting] = []
     for site in config.sites:
@@ -89,13 +137,21 @@ def run_pipeline(config: AppConfig, output_path: str, output_format: str, extra_
                         description=detail_description,
                         posted_at=item.posted_at,
                         source=item.source,
+                        location=item.location,
                     )
                 )
             parsed_items = enriched_items
         all_items.extend(parsed_items)
 
     deduped = _dedupe(all_items)
-    filtered = _apply_filters(deduped, include_keywords, exclude_keywords, job_titles, config.schedule.days_back)
+
+    # Apply location filtering to ensure only NY, NJ, PA, MA jobs
+    target_states = get_default_target_states()
+    location_filtered = filter_jobs_by_location(deduped, target_states)
+    print(f"Location filtering: kept {len(location_filtered)}/{len(deduped)} jobs from target states (NY, NJ, PA, MA)", file=sys.stderr)
+
+    # Apply other filters (keywords, dates, etc.)
+    filtered = _apply_filters(location_filtered, include_keywords, exclude_keywords, job_titles, config.schedule.days_back)
     ordered = _sort_items(filtered)
 
     if output_format == "json":

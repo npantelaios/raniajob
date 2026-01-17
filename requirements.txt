@@ -2,3 +2,5 @@ requests>=2.31.0
 beautifulsoup4>=4.12.0
 python-dateutil>=2.9.0
 PyYAML>=6.0.1
+cloudscraper>=1.2.71
+python-jobspy>=1.1.90

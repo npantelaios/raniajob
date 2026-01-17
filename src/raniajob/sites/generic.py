@@ -24,6 +24,7 @@ def parse_generic_site(html_pages: Iterable[str], config, base_url: str, source_
                     description=description,
                     posted_at=posted_at,
                     source=source_name,
+                    location=None  # Generic parser doesn't extract location yet
                 )
             )
     return postings

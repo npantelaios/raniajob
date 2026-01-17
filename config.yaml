@@ -1,47 +1,102 @@
 schedule:
-  days_back: 2
+  days_back: 30  # Increased from 2 to 30 days
   sleep_seconds: 1.0
 
-# Keywords matched against title + description.
+# Anti-bot detection settings
+fetcher:
+  sleep_seconds: 5.0          # Increased delay between requests (seconds)
+  rotate_user_agents: true    # Rotate between different browser user-agents
+  use_cloudscraper: true      # Use cloudscraper for Cloudflare bypass
+  timeout: 45                 # Increased request timeout (seconds)
+
+# Keywords matched against title + description - very permissive
 include_keywords:
+  - science
+  - scientist
+  - research
+  - researcher
+  - biology
+  - biotech
+  - biotechnology
+  - life sciences
+  - pharmaceutical
+  - pharma
+  - drug
+  - discovery
+  - development
   - CRISPR
-  - gene editing
-  - functional genomics
-  - CRISPR screen
-  - molecular biology
+  - gene
+  - genetic
+  - genomics
+  - molecular
+  - cellular
+  - biochemistry
   - microbiology
   - therapeutics
-  - discovery
-  - biotech
-  - genomics
-  - life sciences
-
-# Keywords that exclude listings even if they match include_keywords.
-exclude_keywords:
-  - pharmacology
-  - oncology
+  - clinical
+  - lab
+  - laboratory
+  - assay
   - protein
+  - DNA
+  - RNA
+  - cell
+  - tissue
+  - medical
+  - health
+  - diagnostic
+  - vaccine
+  - antibody
+  - enzyme
   - chemistry
-  - human cells
-  - rodents
-  - rodent
-  - QC
+  - chemical
 
-# Job titles matched against the title only.
-job_titles:
-  - Scientist
-  - Research Scientist
-  - Molecular Biologist
-  - Functional Genomics Scientist
-  - Discovery Scientist
-  - Project Manager
-  - CRISPR Scientist
-  - Genome Editing
-  - Therapeutics Scientist
-  - Microbiology Researcher
-  - Biology Scientist
+# Keywords that exclude listings even if they match include_keywords - minimal exclusions
+exclude_keywords:
+  - "customer service"
+  - "sales representative"
+  - "administrative assistant"
+  - "receptionist"
+  - "janitor"
+  - "security guard"
+
+# Job titles matched against the title only - leave empty for no filtering by title
+job_titles: []
 
 sites:
+  # JobSpy-powered job search (searches multiple sites simultaneously)
+  - name: jobspy_biotech
+    type: jobspy
+    enabled: true
+    search_terms:
+      - "CRISPR"
+      - "molecular biology"
+      - "functional genomics"
+      - "biotech"
+      - "gene editing"
+      - "scientist"
+      - "researcher"
+      - "biologist"
+      - "genomics"
+      - "therapeutics"
+      - "pharmaceuticals"
+      - "life sciences"
+    locations:
+      - "New York, NY"
+      - "Boston, MA"
+      - "Philadelphia, PA"
+      - "Newark, NJ"
+      - "Cambridge, MA"
+      - "Pittsburgh, PA"
+      - "Jersey City, NJ"
+      - "Albany, NY"
+    job_sites:
+      - "indeed"
+      - "glassdoor"
+      - "zip_recruiter"
+    results_wanted: 100
+    hours_old: 168
+
   - name: biospace
     type: generic
     enabled: true

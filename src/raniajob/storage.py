@@ -15,6 +15,7 @@ def _as_dict(item: JobPosting) -> dict:
         "description": item.description,
         "posted_at": item.posted_at.isoformat() if item.posted_at else "",
         "source": item.source,
+        "location": item.location or "",
     }
 
 
@@ -26,7 +27,7 @@ def write_json(path: str, items: Iterable[JobPosting]) -> None:
 
 def write_csv(path: str, items: Iterable[JobPosting]) -> None:
     rows: List[dict] = [_as_dict(item) for item in items]
-    fieldnames = ["title", "company", "url", "description", "posted_at", "source"]
+    fieldnames = ["title", "company", "url", "description", "posted_at", "source", "location"]
     with open(path, "w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()

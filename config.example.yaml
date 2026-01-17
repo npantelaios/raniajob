@@ -2,6 +2,13 @@ schedule:
   days_back: 2
   sleep_seconds: 1.0
 
+# Anti-bot detection settings
+fetcher:
+  sleep_seconds: 2.0          # Delay between requests (seconds)
+  rotate_user_agents: true    # Rotate between different browser user-agents
+  use_cloudscraper: false     # Use cloudscraper for Cloudflare bypass
+  timeout: 20                 # Request timeout (seconds)
+
 # Keywords matched against title + description.
 include_keywords:
   - CRISPR
@@ -42,6 +49,31 @@ job_titles:
   - Biology Scientist
 
 sites:
+  # JobSpy-powered job search (searches multiple sites simultaneously)
+  - name: jobspy_biotech
+    type: jobspy
+    enabled: true
+    search_terms:
+      - "CRISPR scientist"
+      - "molecular biology"
+      - "functional genomics"
+      - "biotech scientist"
+      - "gene editing"
+    locations:
+      - "New York, NY"
+      - "Boston, MA"
+      - "Philadelphia, PA"
+      - "Newark, NJ"
+      - "Cambridge, MA"
+      - "Pittsburgh, PA"
+      - "Jersey City, NJ"
+      - "Albany, NY"
+    job_sites:
+      - "indeed"
+      - "glassdoor"
+      - "zip_recruiter"
+    results_wanted: 30
+    hours_old: 72
   - name: biospace
     type: generic
     enabled: true

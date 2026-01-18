@@ -8,7 +8,7 @@ from typing import Iterable, List, Set
 
 from .config import AppConfig, load_config
 from .fetcher import Fetcher
-from .filters import exclude_keyword_match, filter_by_date, include_keyword_match, normalize_keywords
+from .filters import exclude_keyword_match, filter_by_date, include_keyword_match, normalize_keywords, is_hourly_job, extract_state, extract_salary
 from .location_filters import filter_jobs_by_location, get_default_target_states
 from .models import JobPosting
 from .parser import extract_detail_description
@@ -54,6 +54,7 @@ def _apply_filters(
         'job_title_filtered': 0,
         'include_keyword_filtered': 0,
         'exclude_keyword_filtered': 0,
+        'hourly_filtered': 0,
         'passed_all_filters': 0
     }
 
@@ -85,6 +86,12 @@ def _apply_filters(
             print(f"DEBUG: Exclude keyword filtered out: {item.title} (excluded term found)", file=sys.stderr)
             continue
 
+        # Hourly job filtering - exclude jobs that pay per hour
+        if is_hourly_job(combined_text):
+            filter_stats['hourly_filtered'] += 1
+            print(f"DEBUG: Hourly job filtered out: {item.title}", file=sys.stderr)
+            continue
+
         filter_stats['passed_all_filters'] += 1
         filtered.append(item)
 
@@ -95,6 +102,7 @@ def _apply_filters(
     print(f"  Job title filtered: {filter_stats['job_title_filtered']}", file=sys.stderr)
     print(f"  Include keyword filtered: {filter_stats['include_keyword_filtered']}", file=sys.stderr)
     print(f"  Exclude keyword filtered: {filter_stats['exclude_keyword_filtered']}", file=sys.stderr)
+    print(f"  Hourly jobs filtered: {filter_stats['hourly_filtered']}", file=sys.stderr)
     print(f"  Passed all filters: {filter_stats['passed_all_filters']}", file=sys.stderr)
     print("", file=sys.stderr)
 
@@ -103,6 +111,28 @@ def _apply_filters(
 
 def _sort_items(items: Iterable[JobPosting]) -> List[JobPosting]:
     return sorted(items, key=lambda item: item.posted_at or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
+
+
+def _enrich_jobs(items: Iterable[JobPosting]) -> List[JobPosting]:
+    """Enrich jobs with state and salary information."""
+    enriched: List[JobPosting] = []
+    for item in items:
+        state = extract_state(item.location)
+        salary = extract_salary(item.description)
+        enriched.append(
+            JobPosting(
+                title=item.title,
+                company=item.company,
+                url=item.url,
+                description=item.description,
+                posted_at=item.posted_at,
+                source=item.source,
+                location=item.location,
+                state=state,
+                salary=salary,
+            )
+        )
+    return enriched
 
 
 def _count_by_domain(items: List[JobPosting]) -> dict:
@@ -207,11 +237,14 @@ def run_pipeline(config: AppConfig, output_base_name: str, output_format: str, e
 
     deduped = _dedupe(all_items)
 
+    # Enrich jobs with state and salary information
+    enriched = _enrich_jobs(deduped)
+
     # Generate output paths with timestamps
     filtered_path, unfiltered_path = _generate_output_paths(output_base_name, output_format)
 
-    # Write unfiltered results (all deduped items, sorted by date)
-    unfiltered_sorted = _sort_items(deduped)
+    # Write unfiltered results (all enriched items, sorted by date)
+    unfiltered_sorted = _sort_items(enriched)
     if output_format == "json":
         write_json(unfiltered_path, unfiltered_sorted)
     elif output_format == "csv":
@@ -220,8 +253,8 @@ def run_pipeline(config: AppConfig, output_base_name: str, output_format: str, e
 
     # Apply location filtering to ensure only NY, NJ, PA, MA jobs
     target_states = get_default_target_states()
-    location_filtered = filter_jobs_by_location(deduped, target_states)
-    print(f"Location filtering: kept {len(location_filtered)}/{len(deduped)} jobs from target states (NY, NJ, PA, MA)", file=sys.stderr)
+    location_filtered = filter_jobs_by_location(enriched, target_states)
+    print(f"Location filtering: kept {len(location_filtered)}/{len(enriched)} jobs from target states (NY, NJ, PA, MA)", file=sys.stderr)
 
     # Apply other filters (keywords, dates, etc.)
     filtered = _apply_filters(location_filtered, include_keywords, exclude_keywords, job_titles, config.schedule.days_back)

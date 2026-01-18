@@ -14,3 +14,5 @@ class JobPosting:
     posted_at: Optional[datetime]
     source: str
     location: Optional[str] = None
+    state: Optional[str] = None
+    salary: Optional[str] = None

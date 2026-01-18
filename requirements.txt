@@ -4,3 +4,4 @@ python-dateutil>=2.9.0
 PyYAML>=6.0.1
 cloudscraper>=1.2.71
 python-jobspy>=1.1.90
+reportlab>=4.0.0

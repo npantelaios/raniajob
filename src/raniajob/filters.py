@@ -11,6 +11,33 @@ except ImportError:  # pragma: no cover - fallback only if dependency missing
 
 
 _RELATIVE_RE = re.compile(r"(\d+)\s*(day|days|hour|hours|minute|minutes)\s*ago", re.IGNORECASE)
+_HOURLY_PAY_RE = re.compile(r"(an\s+hour|per\s+hour|/\s*hour|\$\d+\.?\d*/\s*hr|\$\d+\.?\d*\s*/\s*hour)", re.IGNORECASE)
+_SALARY_RE = re.compile(r"\$[\d,]+(?:\.\d{2})?(?:\s*[-–]\s*\$[\d,]+(?:\.\d{2})?)?(?:\s*(?:per\s+year|/\s*year|annually|/\s*yr|k))?", re.IGNORECASE)
+
+# US State abbreviations for extraction
+_US_STATES = {
+    "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
+    "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
+    "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
+    "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
+    "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", "DC"
+}
+
+_STATE_NAMES = {
+    "alabama": "AL", "alaska": "AK", "arizona": "AZ", "arkansas": "AR",
+    "california": "CA", "colorado": "CO", "connecticut": "CT", "delaware": "DE",
+    "florida": "FL", "georgia": "GA", "hawaii": "HI", "idaho": "ID",
+    "illinois": "IL", "indiana": "IN", "iowa": "IA", "kansas": "KS",
+    "kentucky": "KY", "louisiana": "LA", "maine": "ME", "maryland": "MD",
+    "massachusetts": "MA", "michigan": "MI", "minnesota": "MN", "mississippi": "MS",
+    "missouri": "MO", "montana": "MT", "nebraska": "NE", "nevada": "NV",
+    "new hampshire": "NH", "new jersey": "NJ", "new mexico": "NM", "new york": "NY",
+    "north carolina": "NC", "north dakota": "ND", "ohio": "OH", "oklahoma": "OK",
+    "oregon": "OR", "pennsylvania": "PA", "rhode island": "RI", "south carolina": "SC",
+    "south dakota": "SD", "tennessee": "TN", "texas": "TX", "utah": "UT",
+    "vermont": "VT", "virginia": "VA", "washington": "WA", "west virginia": "WV",
+    "wisconsin": "WI", "wyoming": "WY", "district of columbia": "DC"
+}
 
 
 def normalize_keywords(keywords: Iterable[str]) -> List[str]:
@@ -59,6 +86,64 @@ def parse_posted_date(raw: str, now: Optional[datetime] = None) -> Optional[date
             return parsed
         except (ValueError, OverflowError):
             return None
+
+    return None
+
+
+def is_hourly_job(text: str) -> bool:
+    """Check if the job description indicates hourly pay.
+
+    Returns True if the text contains patterns like 'an hour', 'per hour', '/hour', '$XX/hr'
+    """
+    return bool(_HOURLY_PAY_RE.search(text))
+
+
+def extract_state(location: Optional[str]) -> Optional[str]:
+    """Extract US state abbreviation from a location string.
+
+    Handles formats like:
+    - "Boston, MA"
+    - "New York, NY"
+    - "San Francisco, California"
+    - "Massachusetts"
+    """
+    if not location:
+        return None
+
+    location = location.strip()
+
+    # Try to find state abbreviation (e.g., "Boston, MA" or "MA")
+    # Look for 2-letter state code, typically after comma or at end
+    parts = [p.strip() for p in location.replace(",", " ").split()]
+    for part in reversed(parts):  # Check from end first
+        upper_part = part.upper()
+        if upper_part in _US_STATES:
+            return upper_part
+
+    # Try to match full state names
+    location_lower = location.lower()
+    for state_name, abbrev in _STATE_NAMES.items():
+        if state_name in location_lower:
+            return abbrev
+
+    return None
+
+
+def extract_salary(text: str) -> Optional[str]:
+    """Extract salary information from job description.
+
+    Looks for patterns like:
+    - "$80,000 - $120,000"
+    - "$150k"
+    - "$50,000 per year"
+    - "$100,000/year"
+    """
+    if not text:
+        return None
+
+    match = _SALARY_RE.search(text)
+    if match:
+        return match.group(0).strip()
 
     return None
 

@@ -2,67 +2,25 @@
 
 from __future__ import annotations
 
+import csv
 import os
 import smtplib
 import sys
-import csv
-from pathlib import Path
+from datetime import datetime
+from email import encoders
+from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
-from email import encoders
-from collections import defaultdict
-from datetime import datetime
-from typing import Dict, List, Optional
-from urllib.parse import urlparse
+from pathlib import Path
+from typing import List, Optional
 
-# PDF generation imports
-from reportlab.lib.pagesizes import LETTER
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.pagesizes import LETTER, landscape
+from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+from reportlab.lib.units import inch
+from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
 from .models import JobPosting
-
-
-def _extract_domain(url: str) -> str:
-    """Extract domain from URL."""
-    try:
-        parsed = urlparse(url)
-        domain = parsed.netloc or parsed.path
-        # Remove www. prefix
-        if domain.startswith("www."):
-            domain = domain[4:]
-        return domain or "unknown"
-    except Exception:
-        return "unknown"
-
-
-def _group_by_domain(items: List[JobPosting]) -> Dict[str, List[JobPosting]]:
-    """Group jobs by their URL domain."""
-    grouped: Dict[str, List[JobPosting]] = defaultdict(list)
-    for item in items:
-        domain = _extract_domain(item.url)
-        grouped[domain].append(item)
-    return dict(grouped)
-
-
-def _count_by_source(items: List[JobPosting]) -> dict:
-    """Count jobs by source."""
-    counts: dict = {}
-    for item in items:
-        source = item.source or "unknown"
-        counts[source] = counts.get(source, 0) + 1
-    return counts
-
-
-def _count_by_domain(items: List[JobPosting]) -> dict:
-    """Count jobs by domain."""
-    counts: dict = {}
-    for item in items:
-        domain = _extract_domain(item.url)
-        counts[domain] = counts.get(domain, 0) + 1
-    return counts
 
 
 def _write_jobs_csv(jobs: List[JobPosting], output_path: str) -> str:
@@ -71,7 +29,7 @@ def _write_jobs_csv(jobs: List[JobPosting], output_path: str) -> str:
 
     with open(output_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
-        writer.writerow(["#", "Title", "Company", "URL", "Location"])
+        writer.writerow(["#", "Title", "Company", "URL", "Location", "State", "Salary"])
         for idx, job in enumerate(jobs, 1):
             writer.writerow(
                 [
@@ -80,6 +38,8 @@ def _write_jobs_csv(jobs: List[JobPosting], output_path: str) -> str:
                     job.company,
                     job.url,
                     job.location or "N/A",
+                    job.state or "N/A",
+                    job.salary or "N/A",
                 ]
             )
     return output_path
@@ -90,194 +50,92 @@ def _write_jobs_pdf(jobs: List[JobPosting], output_path: str, title: str) -> str
     """Write job postings to a PDF file and return the file path."""
     Path(output_path).parent.mkdir(parents=True, exist_ok=True)
 
-    doc = SimpleDocTemplate(output_path, pagesize=LETTER)
+    # Use landscape orientation for better table fit
+    doc = SimpleDocTemplate(
+        output_path,
+        pagesize=landscape(LETTER),
+        leftMargin=0.5*inch,
+        rightMargin=0.5*inch,
+        topMargin=0.5*inch,
+        bottomMargin=0.5*inch
+    )
     styles = getSampleStyleSheet()
+
+    # Create custom style for table cells
+    cell_style = ParagraphStyle(
+        'CellStyle',
+        parent=styles['Normal'],
+        fontSize=8,
+        leading=10,
+    )
+
     elements = []
 
     elements.append(Paragraph(title, styles["Title"]))
     elements.append(
         Paragraph(
-            f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+            f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Total: {len(jobs)} jobs",
             styles["Normal"],
         )
     )
-    elements.append(Paragraph(" ", styles["Normal"]))
+    elements.append(Spacer(1, 0.2*inch))
 
-    table_data = [["#", "Title", "Company", "URL", "Location"]]
+    # Column widths: #, Title, Company, URL, Location, State, Salary
+    col_widths = [0.35*inch, 2.0*inch, 1.4*inch, 2.8*inch, 1.2*inch, 0.5*inch, 1.2*inch]
+
+    # Header row
+    table_data = [["#", "Title", "Company", "URL", "Location", "State", "Salary"]]
+
+    # Data rows with text truncation and wrapping
     for idx, job in enumerate(jobs, 1):
-        table_data.append(
-            [
-                str(idx),
-                job.title,
-                job.company,
-                job.url,
-                job.location or "N/A",
-            ]
-        )
+        # Truncate long fields
+        title_text = job.title[:60] + "..." if len(job.title) > 60 else job.title
+        company_text = job.company[:30] + "..." if len(job.company) > 30 else job.company
+        url_text = job.url[:55] + "..." if len(job.url) > 55 else job.url
+        location_text = (job.location or "N/A")[:25]
+        state_text = job.state or "N/A"
+        salary_text = (job.salary or "N/A")[:20]
 
-    table = Table(table_data, repeatRows=1)
+        table_data.append([
+            str(idx),
+            Paragraph(title_text, cell_style),
+            Paragraph(company_text, cell_style),
+            Paragraph(url_text, cell_style),
+            Paragraph(location_text, cell_style),
+            state_text,
+            Paragraph(salary_text, cell_style),
+        ])
+
+    table = Table(table_data, colWidths=col_widths, repeatRows=1)
     table.setStyle(
-        TableStyle(
-            [
-                ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
-                ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
-                ("FONT", (0, 0), (-1, 0), "Helvetica-Bold"),
-                ("VALIGN", (0, 0), (-1, -1), "TOP"),
-                ("LEFTPADDING", (0, 0), (-1, -1), 6),
-                ("RIGHTPADDING", (0, 0), (-1, -1), 6),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
-                ("TOPPADDING", (0, 0), (-1, -1), 4),
-            ]
-        )
+        TableStyle([
+            # Header styling
+            ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#3498db")),
+            ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+            ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+            ("FONTSIZE", (0, 0), (-1, 0), 9),
+            ("ALIGN", (0, 0), (-1, 0), "CENTER"),
+            # Cell styling
+            ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
+            ("FONTSIZE", (0, 1), (-1, -1), 8),
+            ("ALIGN", (0, 1), (0, -1), "CENTER"),  # # column centered
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+            # Grid
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+            # Alternating row colors
+            ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#f8f9fa")]),
+            # Padding
+            ("LEFTPADDING", (0, 0), (-1, -1), 4),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 4),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+            ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ])
     )
 
     elements.append(table)
     doc.build(elements)
 
     return output_path
-
-
-def generate_report_html(
-    unfiltered: List[JobPosting],
-    filtered: List[JobPosting],
-    unfiltered_path: str,
-    filtered_path: str,
-) -> str:
-    """Generate an HTML report of job scraping results, grouped by domain."""
-    unfiltered_by_domain = _count_by_domain(unfiltered)
-    filtered_by_domain = _count_by_domain(filtered)
-    filtered_grouped = _group_by_domain(filtered)
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    html = f"""
-    <html>
-    <head>
-        <style>
-            body {{ font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }}
-            .container {{ max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }}
-            h1 {{ color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }}
-            h2 {{ color: #34495e; }}
-            h3 {{ color: #2980b9; margin-top: 30px; border-left: 4px solid #3498db; padding-left: 10px; }}
-            .stats-box {{ background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #3498db; }}
-            .domain-section {{ background: #fff; margin: 20px 0; padding: 15px; border-radius: 8px; border: 1px solid #e0e0e0; }}
-            .domain-header {{ background: #3498db; color: white; padding: 10px 15px; border-radius: 5px; margin-bottom: 15px; }}
-            .domain-header span {{ font-size: 14px; opacity: 0.9; }}
-            .source-list {{ margin-left: 20px; }}
-            .source-item {{ margin: 5px 0; }}
-            .count {{ font-weight: bold; color: #2980b9; }}
-            .file-path {{ font-size: 12px; color: #7f8c8d; word-break: break-all; }}
-            table {{ border-collapse: collapse; width: 100%; margin-top: 10px; }}
-            th, td {{ border: 1px solid #ddd; padding: 10px; text-align: left; }}
-            th {{ background-color: #ecf0f1; color: #2c3e50; font-weight: 600; }}
-            tr:nth-child(even) {{ background-color: #f9f9f9; }}
-            tr:hover {{ background-color: #f1f1f1; }}
-            .job-title {{ font-weight: bold; color: #2c3e50; }}
-            .job-title a {{ color: #3498db; text-decoration: none; }}
-            .job-title a:hover {{ text-decoration: underline; }}
-            .job-company {{ color: #27ae60; font-weight: 500; }}
-            .job-location {{ color: #7f8c8d; }}
-            .summary-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }}
-            .summary-card {{ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 10px; text-align: center; }}
-            .summary-card.green {{ background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }}
-            .summary-card h4 {{ margin: 0; font-size: 14px; opacity: 0.9; }}
-            .summary-card .number {{ font-size: 36px; font-weight: bold; margin: 10px 0; }}
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>🔬 Job Scraping Report</h1>
-            <p>Generated: {timestamp}</p>
-
-            <div class="summary-grid">
-                <div class="summary-card">
-                    <h4>Unfiltered Jobs</h4>
-                    <div class="number">{len(unfiltered)}</div>
-                </div>
-                <div class="summary-card green">
-                    <h4>Filtered Jobs</h4>
-                    <div class="number">{len(filtered)}</div>
-                </div>
-            </div>
-
-            <div class="stats-box">
-                <h2>📊 Unfiltered Results by Domain</h2>
-                <p class="file-path">File: {unfiltered_path}</p>
-                <div class="source-list">
-    """
-
-    for domain, count in sorted(unfiltered_by_domain.items(), key=lambda x: -x[1]):
-        html += f'<div class="source-item">• <strong>{domain}</strong>: <span class="count">{count}</span> jobs</div>'
-
-    html += f"""
-                </div>
-            </div>
-
-            <div class="stats-box">
-                <h2>✅ Filtered Results by Domain</h2>
-                <p class="file-path">File: {filtered_path}</p>
-                <div class="source-list">
-    """
-
-    for domain, count in sorted(filtered_by_domain.items(), key=lambda x: -x[1]):
-        html += f'<div class="source-item">• <strong>{domain}</strong>: <span class="count">{count}</span> jobs</div>'
-
-    html += """
-                </div>
-            </div>
-
-            <h2>📋 Jobs by Domain</h2>
-    """
-
-    # Generate sections for each domain
-    for domain, jobs in sorted(filtered_grouped.items(), key=lambda x: -len(x[1])):
-        html += f"""
-            <div class="domain-section">
-                <div class="domain-header">
-                    <strong>{domain}</strong> <span>({len(jobs)} jobs)</span>
-                </div>
-                <table>
-                    <tr>
-                        <th>Title</th>
-                        <th>Company</th>
-                        <th>Location</th>
-                    </tr>
-        """
-
-        # Show up to 15 jobs per domain
-        for job in jobs[:15]:
-            title_display = job.title[:70] + "..." if len(job.title) > 70 else job.title
-            html += f"""
-                    <tr>
-                        <td class="job-title"><a href="{job.url}" target="_blank">{title_display}</a></td>
-                        <td class="job-company">{job.company}</td>
-                        <td class="job-location">{job.location or 'N/A'}</td>
-                    </tr>
-            """
-
-        if len(jobs) > 15:
-            html += f"""
-                    <tr>
-                        <td colspan="3" style="text-align: center; color: #7f8c8d;">
-                            ... and {len(jobs) - 15} more jobs from {domain}
-                        </td>
-                    </tr>
-            """
-
-        html += """
-                </table>
-            </div>
-        """
-
-    html += """
-            <p style="color: #7f8c8d; font-size: 12px; margin-top: 30px; text-align: center;">
-                This report was automatically generated by the RaniaJob scraper.
-            </p>
-        </div>
-    </body>
-    </html>
-    """
-
-    return html
 
 
 def send_email_report(
@@ -345,44 +203,17 @@ def send_email_report(
     _write_jobs_pdf(unfiltered, str(unfiltered_pdf_path), "Unfiltered Job Results")
 
     try:
-        # Create message
-        msg = MIMEMultipart("alternative")
+        # Create message with attachments
+        msg = MIMEMultipart("mixed")
         msg["Subject"] = (
-            f"🔬 Job Scraping Report - {datetime.now().strftime('%Y-%m-%d')} - {len(filtered)} jobs found"
+            f"Job Report - {datetime.now().strftime('%Y-%m-%d')} - {len(filtered)} filtered / {len(unfiltered)} total"
         )
         msg["From"] = sender
         msg["To"] = ", ".join(recipients)
 
-        # Generate HTML report
-        html_content = generate_report_html(
-            unfiltered, filtered, unfiltered_path, filtered_path
-        )
-
-        # Group by domain for text version
-        filtered_by_domain = _count_by_domain(filtered)
-
-        # Create plain text version
-        text_content = f"""
-Job Scraping Report - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-
-UNFILTERED RESULTS: {len(unfiltered)} total jobs
-File: {unfiltered_path}
-
-FILTERED RESULTS: {len(filtered)} total jobs
-File: {filtered_path}
-
-Jobs by Domain:
-"""
-        for domain, count in sorted(filtered_by_domain.items(), key=lambda x: -x[1]):
-            text_content += f"  - {domain}: {count} jobs\n"
-
-        text_content += "\nTop 10 jobs:\n"
-        for i, job in enumerate(filtered[:10], 1):
-            text_content += f"{i}. {job.title} at {job.company} ({job.location})\n   URL: {job.url}\n"
-
-        # Attach parts
+        # Simple text body
+        text_content = f"Job scraping report attached.\n\nFiltered: {len(filtered)} jobs\nUnfiltered: {len(unfiltered)} jobs"
         msg.attach(MIMEText(text_content, "plain"))
-        msg.attach(MIMEText(html_content, "html"))
 
         # Attach CSV and PDF files
         for path in [

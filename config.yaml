@@ -84,6 +84,39 @@ sites:
     results_wanted: 100
     hours_old: 168
 
+  # Top 17 Pharma Companies - JobSpy search
+  - name: jobspy_pharma_companies
+    type: jobspy
+    enabled: true
+    search_terms:
+      - "Eli Lilly scientist"
+      - "Johnson & Johnson scientist"
+      - "AbbVie scientist"
+      - "Roche scientist"
+      - "AstraZeneca scientist"
+      - "Novo Nordisk scientist"
+      - "Novartis scientist"
+      - "Merck scientist"
+      - "Thermo Fisher scientist"
+      - "Amgen scientist"
+      - "Gilead scientist"
+      - "Pfizer scientist"
+      - "Sanofi scientist"
+      - "Vertex scientist"
+      - "Bristol-Myers Squibb scientist"
+      - "GSK scientist"
+      - "Regeneron scientist"
+    locations:
+      - "New York, NY"
+      - "Boston, MA"
+      - "Philadelphia, PA"
+      - "New Jersey"
+    job_sites:
+      - "indeed"
+      - "zip_recruiter"
+    results_wanted: 50
+    hours_old: 168
+
   # Disabled: Requires JavaScript rendering (jobs loaded via JS)
   - name: biospace
     type: generic

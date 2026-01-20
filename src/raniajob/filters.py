@@ -12,7 +12,18 @@ except ImportError:  # pragma: no cover - fallback only if dependency missing
 
 _RELATIVE_RE = re.compile(r"(\d+)\s*(day|days|hour|hours|minute|minutes)\s*ago", re.IGNORECASE)
 _HOURLY_PAY_RE = re.compile(r"(an\s+hour|per\s+hour|/\s*hour|\$\d+\.?\d*/\s*hr|\$\d+\.?\d*\s*/\s*hour)", re.IGNORECASE)
-_SALARY_RE = re.compile(r"\$[\d,]+(?:\.\d{2})?(?:\s*[-–]\s*\$[\d,]+(?:\.\d{2})?)?(?:\s*(?:per\s+year|/\s*year|annually|/\s*yr|k))?", re.IGNORECASE)
+
+# Salary patterns - catches multiple formats:
+# $80,000 - $120,000, $150K, $80k-$120k, USD 80,000, etc.
+_SALARY_PATTERNS = [
+    # Standard dollar amounts with optional range: $80,000 - $120,000
+    r"\$\s*[\d,]+(?:\.\d{2})?\s*[kK]?\s*(?:[-–to]+\s*\$?\s*[\d,]+(?:\.\d{2})?\s*[kK]?)?(?:\s*(?:per\s+year|/\s*year|annually|/\s*yr|a\s+year))?",
+    # USD format: USD 80,000 or 80,000 USD
+    r"(?:USD\s*)?[\d,]+(?:\.\d{2})?\s*(?:USD)?(?:\s*[-–to]+\s*(?:USD\s*)?[\d,]+(?:\.\d{2})?\s*(?:USD)?)?(?:\s*(?:per\s+year|annually))?",
+    # Salary label format: Salary: $80,000
+    r"(?:salary|compensation|pay)[:\s]+\$?\s*[\d,]+(?:\.\d{2})?\s*[kK]?(?:\s*[-–to]+\s*\$?\s*[\d,]+(?:\.\d{2})?\s*[kK]?)?",
+]
+_SALARY_RE = re.compile("|".join(_SALARY_PATTERNS), re.IGNORECASE)
 
 # US State abbreviations for extraction
 _US_STATES = {

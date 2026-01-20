@@ -31,7 +31,7 @@ WORKDAY_PHARMA_URLS = {
     "thermofisher": "https://thermofisher.wd5.myworkdayjobs.com/ThermoFisherCareers",
     "bms": "https://bristolmyerssquibb.wd5.myworkdayjobs.com/BMS",
     "gsk": "https://gsk.wd5.myworkdayjobs.com/GSKCareers",
-    "vertex": "https://vrtx.wd5.myworkdayjobs.com/Vertex_Careers",
+    "vertex": "https://vrtx.wd5.myworkdayjobs.com/en-US/Vertex_Careers",
 }
 
 
@@ -53,7 +53,7 @@ def parse_workday_site(
         return []
 
     search_term = getattr(site_config, "search_term", None)
-    max_results = getattr(site_config, "max_results", 500)
+    max_results = getattr(site_config, "max_results", 10000)  # No limit by default
 
     logger.info(f"Workday: Scraping {workday_url} (search: {search_term or 'all jobs'})")
 
@@ -277,7 +277,27 @@ def _parse_workday_job(
         description_parts = []
         if job_data.get("bulletFields"):
             for bullet in job_data["bulletFields"]:
-                description_parts.append(bullet)
+                description_parts.append(str(bullet))
+
+        # Look for salary information in various Workday fields
+        salary_info = None
+        salary_fields = ["salary", "compensation", "payRange", "salaryRange", "pay", "wage"]
+        for field in salary_fields:
+            if job_data.get(field):
+                salary_info = str(job_data[field])
+                break
+
+        # Also check bulletFields for salary-like text
+        if not salary_info and description_parts:
+            import re
+            for part in description_parts:
+                if re.search(r'\$[\d,]+|\d+k|\d+K|salary|compensation', str(part), re.IGNORECASE):
+                    salary_info = str(part)
+                    break
+
+        # Add salary to description if found
+        if salary_info:
+            description_parts.append(f"Salary: {salary_info}")
 
         description = " | ".join(description_parts) if description_parts else ""
 

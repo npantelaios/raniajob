@@ -65,10 +65,10 @@ def parse_jobspy_sites(
             job_sites = ["indeed"]  # Fallback to Indeed as most reliable
             logger.warning("No job sites specified, using Indeed as fallback")
 
-        # Increase limits and make more permissive
+        # No limits - get all available jobs
         results_wanted = getattr(
-            site_config, "results_wanted", 100
-        )  # Increased from 50
+            site_config, "results_wanted", 1000
+        )  # High default to get all jobs
         hours_old = getattr(site_config, "hours_old", 168)  # Increased to 7 days
 
         # Get target states for filtering

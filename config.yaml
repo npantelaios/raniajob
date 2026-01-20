@@ -64,7 +64,7 @@ exclude_keywords:
 job_titles: []
 
 sites:
-  # JobSpy-powered job search (searches multiple sites simultaneously)
+  # JobSpy-powered job search (Indeed only - ZipRecruiter not working)
   - name: jobspy_biotech
     type: jobspy
     enabled: true
@@ -80,11 +80,11 @@ sites:
       - "New Jersey"
     job_sites:
       - "indeed"
-      - "zip_recruiter"
-    results_wanted: 100
+    results_wanted: 1000  # No limit - get all available
     hours_old: 168
 
-  # Top 17 Pharma Companies - JobSpy search
+  # Top 17 Pharma Companies - JobSpy search (Indeed only)
+  # Note: 12 of these are also scraped directly via Workday
   - name: jobspy_pharma_companies
     type: jobspy
     enabled: true
@@ -113,8 +113,7 @@ sites:
       - "New Jersey"
     job_sites:
       - "indeed"
-      - "zip_recruiter"
-    results_wanted: 50
+    results_wanted: 1000  # No limit - get all available
     hours_old: 168
 
   # ============================================================
@@ -127,93 +126,94 @@ sites:
     enabled: true
     workday_url: "https://pfizer.wd1.myworkdayjobs.com/PfizerCareers"
     search_term: "scientist"
-    max_results: 200
+    max_results: 10000
 
   - name: amgen_careers
     type: workday
     enabled: true
     workday_url: "https://amgen.wd1.myworkdayjobs.com/Careers"
     search_term: "scientist"
-    max_results: 200
+    max_results: 10000
 
   - name: regeneron_careers
     type: workday
     enabled: true
     workday_url: "https://regeneron.wd1.myworkdayjobs.com/Careers"
     search_term: "scientist"
-    max_results: 200
+    max_results: 10000
 
   - name: novartis_careers
     type: workday
     enabled: true
     workday_url: "https://novartis.wd3.myworkdayjobs.com/Novartis_Careers"
     search_term: "scientist"
-    max_results: 200
+    max_results: 10000
 
   - name: roche_careers
     type: workday
     enabled: true
     workday_url: "https://roche.wd3.myworkdayjobs.com/roche-ext"
     search_term: "scientist"
-    max_results: 200
+    max_results: 10000
 
   - name: sanofi_careers
     type: workday
     enabled: true
     workday_url: "https://sanofi.wd3.myworkdayjobs.com/SanofiCareers"
     search_term: "scientist"
-    max_results: 200
+    max_results: 10000
 
   - name: lilly_careers
     type: workday
     enabled: true
     workday_url: "https://lilly.wd5.myworkdayjobs.com/en-US/LLY"
     search_term: "scientist"
-    max_results: 200
+    max_results: 10000
 
   - name: merck_careers
     type: workday
     enabled: true
     workday_url: "https://msd.wd5.myworkdayjobs.com/SearchJobs"
     search_term: "scientist"
-    max_results: 200
+    max_results: 10000
 
   - name: thermofisher_careers
     type: workday
     enabled: true
     workday_url: "https://thermofisher.wd5.myworkdayjobs.com/ThermoFisherCareers"
     search_term: "scientist"
-    max_results: 200
+    max_results: 10000
 
   - name: bms_careers
     type: workday
     enabled: true
     workday_url: "https://bristolmyerssquibb.wd5.myworkdayjobs.com/BMS"
     search_term: "scientist"
-    max_results: 200
+    max_results: 10000
 
   - name: gsk_careers
     type: workday
     enabled: true
     workday_url: "https://gsk.wd5.myworkdayjobs.com/GSKCareers"
     search_term: "scientist"
-    max_results: 200
+    max_results: 10000
 
   - name: vertex_careers
     type: workday
     enabled: true
-    workday_url: "https://vrtx.wd5.myworkdayjobs.com/Vertex_Careers"
+    workday_url: "https://vrtx.wd5.myworkdayjobs.com/en-US/Vertex_Careers"
     search_term: "scientist"
-    max_results: 200
+    max_results: 10000
 
   # ============================================================
   # NON-WORKDAY PHARMA COMPANIES (5 companies)
-  # These require Playwright browser automation
+  # DISABLED: Heavy anti-bot protection, Playwright scrapers timeout
+  # These companies are covered by JobSpy searches on Indeed
   # ============================================================
 
   - name: jnj_careers
     type: playwright
-    enabled: true
+    enabled: false  # Disabled: Taleo has heavy anti-bot, covered by JobSpy
     career_url: "https://jobs.jnj.com/en/jobs"
     ats_system: "taleo"
     search_term: "scientist"
@@ -221,7 +221,7 @@ sites:
 
   - name: astrazeneca_careers
     type: playwright
-    enabled: true
+    enabled: false  # Disabled: Eightfold AI blocks scraping, covered by JobSpy
     career_url: "https://careers.astrazeneca.com/search-jobs"
     ats_system: "eightfold"
     search_term: "scientist"
@@ -229,7 +229,7 @@ sites:
 
   - name: novonordisk_careers
     type: playwright
-    enabled: true
+    enabled: false  # Disabled: SuccessFactors timeouts, covered by JobSpy
     career_url: "https://www.novonordisk.com/careers/find-a-job.html"
     ats_system: "successfactors"
     search_term: "scientist"
@@ -237,7 +237,7 @@ sites:
 
   - name: gilead_careers
     type: playwright
-    enabled: true
+    enabled: false  # Disabled: Yello blocks scraping, covered by JobSpy
     career_url: "https://gilead.yello.co/jobs"
     ats_system: "yello"
     search_term: "scientist"
@@ -245,7 +245,7 @@ sites:
 
   - name: abbvie_careers
     type: playwright
-    enabled: true
+    enabled: false  # Disabled: Attrax timeouts, covered by JobSpy
     career_url: "https://careers.abbvie.com/en/search-jobs"
     ats_system: "attrax"
     search_term: "scientist"

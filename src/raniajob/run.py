@@ -32,6 +32,9 @@ def _dedupe(items: Iterable[JobPosting]) -> List[JobPosting]:
 def _fetch_site(fetcher: Fetcher, config) -> List[str]:
     pages: List[str] = []
     for url in config.start_urls:
+        # Skip empty URLs (used by jobspy/workday/playwright sites)
+        if not url or not url.strip():
+            continue
         html = fetcher.get(url)
         if html:
             pages.append(html)

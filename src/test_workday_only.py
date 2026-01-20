@@ -44,7 +44,7 @@ def test_workday_pfizer():
     config = MockSiteConfig(
         workday_url="https://pfizer.wd1.myworkdayjobs.com/PfizerCareers",
         search_term="scientist",  # Optional: search for scientist roles
-        max_results=30,  # Limit for testing
+        max_results=10000,  # No limit - get all jobs
         name="pfizer_careers",
     )
 
@@ -97,7 +97,7 @@ def test_workday_multiple():
         config = MockSiteConfig(
             workday_url=url,
             search_term="scientist",
-            max_results=10,  # Small limit for testing
+            max_results=10000,  # No limit - get all jobs
             name=f"{company}_careers",
         )
 

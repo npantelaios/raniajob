@@ -1,3 +1,488 @@
 #,Title,Company,URL,Location,State,Salary
-1,Senior Scientist - CRISPR Gene Editing,Test Pharma Inc,https://example.com/job/123,"Boston, MA",MA,"$120,000 - $150,000"
-2,Research Associate - Molecular Biology,BioTech Solutions,https://example.com/job/456,"New York, NY",NY,"$65,000 - $80,000"
+1,"Scientist, Oncology Translational Research",Bms,https://bristolmyerssquibb.wd5.myworkdayjobs.com/BMS/job/Cambridge-Crossing---MA---US/Scientist--Oncology-Translational-Research_R1598334,Cambridge Crossing - MA - US,MA,N/A
+2,2026 Future Talent Program - Research – Chemical Biology- Co-Op,Merck,https://msd.wd5.myworkdayjobs.com/SearchJobs/job/USA---Massachusetts---Cambridge-320-Bent-Street/XMLNAME-2026-Future-Talent-Program---Research---Chemical-Biology--Co-Op_R380805,USA - Massachusetts - Cambridge (320 Bent Street),MA,N/A
+3,"Associate Scientist, Postdoctoral Fellow- Data Science for Multi-omics and Biomarker Modelling in Neuroscience",Merck,https://msd.wd5.myworkdayjobs.com/SearchJobs/job/USA---Massachusetts---Cambridge-320-Bent-Street/Associate-Scientist--Postdoctoral-Fellow--Data-Science-for-Multi-omics-and-Biomarker-Modelling-in-Neuroscience-_R371433,USA - Massachusetts - Cambridge (320 Bent Street),MA,N/A
+4,"Head, Translational Research and Biomarkers",Novartis,https://novartis.wd3.myworkdayjobs.com/Novartis_Careers/job/Cambridge-USA/Head--Translational-Research-and-Biomarkers_REQ-10069635-2,Cambridge (USA),N/A,N/A
+5,"Associate Scientist, Assay Development",Pfizer,https://pfizer.wd1.myworkdayjobs.com/PfizerCareers/job/United-States---Massachusetts---Cambridge/Associate-Scientist--Assay-Development_4949986-1,United States - Massachusetts - Cambridge,MA,N/A
+6,"Principal Scientist in Cell, Molecular, and Immunology",Gsk,https://gsk.wd5.myworkdayjobs.com/GSKCareers/job/USA---Massachusetts---Cambridge/Principal-Scientist-in-Cell--Molecular--and-Immunology_433845,USA - Massachusetts - Cambridge,MA,N/A
+7,"Senior Director, Vx and Lab Specialization",Gsk,https://gsk.wd5.myworkdayjobs.com/GSKCareers/job/USA---Massachusetts---Cambridge/Senior-Director--Vx-and-Lab-Specialization_431209,USA - Massachusetts - Cambridge,MA,N/A
+8,"Senior Director, Customer Engagement Data Science & AI Engineering Lead",Bms,https://bristolmyerssquibb.wd5.myworkdayjobs.com/BMS/job/Princeton---NJ---US/Senior-Director--Customer-Engagement-Data-Science---AI-Engineering-Lead_R1596897,Princeton - NJ - US,NJ,N/A
+9,"Scientific Senior Director, ADCs Discovery Biology, Oncology",Bms,https://bristolmyerssquibb.wd5.myworkdayjobs.com/BMS/job/Cambridge-Crossing---MA---US/Scientific-Senior-Director--ADCs-Discovery-Biology--Oncology_R1598377-1,Cambridge Crossing - MA - US,MA,N/A
+10,Cell Culture Scientist,Thermofisher,https://thermofisher.wd5.myworkdayjobs.com/ThermoFisherCareers/job/King-of-Prussia-Pennsylvania-USA/Cell-Culture-Scientist_R-01340162,"King of Prussia, Pennsylvania, USA",PA,N/A
+11,"Senior Scientist, Epidemiology",Merck,https://msd.wd5.myworkdayjobs.com/SearchJobs/job/USA---Pennsylvania---West-Point/Senior-Scientist--Epidemiology_R381154-2,USA - Pennsylvania - West Point,PA,N/A
+12,"Scientist, Analytical R&D",Merck,https://msd.wd5.myworkdayjobs.com/SearchJobs/job/USA---New-Jersey---Rahway/Scientist--Analytical-R-D_R381113-1,USA - New Jersey - Rahway,NJ,N/A
+13,Senior Scientist – Downstream Vaccines and Advanced Biotechnologies Process R&D,Merck,https://msd.wd5.myworkdayjobs.com/SearchJobs/job/USA---Pennsylvania---West-Point/Senior-Scientist---Downstream-Vaccines-and-Advanced-Biotechnologies-Process-R-D-_R380998-1,USA - Pennsylvania - West Point,PA,N/A
+14,"Scientist, Virology",Gsk,https://gsk.wd5.myworkdayjobs.com/GSKCareers/job/USA---Massachusetts---Cambridge/Scientist--Virology_432019,USA - Massachusetts - Cambridge,MA,N/A
+15,CLD Senior Data Scientist,Sanofi,https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Framingham-MA/CLD-Senior-Data-Scientist_R2832040-1,"Framingham, MA",MA,N/A
+16,"Sr. Principal Scientist, Neurodegeneration",Gsk,https://gsk.wd5.myworkdayjobs.com/GSKCareers/job/USA---Pennsylvania---Upper-Providence/Sr-Principal-Scientist--Neurodegeneration_433313,USA - Pennsylvania - Upper Providence,PA,N/A
+17,"Associate Principal Scientist, Drug Metabolism & Pharmacokinetics",Merck,https://msd.wd5.myworkdayjobs.com/SearchJobs/job/USA---Pennsylvania---West-Point/Associate-Principal-Scientist--Drug-Metabolism---Pharmacokinetics_R381469-1,USA - Pennsylvania - West Point,PA,N/A
+18,"Principal Scientist, Drug Discovery",Merck,https://msd.wd5.myworkdayjobs.com/SearchJobs/job/USA---New-Jersey---Rahway/Principal-Scientist--Biology-Discovery_R363749,USA - New Jersey - Rahway,NJ,N/A
+19,Biorepository Center of Excellence (BCOE) Expert,Sanofi,https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Cambridge-MA/Biorepository-Center-of-Excellence--BCOE--Expert_R2835367-1,"Cambridge, MA",MA,N/A
+20,"Senior Principal Scientist, Lab Head Medicinal Chemistry",Sanofi,https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Cambridge-MA/Senior-Principal-Scientist--Lab-Head-Medicinal-Chemistry_R2834827-1,"Cambridge, MA",MA,N/A
+21,Associate Scientist,Sanofi,https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Framingham-MA/Associate-Scientist_R2833601-1,"Framingham, MA",MA,N/A
+22,Senior Scientist - Lab Automation - Purification Process Development,Sanofi,https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Framingham-MA/Senior-Scientist---Lab-Automation---Purification-Process-Development_R2836873-1,"Framingham, MA",MA,N/A
+23,Fall 2026 Co-Op - Immunology Translational Early Development,Bms,https://bristolmyerssquibb.wd5.myworkdayjobs.com/BMS/job/Princeton---NJ---US/Fall-2026-Co-Op---Immunology-Translational-Early-Development_R1598310,Princeton - NJ - US,NJ,N/A
+24,"Scientist, Characterization",Thermofisher,https://thermofisher.wd5.myworkdayjobs.com/ThermoFisherCareers/job/Framingham-Massachusetts-USA/Scientist--Characterization_R-01339500,"Framingham, Massachusetts, USA",MA,N/A
+25,FSP -- Sr. Scientist -- Neutralizing Antibody Assays (NAb),Thermofisher,https://thermofisher.wd5.myworkdayjobs.com/ThermoFisherCareers/job/Lawrenceville-New-Jersey-USA/FSP----Sr-Scientist----Study-Support-NAb_R-01339069,"Lawrenceville, New Jersey, USA",NJ,N/A
+26,"Senior Scientist/Engineer, Medical Device and Combination Products, Analytical",Merck,https://msd.wd5.myworkdayjobs.com/SearchJobs/job/USA---Pennsylvania---West-Point/Senior-Scientist-Engineer--Medical-Device-and-Combination-Products--Analytical_R380204-1,USA - Pennsylvania - West Point,PA,N/A
+27,"Director, Computational Chemistry, Modeling & Informatics",Merck,https://msd.wd5.myworkdayjobs.com/SearchJobs/job/USA---New-Jersey---Rahway/Director--Computational-Chemistry--Modeling---Informatics_R380246-1,USA - New Jersey - Rahway,NJ,N/A
+28,Group Lead Neurology Research,Sanofi,https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Cambridge-MA/Group-Head-Neurology-Research_R2832334-1,"Cambridge, MA",MA,N/A
+29,In Vivo Vaccine Research Scientist,Pfizer,https://pfizer.wd1.myworkdayjobs.com/PfizerCareers/job/United-States---New-York---Pearl-River/In-Vivo-Vaccine-Research-Scientist_4949609-2,United States - New York - Pearl River,NY,N/A
+30,"Senior Scientist, Discovery BioSciences Oncology",Bms,https://bristolmyerssquibb.wd5.myworkdayjobs.com/BMS/job/Cambridge-Crossing---MA---US/Senior-Scientist--Discovery-BioSciences-Oncology_R1598206,Cambridge Crossing - MA - US,MA,N/A
+31,"Scientist I, Data Science",Sanofi,https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Cambridge-MA/Scientist-I--Data-Science_R2822005-1,"Cambridge, MA",MA,N/A
+32,"Scientist, Investigation Team",Bms,https://bristolmyerssquibb.wd5.myworkdayjobs.com/BMS/job/Summit-West---NJ---US/Scientist--Investigation-Team_R1597922,Summit West - NJ - US,NJ,N/A
+33,Scientist III - Downstream Purification Development,Thermofisher,https://thermofisher.wd5.myworkdayjobs.com/ThermoFisherCareers/job/Bedford-Massachusetts-USA/Scientist-III---Downstream-Purification-Development_R-01336907,"Bedford, Massachusetts, USA",MA,N/A
+34,Senior Data Scientist – Computer Vision & Biomedical Imaging,Merck,https://msd.wd5.myworkdayjobs.com/SearchJobs/job/USA---Massachusetts---Cambridge-320-Bent-Street/Senior-Data-Scientist---Computer-Vision---Biomedical-Imaging_R361956-1,USA - Massachusetts - Cambridge (320 Bent Street),MA,N/A
+35,"Associate Director, Equipment Development and Facility Engineering Technology Engineer",Merck,https://msd.wd5.myworkdayjobs.com/SearchJobs/job/USA---New-Jersey---Rahway/Associate-Director--Equipment-Development-and-Facility-Engineering-Technology-Engineer_R379223,USA - New Jersey - Rahway,NJ,N/A
+36,"Assoc. Scientist, Chemistry",Merck,https://msd.wd5.myworkdayjobs.com/SearchJobs/job/USA---New-Jersey---Rahway/Assoc-Scientist--Chemistry_R379846-1,USA - New Jersey - Rahway,NJ,N/A
+37,"Senior Scientist, Chemistry",Merck,https://msd.wd5.myworkdayjobs.com/SearchJobs/job/USA---New-Jersey---Rahway/Senior-Scientist--Chemistry_R380175-1,USA - New Jersey - Rahway,NJ,N/A
+38,Senior Manager - International Predictive Customer Engagement,Bms,https://bristolmyerssquibb.wd5.myworkdayjobs.com/BMS/job/Princeton---NJ---US/Senior-Manager---International-Predictive-Customer-Engagement_R1596187,Princeton - NJ - US,NJ,N/A
+39,"Principal Scientist, In Vivo Pharmacology, Oncology Discovery Biology",Bms,https://bristolmyerssquibb.wd5.myworkdayjobs.com/BMS/job/Cambridge-Crossing---MA---US/Principal-Scientist--In-Vivo-Pharmacology--Oncology-Discovery-Biology_R1595224,Cambridge Crossing - MA - US,MA,N/A
+40,"Principal Scientist, Engineering",Merck,https://msd.wd5.myworkdayjobs.com/SearchJobs/job/USA---Pennsylvania---West-Point/Principal-Scientist--Engineering_R374282-1,USA - Pennsylvania - West Point,PA,N/A
+41,"Assoc Prin. Scientist, Engineering",Merck,https://msd.wd5.myworkdayjobs.com/SearchJobs/job/USA---New-Jersey---Rahway/Assoc-Prin-Scientist--Engineering_R374284,USA - New Jersey - Rahway,NJ,N/A
+42,Principal Data Scientist,Sanofi,https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Cambridge-MA/Principal-Data-Scientist_R2828432-1,"Cambridge, MA",MA,N/A
+43,Summer-Fall 2026 Co-Op - mRNA Center of Excellence - Scientific Data Support Analyst - Vaccines,Sanofi,https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Waltham-MA/Summer-Fall-2026-Co-Op---mRNA-Center-of-Excellence---Scientific-Data-Support-Analyst---Vaccines_R2814260,"Waltham, MA",MA,N/A
+44,Distinguished Scientist,Sanofi,https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Cambridge-MA/Distinguished-Scientist_R2836888,"Cambridge, MA",MA,N/A
+45,Senior Scientist – Expert in RNA Biology and Rare Neurodevelopmental Diseases,Sanofi,https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Cambridge-MA/Senior-Scientist--Molecular--Cellular-and-In-vivo-Expert-in-Rare-Neurodevelopmental-Disorders_R2825604,"Cambridge, MA",MA,N/A
+46,"Distinguished Scientist, Head of Investigative Toxicology US",Sanofi,https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Cambridge-MA/Distinguished-Scientist--Head-of-Investigative-Toxicology-US_R2835359,"Cambridge, MA",MA,N/A
+47,"Scientist, Retinal Degeneration",Sanofi,https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Cambridge-MA/Scientist--Retinal-Degeneration_R2837665-1,"Cambridge, MA",MA,N/A
+48,"Principal Scientist, Retinal Degeneration",Sanofi,https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Cambridge-MA/Principal-Scientist--Retinal-Degeneration_R2837663,"Cambridge, MA",MA,N/A
+49,2026 Future Talent Program - Computer Scientist - Co-Op,Merck,https://msd.wd5.myworkdayjobs.com/SearchJobs/job/USA---Pennsylvania---West-Point/XMLNAME-2026-Future-Talent-Program---Computer-Scientist---Co-Op_R378187,USA - Pennsylvania - West Point,PA,N/A
+50,"Associate Principal Scientist, Vaccines Clinical Assays",Merck,https://msd.wd5.myworkdayjobs.com/SearchJobs/job/USA---Pennsylvania---Lower-Gwynedd-Township-Spring-House/Associate-Principal-Scientist--Vaccines-Clinical-Assays_R377868-1,USA - Pennsylvania - Lower Gwynedd Township (Spring House),PA,N/A
+51,Chromatography Principal Scientist,Sanofi,https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Cambridge-MA/Chromatography-Principal-Scientist_R2819445,"Cambridge, MA",MA,N/A
+52,Process Development Senior Scientist - Attribute Sciences,Amgen,https://amgen.wd1.myworkdayjobs.com/Careers/job/US---Massachusetts---Cambridge/Process-Development-Senior-Scientist---Attribute-Sciences_R-233625,US - Massachusetts - Cambridge,MA,N/A
+53,"Director WW Medical, Pulmonology/Admilparant",Bms,https://bristolmyerssquibb.wd5.myworkdayjobs.com/BMS/job/Princeton---NJ---US/Director-WW-Medical--Pulmonology-Admilparant_R1597957,Princeton - NJ - US,NJ,N/A
+54,Reference Standard and Critical Reagents Scientist Co-op,Bms,https://bristolmyerssquibb.wd5.myworkdayjobs.com/BMS/job/New-Brunswick---NJ---US/Reference-Standard-and-Critical-Reagents-Scientist-Co-op_R1598135,New Brunswick - NJ - US,NJ,N/A
+55,Senior Scientist,Bms,https://bristolmyerssquibb.wd5.myworkdayjobs.com/BMS/job/Summit-West---NJ---US/Senior-Scientist_R1596420,Summit West - NJ - US,NJ,N/A
+56,Senior Scientist – Quality Control,Thermofisher,https://thermofisher.wd5.myworkdayjobs.com/ThermoFisherCareers/job/Boston-Massachusetts-USA/Senior-Scientist---Quality-Control_R-01337642,"Boston, Massachusetts, USA",MA,N/A
+57,"Sr. Scientist, Engineering",Merck,https://msd.wd5.myworkdayjobs.com/SearchJobs/job/USA---New-Jersey---Rahway/Sr-Scientist--Engineering_R378926-1,USA - New Jersey - Rahway,NJ,N/A
+58,"Associate Principal Scientist, Engineering",Merck,https://msd.wd5.myworkdayjobs.com/SearchJobs/job/USA---New-Jersey---Rahway/Associate-Principal-Scientist--Engineering_R378932-1,USA - New Jersey - Rahway,NJ,N/A
+59,Analytical Principal Scientist (Analytical team lead),Sanofi,https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Cambridge-MA/Analytical-Principal-Scientist--Analytical-team-lead-_R2819446,"Cambridge, MA",MA,N/A
+60,Manufacturing Science and Technology Process Engineering (MSAT PE) Co-Op,Bms,https://bristolmyerssquibb.wd5.myworkdayjobs.com/BMS/job/Summit-West---NJ---US/Manufacturing-Science-and-Technology-Process-Engineering--MSAT-PE--Co-Op_R1597666,Summit West - NJ - US,NJ,N/A
+61,Principal Scientist Computational Biology,Bms,https://bristolmyerssquibb.wd5.myworkdayjobs.com/BMS/job/Cambridge-Crossing---MA---US/Principal-Scientist_R1596679,Cambridge Crossing - MA - US,MA,N/A
+62,Principal Downstream Scientist – mRNA purification,Gsk,https://gsk.wd5.myworkdayjobs.com/GSKCareers/job/USA---Massachusetts---Cambridge/Principal-Downstream-Scientist---mRNA-purification_432207,USA - Massachusetts - Cambridge,MA,N/A
+63,"Scientist, Chemical Process Development, Process Chemistry",Bms,https://bristolmyerssquibb.wd5.myworkdayjobs.com/BMS/job/New-Brunswick---NJ---US/Scientist--Chemical-Process-Development--Process-Chemistry_R1597893,New Brunswick - NJ - US,NJ,N/A
+64,Data Scientist,Psychogenics Inc,https://www.indeed.com/viewjob?jk=42e01c7169b5bbac,"Paramus, NJ, US",NJ,N/A
+65,L&D Manager,Legend Biotech,https://www.indeed.com/viewjob?jk=3c97e85a06cf0ea6,"Somerset, NJ, US",NJ,N/A
+66,Site Civil Engineer,VHB,https://www.indeed.com/viewjob?jk=59fb8e2f5f495ae3,"Manasquan, NJ, US",NJ,"$110,000"
+67,Clinical Trial Manager,BioNTech,https://www.indeed.com/viewjob?jk=239392ec5cf265d8,"Berkeley Heights, NJ, US",NJ,"$122,600/year"
+68,"Principal Scientist, Clinical Sciences",COMPASS Pathways,https://www.indeed.com/viewjob?jk=36c5be2a89855738,"New York, NY, US",NY,N/A
+69,"Director, Global Product Strategy - Lung Cancer Therapies",BioNTech,https://www.indeed.com/viewjob?jk=95ffb5394bd7e4af,"Berkeley Heights, NJ, US",NJ,"$168,100"
+70,"Executive Director, Head Trial Analytics, Insights and Planning",Bristol Myers Squibb,https://www.indeed.com/viewjob?jk=4a6aaf25dc3591ec,"Princeton, NJ, US",NJ,"$257,180"
+71,"Director, Global Product Strategy - Lung Cancer Therapies",BioNTech,https://www.indeed.com/viewjob?jk=4efde9c9a79f3747,"Berkeley Heights, NJ, US",NJ,"$168,100"
+72,Inside Sales Manager,Instem,https://www.indeed.com/viewjob?jk=e9d049fb9a5db488,"Boston, MA, US",MA,N/A
+73,"Head, Translational Research and Biomarkers",Novartis,https://www.indeed.com/viewjob?jk=6d89457dea1aa5b9,"Cambridge, MA, US",MA,"$185,500"
+74,"(Senior) Manager, Biomarker Operations",BioNTech,https://www.indeed.com/viewjob?jk=9336583a3610539c,"Cambridge, MA, US",MA,"$113,600"
+75,Senior Editor,cradle,https://www.indeed.com/viewjob?jk=97495e04da284237,"Boston, MA, US",MA,N/A
+76,"Principal Scientist in Cell, Molecular, and Immunology",GSK,https://www.indeed.com/viewjob?jk=a7343cc70c3a492d,"Cambridge, MA, US",MA,"$115,500"
+77,"Director, AI/ML Strategy and Technology Enablement",Takeda Pharmaceuticals,https://www.indeed.com/viewjob?jk=da4e1e5a21d7416f,"Boston, MA, US",MA,"$174,500"
+78,"Principal Scientist in Cell, Molecular, and Immunology",GSK,https://www.indeed.com/viewjob?jk=909f61b717ab973f,"Cambridge, MA, US",MA,"$115,500"
+79,"Associate Director, Clinical Trials",BioNTech,https://www.indeed.com/viewjob?jk=cd2b82dd6f0d4b61,"Cambridge, MA, US",MA,"$146,300/year"
+80,Field Application Scientist Chromatics,GeneData,https://www.indeed.com/viewjob?jk=43c9bb508990dba3,"Lexington, MA, US",MA,"$80,000"
+81,"Senior/Principal Scientist, Medicinal Chemistry",nan,https://www.indeed.com/viewjob?jk=f3b246d5531ff557,"Watertown, MA, US",MA,N/A
+82,Raven Senior Associate,nan,https://www.indeed.com/viewjob?jk=4c78535472527ebc,"Boston, MA, US",MA,$10
+83,Director CTSM Supply Network Alliance Management,BioNTech,https://www.indeed.com/viewjob?jk=88912ec3d8513c63,"Cambridge, MA, US",MA,"$168,100/year"
+84,"Associate Principal Scientist, In Vitro Quantitative Biosciences",Merck,https://www.indeed.com/viewjob?jk=8611838ffbcffe20,"Cambridge, MA, US",MA,"$144,800"
+85,Staff / Principal Mechanical Engineer,Lila Sciences,https://www.indeed.com/viewjob?jk=14f25a4c2a9399b1,"Cambridge, MA, US",MA,"$163,400 – $228,000"
+86,Postdoctoral Research Associate-Translational/Muscle Biology (Murine Models),Northeastern University,https://www.indeed.com/viewjob?jk=8ce7bfcc54853fc2,"Boston, MA, US",MA,"$59,425"
+87,"Director, Global Clinical Operations",BioNTech,https://www.indeed.com/viewjob?jk=79d1f7afd4e4d198,"Cambridge, MA, US",MA,"$168,100/year"
+88,Molecular Biology Scientist/Senior Associate Scientist,Legend Biotech,https://www.indeed.com/viewjob?jk=978ed50cd20da9cc,"Philadelphia, PA, US",PA,N/A
+89,Process Operator I,Catalent Pharma Solutions,https://www.indeed.com/viewjob?jk=f4421dbcef5201a1,"Malvern, PA, US",PA,N/A
+90,Postdoctoral Associate,Rutgers University,https://www.indeed.com/viewjob?jk=d9b34f7e1a8218bd,"Piscataway, NJ, US",NJ,"$63,968"
+91,Research Technician I,The Research Foundation for The State University of New York at Stony Brook,https://www.indeed.com/viewjob?jk=b7d9e76c72906849,"Stony Brook, NY, US",NY,"$35,000"
+92,Research Technician B,Albert Einstein College of Medicine,https://www.indeed.com/viewjob?jk=6043623b29468790,"Bronx, NY, US",NY,$26
+93,Postdoctoral Fellow-MSH-30035-391,Mount Sinai Health System,https://www.indeed.com/viewjob?jk=aeeb395bb2e968d8,"New York, NY, US",NY,$72500
+94,"Senior Scientist, Stem Cell Biology - Hematology & Medical Oncology",Mount Sinai Health System,https://www.indeed.com/viewjob?jk=d2aca9e3aba92c24,"New York, NY, US",NY,$58661
+95,"Senior Scientist, Megakaryocyte Stem Cell Biology - Hematology & Medical Oncology",Mount Sinai Health System,https://www.indeed.com/viewjob?jk=ebc03c18c7296929,"New York, NY, US",NY,$58661
+96,"Associate Director, Precision Medicine",Regeneron,https://www.indeed.com/viewjob?jk=28d4c4785442b32a,"Armonk, NY, US",NY,"$176,100"
+97,"Associate Scientist, In Vivo & In Vitro",Regeneron,https://www.indeed.com/viewjob?jk=81f1ddc0bcea9eda,"Tarrytown, NY, US",NY,"$70,300"
+98,Technician A,Columbia University,https://www.indeed.com/viewjob?jk=be5fd9a9b7844fdb,"New York, NY, US",NY,"$46,529"
+99,Postdoctoral Associate,The Research Foundation for The State University of New York at Stony Brook,https://www.indeed.com/viewjob?jk=86c1fb77886e6f19,"Stony Brook, NY, US",NY,"$53,000"
+100,"Research Technician, Lowe Lab",Memorial Sloan Kettering Cancer Center,https://www.indeed.com/viewjob?jk=aeaa460e33fa1e63,"New York, NY, US",NY,$26
+101,"Associate Director, Precision Medicine",Regeneron,https://www.indeed.com/viewjob?jk=ea35df626f3895f8,"Armonk, NY, US",NY,"$176,100"
+102,"Associate Scientist, In Vivo & In Vitro",Regeneron,https://www.indeed.com/viewjob?jk=f83c4af1c81d8b65,"Tarrytown, NY, US",NY,"$70,300"
+103,Research Assistant | Laboratory of Chemistry and Cell Biology,Rockefeller University,https://www.indeed.com/viewjob?jk=2ed8247b3383f212,"New York, NY, US",NY,"$50,000"
+104,Postdoctoral Associate,Rutgers University,https://www.indeed.com/viewjob?jk=bc926694754104ef,"Piscataway, NJ, US",NJ,"$63,968"
+105,Postdoctoral Associate,Hospital for Special Surgery,https://www.indeed.com/viewjob?jk=942dc3d66549026d,"New York, NY, US",NY,$23
+106,"Associate Scientist, Keloid & Fibrosis",Regeneron,https://www.indeed.com/viewjob?jk=d697445d7ec36ad4,"Tarrytown, NY, US",NY,"$70,300"
+107,Postdoctoral Associate (Rocha Lab),New York University,https://www.indeed.com/viewjob?jk=93827ebfe9c1593c,"New York, NY, US",NY,"$62,500"
+108,"Associate Scientist, Keloid & Fibrosis",Regeneron,https://www.indeed.com/viewjob?jk=4ac397875f9742f7,"Tarrytown, NY, US",NY,"$70,300"
+109,Research Assistant | Laboratory of Mucosal Immunology,Rockefeller University,https://www.indeed.com/viewjob?jk=b53321847daffbc6,"New York, NY, US",NY,"$50,000"
+110,Technician B - Celiac Disease Center,Columbia University,https://www.indeed.com/viewjob?jk=bfb7262c5167caae,"New York, NY, US",NY,"$55,112"
+111,Technician B - Hematology & Oncology,Columbia University,https://www.indeed.com/viewjob?jk=7ee84690daee67e8,"New York, NY, US",NY,"$55,112"
+112,"Research Assistant, Sanjana Lab (STING-req)",New York Genome Center,https://www.indeed.com/viewjob?jk=49cee59122c576a8,"New York, NY, US",NY,"$46,000"
+113,"Research Assistant, Sanjana Lab (in vivo)",New York Genome Center,https://www.indeed.com/viewjob?jk=a58b0547a62dd4db,"New York, NY, US",NY,"$46,000"
+114,Research Assistant | Laboratory of RNA Structural Biology and Biophysics,Rockefeller University,https://www.indeed.com/viewjob?jk=21434b362c5a667a,"New York, NY, US",NY,"$50,000"
+115,Postdoctoral Fellow-MSH-32076-162,Mount Sinai Health System,https://www.indeed.com/viewjob?jk=4dea13a8a9d8443a,"New York, NY, US",NY,"$74,692"
+116,"Associate Scientist, Assay Development",Pfizer,https://www.indeed.com/viewjob?jk=61d96dc90d513893,"Cambridge, MA, US",MA,"$60,200"
+117,Principal Scientist,Harvard University,https://www.indeed.com/viewjob?jk=ca27ea1873445f29,"Boston, MA, US",MA,N/A
+118,"Sr Research Associate, Molecular Biology",TWIST BIOSCIENCE,https://www.indeed.com/viewjob?jk=56bfbba46c1f88fc,"Quincy, MA, US",MA,N/A
+119,"Research Scientist, AI/ML Foundational Models",Takeda Pharmaceuticals,https://www.indeed.com/viewjob?jk=5ec9542952f08ba2,"Boston, MA, US",MA,"$111,800"
+120,Technical Scientist,Cytiva,https://www.indeed.com/viewjob?jk=189ff8770aae2bc1,"Marlborough, MA, US",MA,"$110,000"
+121,Research Technician,Brandeis University,https://www.indeed.com/viewjob?jk=bad75ba54b4a3392,"Waltham, MA, US",MA,"$39,600"
+122,2026 Future Talent Program - Research – Chemical Biology- Co-Op,Merck,https://www.indeed.com/viewjob?jk=840ac344a4905795,"Cambridge, MA, US",MA,"$39,600"
+123,"2026 Future Talent Program – Discovery Immunology – Co-op (Cambridge, MA)",Merck,https://www.indeed.com/viewjob?jk=015620fc83536dbf,"Cambridge, MA, US",MA,"$39,600"
+124,Technical Associate I,Massachusetts Institute of Technology,https://www.indeed.com/viewjob?jk=623a99a150a2ef1a,"Cambridge, MA, US",MA,N/A
+125,Research Fellow: Bioassay Development,Biogen,https://www.indeed.com/viewjob?jk=154b2b7b847985f5,"Cambridge, MA, US",MA,"$110,000"
+126,"Principal Scientist, Analytical Development",nan,https://www.indeed.com/viewjob?jk=57060a9b11328a03,"Cambridge, MA, US",MA,$30
+127,"Postdoctoral researcher Omics, R&D Data Science & Digital Health",Johnson & Johnson,https://www.indeed.com/viewjob?jk=6dbd6faec5d23085,"Cambridge, MA, US",MA,"$79,000"
+128,Postdoctoral Fellow,Mass General Brigham,https://www.indeed.com/viewjob?jk=5b1c533c9ed9e61c,"Boston, MA, US",MA,N/A
+129,"Research Associate II/Senior Research Associate, Discovery",CAMP4 Therapeutics,https://www.indeed.com/viewjob?jk=2f65965b15ea5a0c,"Cambridge, MA, US",MA,"$85,000"
+130,"Associate Scientist II, Precision Medicine Immunology",AbbVie,https://www.indeed.com/viewjob?jk=336f0f2f74ddc686,"Waltham, MA, US",MA,"$106,870"
+131,Research Fellow -- AHA SFRN Cardiovascular Research Fellow (Basic Science Project),Mass General Brigham,https://www.indeed.com/viewjob?jk=42cad7345b7d3ba9,"Charlestown, MA, US",MA,N/A
+132,Scientist I - ADA/PK,BioAgilytix Labs,https://www.indeed.com/viewjob?jk=7e98eff1289d3421,"Boston, MA, US",MA,N/A
+133,Research Assistant I,Harvard University,https://www.indeed.com/viewjob?jk=9aea3c7ad13789c8,"Boston, MA, US",MA,N/A
+134,"Senior Research Associate, Antibody Engineering",Institute for Protein Innovation,https://www.indeed.com/viewjob?jk=16be944347f2810e,"Boston, MA, US",MA,N/A
+135,"Intern, Student (Laboratory)",Quest Diagnostics,https://www.indeed.com/viewjob?jk=cf072e6fb78e781f,"Marlborough, MA, US",MA,N/A
+136,"Associate Director, Translational Research Hematology R&D",AstraZeneca,https://www.indeed.com/viewjob?jk=c7487b476f74d599,"Waltham, MA, US",MA,"$134,578"
+137,"Scientist, Characterization",Thermo Fisher Scientific,https://www.indeed.com/viewjob?jk=a1f783b535ddd9ce,"Framingham, MA, US",MA,$36
+138,"Director, Chemical Biology, US",GSK,https://www.indeed.com/viewjob?jk=d12940450a059bf6,"Collegeville, PA, US",PA,N/A
+139,"Analyst II, Quality Control",Resilience,https://www.indeed.com/viewjob?jk=a6f1726c113f0007,"East Norriton, PA, US",PA,"$65,000"
+140,"Scientist, Quality Control","Rockland Immunochemicals, Inc.",https://www.indeed.com/viewjob?jk=808226bafeb5eeaf,"Pottstown, PA, US",PA,N/A
+141,"Hiring Scientists and Technicians at all levels (BS, MS, PhD)",Biopharmaspec Inc,https://www.indeed.com/viewjob?jk=22909571db1e6851,"Malvern, PA, US",PA,"$50,000"
+142,"Research Investigator, Senior",University of Pennsylvania,https://www.indeed.com/viewjob?jk=d9cda48f7207749b,"Philadelphia, PA, US",PA,"$79,500"
+143,"Principal Scientist, Omics - R&D Data Science & Digital Health – Neuroscience",Johnson & Johnson,https://www.indeed.com/viewjob?jk=db6754c71b6ee719,"Spring House, PA, US",PA,"$117,000"
+144,Research Specialist A/B,University of Pennsylvania,https://www.indeed.com/viewjob?jk=11911336a2bf0c30,"Philadelphia, PA, US",PA,"$44,500"
+145,"Senior, Research Investigator",University of Pennsylvania,https://www.indeed.com/viewjob?jk=32a03e0ca8cb8296,"Philadelphia, PA, US",PA,"$79,500"
+146,"Distinguished Scientist, Translational Safety",Johnson & Johnson,https://www.indeed.com/viewjob?jk=3ac3fe7d0b9eba76,"Spring House, PA, US",PA,"$164,000"
+147,Research Postdoctoral Fellow - Grant & Sengupta Labs,Children's Hospital of Philadelphia,https://www.indeed.com/viewjob?jk=22ef785c4f3217b9,"Philadelphia, PA, US",PA,"$20,800"
+148,"Sr. Principal Scientist, Neurodegeneration",GSK,https://www.indeed.com/viewjob?jk=86b179830ef7c240,"Collegeville, PA, US",PA,N/A
+149,R&D Novel CAR Intern/Co-Op,Legend Biotech,https://www.indeed.com/viewjob?jk=61a59adbbbeb521f,"Philadelphia, PA, US",PA,N/A
+150,"Sr. Principal Scientist, Neurodegeneration",GSK,https://www.indeed.com/viewjob?jk=df8e04290777682c,"Upper Providence, PA, US",PA,N/A
+151,Research Specialist A/B,University of Pennsylvania,https://www.indeed.com/viewjob?jk=1180a0b328513da4,"Philadelphia, PA, US",PA,"$44,500"
+152,Bioinformatics Software Engineer III,Memorial Sloan Kettering Cancer Center,https://www.indeed.com/viewjob?jk=4aa004eda1c637c1,"New York, NY, US",NY,"$121,400"
+153,Supervising Research Scientist,Rutgers University,https://www.indeed.com/viewjob?jk=90d8597d2de1b346,"New Brunswick, NJ, US",NJ,N/A
+154,Bioethics Research Coordinator,Columbia University,https://www.indeed.com/viewjob?jk=a4ff40885843204e,"New York, NY, US",NY,"$66,300"
+155,Senior Technician - Hematology & Oncology,Columbia University,https://www.indeed.com/viewjob?jk=4c5c9dc2a75bfb94,"New York, NY, US",NY,"$61,692"
+156,Mobile Phlebotomist (Independent Contractor),"Biodesix, Inc.",https://www.indeed.com/viewjob?jk=918fcfe7961f8b57,"Clifton, NJ, US",NJ,N/A
+157,Mobile Phlebotomist (Independent Contractor),"Biodesix, Inc.",https://www.indeed.com/viewjob?jk=6bacbe20a9b28757,"Morristown, NJ, US",NJ,N/A
+158,Bioinformatician II- Tisch Cancer Institute BiNGS Core,Mount Sinai Health System,https://www.indeed.com/viewjob?jk=bd6f16ab95cb43db,"New York, NY, US",NY,$65885
+159,Data Operations Engineer (Bioinformatics),Holobiome Inc,https://www.indeed.com/viewjob?jk=d6639aa2984989d9,"Boston, MA, US",MA,"$90,000"
+160,Protein Purification Analytical Scientist,Eurofins,https://www.indeed.com/viewjob?jk=e98b69e21f418af7,"Andover, MA, US",MA,$27
+161,Analytical Laboratory Associate II,Eurofins,https://www.indeed.com/viewjob?jk=12e4f01c0cc0bbc4,"Andover, MA, US",MA,$26
+162,HPLC Biochemistry Team Lead,Eurofins,https://www.indeed.com/viewjob?jk=644733897d54924d,"Cambridge, MA, US",MA,$34
+163,"Oligonucleotide Scientist I, Process Development",Editas Medicine,https://www.indeed.com/viewjob?jk=95fd8d4d165eace0,"Cambridge, MA, US",MA,"$115,000"
+164,"Scientist I, Analytical Sciences",Editas Medicine,https://www.indeed.com/viewjob?jk=ebac1d4eab78b415,"Cambridge, MA, US",MA,"$115,000"
+165,"Associate Scientist, Postdoctoral Fellow- Data Science for Multi-omics and Biomarker Modelling in Neuroscience",Merck,https://www.indeed.com/viewjob?jk=6f231a7e8b47f7a4,"Cambridge, MA, US",MA,N/A
+166,Machine Learning Software Engineer,nan,https://www.indeed.com/viewjob?jk=5adf1b3bef3eeb0f,"Cambridge, MA, US",MA,$30
+167,"Senior Manager, Clinical Biomarker Operations",Apogee Therapeutics,https://www.indeed.com/viewjob?jk=8345209181a4c1f2,"Boston, MA, US",MA,"$160,000"
+168,Associate Computational Biologist,Dana-Farber Cancer Institute,https://www.indeed.com/viewjob?jk=ebf664dbd48ae3a1,"Boston, MA, US",MA,"$60,000"
+169,Consumer Product Testing Analytical Director,Eurofins,https://www.indeed.com/viewjob?jk=11f7a5e28394611e,"Norwood, MA, US",MA,$100k
+170,Specimen Processing Specialist I,Fulgent Therapeutics,https://www.indeed.com/viewjob?jk=220e2ffc5db9339d,"Needham, MA, US",MA,N/A
+171,"Associate Director, US Analytics (Heme-Oncology)",SERVIER,https://www.indeed.com/viewjob?jk=e21d22970fe0dd58,"Boston, MA, US",MA,$160k
+172,Bioanalytical Chemist,Eurofins,https://www.indeed.com/viewjob?jk=3ece8968ac89ae52,"Andover, MA, US",MA,$26
+173,Laboratory Technician - Part-Time,Eurofins,https://www.indeed.com/viewjob?jk=4168b028801a92bf,"Philadelphia, PA, US",PA,N/A
+174,Medical Laboratory Manager,Curesponse,https://www.indeed.com/viewjob?jk=a2fb170b7b89462b,"Philadelphia, PA, US",PA,N/A
+175,Faculty Positions - HIV Cure and Viral Diseases Center,The Wistar Institute,https://www.indeed.com/viewjob?jk=fd4785069a3950cc,"Philadelphia, PA, US",PA,N/A
+176,Clinical Research Coordinator A,University of Pennsylvania,https://www.indeed.com/viewjob?jk=d4f4d2c2c7f11780,"Philadelphia, PA, US",PA,"$46,500"
+177,Research Post Doc - Zhou Lab,Children's Hospital of Philadelphia,https://www.indeed.com/viewjob?jk=800fa2c6d53e6997,"Philadelphia, PA, US",PA,"$20,800"
+178,Upstream Process Scientist - Ambr250 (Weekends),Eurofins,https://www.indeed.com/viewjob?jk=2a0aa8b47e789b18,"Malvern, PA, US",PA,N/A
+179,Tecan/Hamilton Liquid Handler Associate - Lab Automation,Eurofins,https://www.indeed.com/viewjob?jk=859737fc7145806d,"West Point, PA, US",PA,N/A
+180,Product Support Intern,Werfen,https://www.indeed.com/viewjob?jk=18eb8db66526a841,"Orangeburg, NY, US",NY,$21
+181,Manufacturing Engineer,Weiss-Aug,https://www.indeed.com/viewjob?jk=60d2f1a1499e303b,"Fairfield, NJ, US",NJ,N/A
+182,Junior Content Developer,Derex Technologies inc,https://www.indeed.com/viewjob?jk=5dabaae4836254bf,"Harrison, NJ, US",NJ,N/A
+183,"Blackstone Executive Offices - Chief Investment Office, Vice President",Blackstone,https://www.indeed.com/viewjob?jk=9276bb97266e1e1b,"New York, NY, US",NY,$1
+184,Healthcare Investment Banking Analyst / Associate,Career Launch AI,https://www.indeed.com/viewjob?jk=d8667b2578259b12,"New York, NY, US",NY,"$150,000 – $250,000"
+185,Secretary,Goodwin Procter LLP,https://www.indeed.com/viewjob?jk=423281369b742e38,"New York, NY, US",NY,"$85,000"
+186,Computer System Assurance (CSA) Consultant,Katalyst Healthcares & Life Sciences,https://www.indeed.com/viewjob?jk=9c3af3fdbbe6238f,"South Plainfield, NJ, US",NJ,N/A
+187,Salesforce Senior Consultant,Deloitte,https://www.indeed.com/viewjob?jk=1563d4edbe708ede,"Morristown, NJ, US",NJ,"$113,300"
+188,Salesforce Senior Consultant,Deloitte,https://www.indeed.com/viewjob?jk=16ca364f7645a226,"New York, NY, US",NY,"$113,300"
+189,Salesforce Senior Consultant,Deloitte,https://www.indeed.com/viewjob?jk=14dfff9a45907900,"Princeton, NJ, US",NJ,"$113,300"
+190,Salesforce Senior Consultant,Deloitte,https://www.indeed.com/viewjob?jk=4727d05cd8640f85,"Jersey City, NJ, US",NJ,"$113,300"
+191,Electrical Engineer,CMTA Consulting Engineers,https://www.indeed.com/viewjob?jk=7cc0ff2ad7d32d68,"Madison, NJ, US",NJ,N/A
+192,Senior Electrical Engineer,CMTA Consulting Engineers,https://www.indeed.com/viewjob?jk=90cdcb37b7730a43,"Madison, NJ, US",NJ,N/A
+193,Commercial Banker - Innovation Economy Portfolio Debt Solutions - Vice President,JPMorganChase,https://www.indeed.com/viewjob?jk=7768709e0e0d4888,"New York, NY, US",NY,N/A
+194,Marketing Operations Specialist,Bausch & Lomb,https://www.indeed.com/viewjob?jk=0fb3d1222cba9628,"Bridgewater, NJ, US",NJ,"$75,000"
+195,"Project Manager, Pharmaceutical Marketing",Bausch & Lomb,https://www.indeed.com/viewjob?jk=45f876e59fbf8de8,"Bridgewater, NJ, US",NJ,"$75,000"
+196,Principal Software Engineer – Forward Deployed,Pfizer,https://www.indeed.com/viewjob?jk=eb5728e4335c93d1,"New York, NY, US",NY,"$162,900"
+197,Senior Analyst – Life Science Consulting,Inizio Engage,https://www.indeed.com/viewjob?jk=52dbb8659d6c23b4,"Newark, NJ, US",NJ,"$90,000"
+198,Senior Analyst – Life Science Consulting,Inizio Engage,https://www.indeed.com/viewjob?jk=4db9546f55c3bf20,"Elizabeth, NJ, US",NJ,"$90,000"
+199,Life Science Consulting Manager – Hub Strategy,Inizio Engage,https://www.indeed.com/viewjob?jk=3a75071c4933bc98,"Hanover, NJ, US",NJ,"$150,000"
+200,"Sr. Scientist, Stat. Programming - Late Stage (Hybrid)",Merck,https://www.indeed.com/viewjob?jk=a224fdb43a897135,"Rahway, NJ, US",NJ,"$117,000"
+201,"Blackstone Operating Team, Vice President, Spend Management",Blackstone,https://www.indeed.com/viewjob?jk=a49cdc60107a3165,"New York, NY, US",NY,$1
+202,"Blackstone Credit & Insurance, ABF Associate",Blackstone,https://www.indeed.com/viewjob?jk=fba7fe4c03bb8091,"New York, NY, US",NY,$1
+203,Blackstone Credit & Insurance(BXCI) - Fund Operations - Insurance - Vice President,Blackstone,https://www.indeed.com/viewjob?jk=73d8d102b65d1010,"New York, NY, US",NY,$1
+204,Carried Interest & Co-Investment Financial Associate,Blackstone,https://www.indeed.com/viewjob?jk=3c805e369afaa20b,"New York, NY, US",NY,$1
+205,Blackstone Credit & Insurance(BXCI) - Treasury & Liquidity Management - Assistant Vice President,Blackstone,https://www.indeed.com/viewjob?jk=2fe7ee432d044217,"New York, NY, US",NY,$1
+206,Head of Stemline Quality Operations (Executive Director),Menarini,https://www.indeed.com/viewjob?jk=1469ec28293d71bb,"New York, NY, US",NY,"$291,947"
+207,Principal Enterprise Architect (Remote),IQVIA,https://www.indeed.com/viewjob?jk=70fb08e5de109f80,"Wayne, NJ, US",NJ,"$118,100"
+208,"Senior Analyst, FP&A",CVS Health,https://www.indeed.com/viewjob?jk=b2d08568d4ba8ad0,"New York, NY, US",NY,"$50,188"
+209,Director of Capital Projects,Hines,https://www.indeed.com/viewjob?jk=2f27e613e458e0bc,"New York, NY, US",NY,"$207,900"
+210,Anatomic Pathology/Histology Lab Manager,Allied Digestive Health,https://www.indeed.com/viewjob?jk=53596466d0c3de33,"West Long Branch, NJ, US",NJ,N/A
+211,"Managing Director, Software Engineering",West Monroe,https://www.indeed.com/viewjob?jk=d3d60d82d683c60d,"New York, NY, US",NY,"$280,000"
+212,"QC Testing Assistant Researcher, Protein",GenScript ProBio,https://www.indeed.com/viewjob?jk=4ea4ab0eb0cbcb79,"Piscataway, NJ, US",NJ,"$60,000"
+213,Documentation Solutions Architect - REMOTE,Beckman Coulter Life Sciences,https://www.indeed.com/viewjob?jk=68902ddebba8359e,"New York, NY, US",NY,"$100,000"
+214,Paralegal - Immigration,nan,https://www.indeed.com/viewjob?jk=9d466110fcf7ddfe,"New York, NY, US",NY,N/A
+215,Delivery Solutions Architect Manager – Healthcare & Life Sciences (HLS),Databricks,https://www.indeed.com/viewjob?jk=0e99ff706e8ee79c,"New York, NY, US",NY,N/A
+216,"Senior Director, Customer Engagement Data Science & AI Engineering Lead",Bristol Myers Squibb,https://www.indeed.com/viewjob?jk=cd0ea29fba647446,"Princeton, NJ, US",NJ,"$229,500"
+217,Principal Cloud Architect – DevIQ (Remote),IQVIA,https://www.indeed.com/viewjob?jk=cbe9df7a3a5fa9b7,"Wayne, NJ, US",NJ,"$118,100"
+218,"Clinical Research Associate, Full Service",IQVIA,https://www.indeed.com/viewjob?jk=2d7866f4f8f1f93f,"Parsippany-Troy Hills, NJ, US",NJ,"$47,400"
+219,Healthcare Strategy Consultant,Career Launch AI,https://www.indeed.com/viewjob?jk=7d27ef0b4bd3513a,"New York, NY, US",NY,"$95,000 – $145,000"
+220,Healthcare Strategy Consultant,Career Launch AI,https://www.indeed.com/viewjob?jk=41cee9ac700f3461,"New York, NY, US",NY,"$95,000 – $145,000"
+221,Healthcare Investment Banking Analyst / Associate,Career Launch AI,https://www.indeed.com/viewjob?jk=e3c8eb370be046c4,"New York, NY, US",NY,"$150,000 – $250,000"
+222,Product Stewardship and Data Manager,Edgewell Personal Care,https://www.indeed.com/viewjob?jk=5e6ccfd72adbf6f7,"Allendale, NJ, US",NJ,"$112,000"
+223,Project Director ( Retail),"JRM Construction Management, LLC",https://www.indeed.com/viewjob?jk=c4147fca9a50b48c,"New York, NY, US",NY,"$225,000"
+224,Life Science-Biology Teacher,iLearn Schools,https://www.indeed.com/viewjob?jk=e68d2e9fe2c24ece,"Hackensack, NJ, US",NJ,"$64,500"
+225,"VP, Global Advanced Wound Care Strategy & Development",Convatec,https://www.indeed.com/viewjob?jk=eb739989b2c0c357,"Bridgewater, NJ, US",NJ,$2
+226,"Commercial Marketing Manager, East Coast",Cytiva,https://www.indeed.com/viewjob?jk=2bbb8f78893ac930,"New York, NY, US",NY,"$100,000"
+227,"Director, Procurement - Biochemistries",Danaher,https://www.indeed.com/viewjob?jk=ec4ac198aef60710,"New York, NY, US",NY,$1
+228,Customs Trade Compliance Expert,GenScript ProBio,https://www.indeed.com/viewjob?jk=d32b3db8732c16f3,"Piscataway, NJ, US",NJ,"$85,000"
+229,Trainee Market Research Executive - US Graduate 2026,Healthcare Research Worldwide,https://www.indeed.com/viewjob?jk=9c7a11b84c0c20e8,"Manhattan, NY, US",NY,"$60,000"
+230,USA - Consulting - Risk - Digital Risk - Staff,EY,https://www.indeed.com/viewjob?jk=a41c71cdcc70beaa,"New York, NY, US",NY,"$78,000"
+231,frog - Senior Service Designer,Capgemini,https://www.indeed.com/viewjob?jk=0f458ee0f49de7ed,"New York, NY, US",NY,"$112,000"
+232,Product Development - Digital Engineering - Senior Associate,PwC,https://www.indeed.com/viewjob?jk=4c767dd28ba81180,"Florham Park, NJ, US",NJ,"$77,000"
+233,Product Development - Digital Engineering - Senior Associate,PwC,https://www.indeed.com/viewjob?jk=657ed6ed6bbba189,"New York, NY, US",NY,"$77,000"
+234,Operations Manager,AIT Worldwide Logistics,https://www.indeed.com/viewjob?jk=d2c3aaabdf95106d,"Secaucus, NJ, US",NJ,"$70,040"
+235,District Manager - Water,Ecolab,https://www.indeed.com/viewjob?jk=28da5cd45a685055,"New York, NY, US",NY,"$142,100"
+236,Business Operations and Analytics Intern - US Market Commercial,Genmab,https://www.indeed.com/viewjob?jk=c0e5252cd12df555,"Princeton, NJ, US",NJ,N/A
+237,"Director, Patent Attorney",Regeneron,https://www.indeed.com/viewjob?jk=311609fe0a22e45c,"Tarrytown, NY, US",NY,"$205,000"
+238,"Director, Enterprise Architecture - Commercial",Pfizer,https://www.indeed.com/viewjob?jk=1204d1da38f0433b,"New York, NY, US",NY,"$162,900"
+239,"Full-Stack Developer, Associate - Corporate Finance",Blackstone,https://www.indeed.com/viewjob?jk=5b5cfa3d57ea92cc,"New York, NY, US",NY,$1
+240,"Vice President, Real Estate (Public Relations)",Rubenstein,https://www.indeed.com/viewjob?jk=b6c48d1c1bc223b4,"New York, NY, US",NY,"$100,000"
+241,"Manager, Editorial Operations",Goodwin Procter LLP,https://www.indeed.com/viewjob?jk=c018fcb31f4eae9b,"New York, NY, US",NY,"$103,700"
+242,Private Equity Fund Administrator - Supervisor,RSM,https://www.indeed.com/viewjob?jk=a81d95e9ea9c1053,"New York, NY, US",NY,"$81,400"
+243,Accounting and Finance Consulting Senior Associate - Public Company Solutions,RSM,https://www.indeed.com/viewjob?jk=266f3f83f8b96cef,"New York, NY, US",NY,"$69,800"
+244,AQUARIST 1,Merlin Entertainments,https://www.indeed.com/viewjob?jk=2666f105f8f16f96,"East Rutherford, NJ, US",NJ,$22
+245,"Sales Executive - Hereditary Cancer Screening - New Brunswick, NJ",Myriad Genetics,https://www.indeed.com/viewjob?jk=92e267e29b5ae014,"New Brunswick, NJ, US",NJ,"$180,000 – $205,000 annually"
+246,"Sales Executive - Hereditary Cancer Screening - Spring Valley, NY",Myriad Genetics,https://www.indeed.com/viewjob?jk=35d329235e2832d7,"Spring Valley, NY, US",NY,"$180,000 – $205,000 annually"
+247,"Sales Executive - Prenatal - Jersey City, NJ",Myriad Genetics,https://www.indeed.com/viewjob?jk=4346816dec41fe30,"Jersey City, NJ, US",NJ,"$180,000 – $205,000 annually"
+248,"Sales Executive - Hereditary Cancer Screening - Brooklyn, NY",Myriad Genetics,https://www.indeed.com/viewjob?jk=27c89d768c2e2593,"Brooklyn, NY, US",NY,"$180,000 – $205,000 annually"
+249,"Sales Executive - Hereditary Cancer Screening - Long Island/West, NY",Myriad Genetics,https://www.indeed.com/viewjob?jk=5da44d360d683243,"Brooklyn, NY, US",NY,"$180,000 – $205,000 annually"
+250,"Clinical Sales Specialist, Structural Heart, TEER (NYC - Manhattan)",Abbott,https://www.indeed.com/viewjob?jk=4f3e199790cf5638,"Manhattan, NY, US",NY,"$78,000"
+251,"Associate Director, Medical Strategy",EVERSANA,https://www.indeed.com/viewjob?jk=128fd3538d499ffc,"New York, NY, US",NY,N/A
+252,Senior IT Program Manager,Morris Technology Solutions,https://www.indeed.com/viewjob?jk=336dcf935ca059cf,"Nutley, NJ, US",NJ,N/A
+253,Construction Scheduler I,"JRM Construction Management, LLC",https://www.indeed.com/viewjob?jk=d6a7adf9a3896b16,"New York, NY, US",NY,"$80,000"
+254,"Associate Consultant, Healthcare & Analytics Strategy Consulting",IQVIA,https://www.indeed.com/viewjob?jk=82041f8fef1230bb,"New York, NY, US",NY,"$60,000"
+255,"Director, Patent Attorney",Regeneron,https://www.indeed.com/viewjob?jk=afbfafbee7f921fd,"Tarrytown, NY, US",NY,"$205,000"
+256,"Senior Healthcare & Life Sciences Solutions Architect, AI Solutions",Amazon Web Services,https://www.indeed.com/viewjob?jk=d8bb63671c81f15e,"New York, NY, US",NY,"$138,200/year"
+257,"Sr. ProServe Account Executive, WWPS Healthcare & Life Sciences",Amazon Web Services,https://www.indeed.com/viewjob?jk=b75ebd5a5267dc26,"Jersey City, NJ, US",NJ,"$138,200/year"
+258,"Manager, Data Science",Suffolk Construction,https://www.indeed.com/viewjob?jk=7281d28f7831bb9d,"Boston, MA, US",MA,$8
+259,IT Intern - Software Development Platform Automation,Waters,https://www.indeed.com/viewjob?jk=9bef5ec535b5435d,"Milford, MA, US",MA,N/A
+260,Psychometrician,Lumanity,https://www.indeed.com/viewjob?jk=1b2710fd01db3e3d,"Boston, MA, US",MA,N/A
+261,"VP, Product Marketing",Ataccama,https://www.indeed.com/viewjob?jk=dc4d458d7bae1ea1,"Boston, MA, US",MA,"$280,000–$350,000"
+262,"Research Scientist/ Senior Research Scientist, Precision Medicine",Aitia,https://www.indeed.com/viewjob?jk=8112f738f382eae5,"Cambridge, MA, US",MA,N/A
+263,Software Test/Validation Engineer (Med Device) #7728,Enhanced Compliance Inc.,https://www.indeed.com/viewjob?jk=4b71132cd837fe24,"Marlborough, MA, US",MA,N/A
+264,Registered Nurse- Neonatal Intensive Care Unit- Concord MA,Precision Life Sciences,https://www.indeed.com/viewjob?jk=14d7150bafa49ebc,"Concord, MA, US",MA,$2500
+265,Registered Nurse- Critical Care- Concord MA,Precision Life Sciences,https://www.indeed.com/viewjob?jk=4674d03cea55626a,"Concord, MA, US",MA,$2425
+266,Registered Nurse- Operating Room- Concord MA,Precision Life Sciences,https://www.indeed.com/viewjob?jk=abdb3484afb2e6c0,"Concord, MA, US",MA,$2700
+267,Registered Nurse- Medical Surgical- Concord MA,Precision Life Sciences,https://www.indeed.com/viewjob?jk=c0a553c8a4adf816,"Concord, MA, US",MA,$2350
+268,Registered Nurse- Lawrence MA - Medical Surgical,Precision Life Sciences,https://www.indeed.com/viewjob?jk=effa820fec75889c,"Lawrence, MA, US",MA,$2550
+269,WAREHOUSE LABORER,"Callahan, Inc.",https://www.indeed.com/viewjob?jk=abd0178fb228dd8c,"Bridgewater, MA, US",MA,N/A
+270,"Research Scientist/ Senior Research Scientist, Precision Medicine",Aitia,https://www.indeed.com/viewjob?jk=42065918392afec0,"Cambridge, MA, US",MA,N/A
+271,Senior Sales Executive,Instem,https://www.indeed.com/viewjob?jk=bd0fe23fec831ab9,"Boston, MA, US",MA,N/A
+272,Senior Accountant,Azenta Life Sciences,https://www.indeed.com/viewjob?jk=08adefd9382fa015,"Burlington, MA, US",MA,"$82,000"
+273,Supplier Quality Engineer,Katalyst Healthcares & Life Sciences,https://www.indeed.com/viewjob?jk=53fe89135e83b572,"Danvers, MA, US",MA,N/A
+274,Senior Product Manager,LGC,https://www.indeed.com/viewjob?jk=b7dadb262ac03dd0,"Milford, MA, US",MA,N/A
+275,Regulatory Affairs Coordinator,Katalyst Healthcares & Life Sciences,https://www.indeed.com/viewjob?jk=3f9b34f97b54f063,"Boston, MA, US",MA,N/A
+276,"Global VP R&D, Respiratory",Olympus Corporation,https://www.indeed.com/viewjob?jk=a1f039b9a9c76f3a,"Westborough, MA, US",MA,"$210,319"
+277,Salesforce Senior Consultant,Deloitte,https://www.indeed.com/viewjob?jk=db2d2b6abe3118b6,"Boston, MA, US",MA,"$113,300"
+278,Inside Sales/ Revenue Operations Specialist,MarathonLS,https://www.indeed.com/viewjob?jk=f8f624085d37ecdb,"Norwood, MA, US",MA,"$70,000"
+279,"Scientist, Oncology Translational Research",Bristol Myers Squibb,https://www.indeed.com/viewjob?jk=2ded770e6d92611e,"Cambridge, MA, US",MA,"$129,640"
+280,Senior Electrical Engineer,CMTA Consulting Engineers,https://www.indeed.com/viewjob?jk=8ac95e390a58fbc2,"Framingham, MA, US",MA,N/A
+281,Senior IT Consultant,Pliancy,https://www.indeed.com/viewjob?jk=09cf3d814c105a0f,"Boston, MA, US",MA,"$95,000–$115,000 per year"
+282,Senior Business Development Manager,Ropes & Gray LLP,https://www.indeed.com/viewjob?jk=4070c091542f0df0,"Boston, MA, US",MA,"$180,700"
+283,"Sr Director, Sales Enablement -Chemical Analysis Division",Thermo Fisher Scientific,https://www.indeed.com/viewjob?jk=473e130b6cceb102,"Waltham, MA, US",MA,$40
+284,Customer Care Specialist,Vizgen,https://www.indeed.com/viewjob?jk=34b36fb3d7c73607,"Cambridge, MA, US",MA,N/A
+285,"Principal, Scientific Statistical Programming",CSL,https://www.indeed.com/viewjob?jk=6d7deecc3615c35f,"Waltham, MA, US",MA,N/A
+286,Alternative Energy Sales Specialist,MilliporeSigma,https://www.indeed.com/viewjob?jk=e5a98246dc7d131f,"Burlington, MA, US",MA,"$85,300"
+287,"Senior Director, Real World Data Methodologies and Solutions",EMD Serono,https://www.indeed.com/viewjob?jk=4da7089dd8f675c2,"Billerica, MA, US",MA,"$234,800"
+288,Field Application Scientist,Sony,https://www.indeed.com/viewjob?jk=a31f494fd81d7278,"Boston, MA, US",MA,"$110,000"
+289,Financial Analyst,Ropes & Gray LLP,https://www.indeed.com/viewjob?jk=6d3c787a831d92c1,"Boston, MA, US",MA,"$77,000"
+290,Credit Assistant,Ropes & Gray LLP,https://www.indeed.com/viewjob?jk=900c5fb61484110d,"Boston, MA, US",MA,"$52,600"
+291,Educator Advisor,The Possible Zone,https://www.indeed.com/viewjob?jk=d759da95ce93699f,"Lawrence, MA, US",MA,N/A
+292,"Associate, Life Science",Alexandria Real Estate Equities,https://www.indeed.com/viewjob?jk=3bc5bf00149bd1ec,"Boston, MA, US",MA,"$150,000"
+293,"Clinical Scientist, Clinical Development",nan,https://www.indeed.com/viewjob?jk=a3a8a46fe9388e13,"Waltham, MA, US",MA,"$140,000"
+294,Account Executive,2020 On-site,https://www.indeed.com/viewjob?jk=8bc4b4408fc01e28,"Everett, MA, US",MA,N/A
+295,Global Strategic Account Director,Cytiva,https://www.indeed.com/viewjob?jk=87b445ba8367649b,"Boston, MA, US",MA,"$150,000"
+296,"FP&A Analyst, Global (Evident MIS)",Evident Scientific,https://www.indeed.com/viewjob?jk=f4a467d5311e76a4,"Needham, MA, US",MA,N/A
+297,"FP&A Director, Global (Evident MIS)",Evident Scientific,https://www.indeed.com/viewjob?jk=d82161cf717a2d8d,"Needham, MA, US",MA,N/A
+298,HCP Marketing Manager,Fresenius Medical Care,https://www.indeed.com/viewjob?jk=268a09e9be62e451,"Lawrence, MA, US",MA,"$79,600"
+299,HCP Marketing Manager - Education,Fresenius Medical Care,https://www.indeed.com/viewjob?jk=68fe14b7e2dc257a,"Lawrence, MA, US",MA,"$79,600"
+300,Sr. Consultant - Life Sciences,Tiger Analytics,https://www.indeed.com/viewjob?jk=9420523a55c3330f,"Boston, MA, US",MA,N/A
+301,Senior Consultant – Healthcare & Life Sciences - Commercial Strategy,Simon-Kucher & Partners,https://www.indeed.com/viewjob?jk=45eb95300cc5b9c0,"Boston, MA, US",MA,"$105,000"
+302,Experienced Consultant – Healthcare & Life Sciences - Commercial Strategy,Simon-Kucher & Partners,https://www.indeed.com/viewjob?jk=30867b71f10665b2,"Boston, MA, US",MA,"$105,000"
+303,Senior Medical Writer,Synaptiq Health,https://www.indeed.com/viewjob?jk=5e1332e1f627e8b2,"Boston, MA, US",MA,N/A
+304,Account Director,Synaptiq Health,https://www.indeed.com/viewjob?jk=29ae18c39fa23f3c,"Boston, MA, US",MA,N/A
+305,"Executive Director, Talent Management and HR Strategy","Apellis Pharmaceuticals, Inc.",https://www.indeed.com/viewjob?jk=e8e6ef813e17ea56,"Waltham, MA, US",MA,"$249,500"
+306,Pharmaceutical Reference Librarian,Copyright Clearance Center,https://www.indeed.com/viewjob?jk=4704ea24e49e09b9,"Cambridge, MA, US",MA,"$95,000"
+307,Quality/Regulatory Manager,Analog Devices,https://www.indeed.com/viewjob?jk=b74fbf3a9ecd2852,"Wilmington, MA, US",MA,$9
+308,Senior Project Manager - Life Sciences - Pharmaceuticals - Biotech,Northstar Project and Real Estate Services,https://www.indeed.com/viewjob?jk=bb6d905af850636d,"Cambridge, MA, US",MA,N/A
+309,"Scientific Senior Director, ADCs Discovery Biology, Oncology",Bristol Myers Squibb,https://www.indeed.com/viewjob?jk=f3a03c6e0f8dac32,"Cambridge, MA, US",MA,"$266,590"
+310,R&D Engineer,Formlabs,https://www.indeed.com/viewjob?jk=ccb01805cd8fdc10,"Somerville, MA, US",MA,N/A
+311,R&D Engineer,Formlabs,https://www.indeed.com/viewjob?jk=b5453d260a95e41c,"Boston, MA, US",MA,N/A
+312,Sales & Business Development Specialist,Manay CPA,https://www.indeed.com/viewjob?jk=58f65a950c11cc09,"Medford, MA, US",MA,N/A
+313,"Senior Director, Operations Commercialization Lead (Cell Therapy)",AstraZeneca,https://www.indeed.com/viewjob?jk=ad8abbed67a476d3,"Boston, MA, US",MA,"$174,756"
+314,"Director, Forecasting, Analytics & Insights (CF)",Vertex Pharmaceuticals,https://www.indeed.com/viewjob?jk=b1710b2919c3d9af,"Boston, MA, US",MA,"$192,000"
+315,"Director, Forecasting, Analytics & Insights (CGT)",Vertex Pharmaceuticals,https://www.indeed.com/viewjob?jk=5f8711dd992f8e11,"Boston, MA, US",MA,"$192,000"
+316,Consulting Project Team Lead - Pricing & Market Access (Multiple Offices) New,ClearView Healthcare Partners,https://www.indeed.com/viewjob?jk=02ce927c53070c1d,"Boston, MA, US",MA,"$190,000"
+317,Consulting Project Team Lead - Corporate Strategy (Multiple offices) New,ClearView Healthcare Partners,https://www.indeed.com/viewjob?jk=32235138753c0601,"Boston, MA, US",MA,"$190,000"
+318,Life Sciences Senior Consultant - Investor (Multiple Offices) New,ClearView Healthcare Partners,https://www.indeed.com/viewjob?jk=26b3b970612363a5,"Boston, MA, US",MA,"$160,000"
+319,Consulting Project Team Lead - Investor (Multiple offices) New,ClearView Healthcare Partners,https://www.indeed.com/viewjob?jk=348547028944f832,"Boston, MA, US",MA,"$190,000"
+320,Faculty – School of Nursing – Graduate Nursing,Massachusetts College of Pharmacy and Health Sciences,https://www.indeed.com/viewjob?jk=e790865fa9d2c33e,"Worcester, MA, US",MA,"$100,000"
+321,"Senior Healthcare & Life Sciences Solutions Architect, AI Solutions",Amazon Web Services,https://www.indeed.com/viewjob?jk=0a4a7a31c3d35fe9,"Boston, MA, US",MA,"$138,200/year"
+322,"Applied Scientist, Special Projects",Amazon.com,https://www.indeed.com/viewjob?jk=0076987c2b9470f2,"Boston, MA, US",MA,"$136,000/year"
+323,"Applied Scientist, Amazon Special Projects",Amazon.com,https://www.indeed.com/viewjob?jk=7b6dc05a62000855,"Boston, MA, US",MA,"$136,000/year"
+324,"Principal Applied Scientist, Amazon Special Projects",Amazon.com,https://www.indeed.com/viewjob?jk=5417daeb0ee40ab4,"Boston, MA, US",MA,"$179,000/year"
+325,Senior SAP PTP (Procure to Pay) Consultant,Tenthpin,https://www.indeed.com/viewjob?jk=4ea804e3b892d928,"Philadelphia, PA, US",PA,N/A
+326,"Sr. Manager, Accounting Operations",nan,https://www.indeed.com/viewjob?jk=cdf87ab45a36da09,"Philadelphia, PA, US",PA,N/A
+327,Electrical Engineer,Genesis AEC,https://www.indeed.com/viewjob?jk=40e1890754e05c90,"Blue Bell, PA, US",PA,"$1,000"
+328,Quality Systems Specialist,Katalyst Healthcares & Life Sciences,https://www.indeed.com/viewjob?jk=ec586d947ce476ef,"Exton, PA, US",PA,N/A
+329,Commercial Construction Estimator,Greenstar Group,https://www.indeed.com/viewjob?jk=062ece8570085bb9,"Brooklawn, NJ, US",NJ,"$80,000"
+330,GRC / Technical Controls Analyst II,PCI Pharma Services,https://www.indeed.com/viewjob?jk=095f69627193c178,"Philadelphia, PA, US",PA,N/A
+331,Secretary,Goodwin Procter LLP,https://www.indeed.com/viewjob?jk=bd900ed292bb2322,"Philadelphia, PA, US",PA,"$60,000"
+332,Senior Global Marketing Director - Multiple Myeloma,GSK,https://www.indeed.com/viewjob?jk=f15cf3d3c925082f,"Upper Providence, PA, US",PA,N/A
+333,Senior Director External Engagement - Multiple Myeloma,GSK,https://www.indeed.com/viewjob?jk=4f3f85ce468ff6d7,"Upper Providence, PA, US",PA,N/A
+334,"Associate Director, Veeva Clinical Excellence",GSK,https://www.indeed.com/viewjob?jk=c413f4dfcd92e00f,"Collegeville, PA, US",PA,N/A
+335,"Director, Veeva Clinical Excellence",GSK,https://www.indeed.com/viewjob?jk=ee7bb3e5bf364cb1,"Collegeville, PA, US",PA,N/A
+336,Quality Inspector - NMR,ATS Scientific Products,https://www.indeed.com/viewjob?jk=d6f76ee6c8546837,"Vineland, NJ, US",NJ,$2
+337,Trade Marketing (TPM/TPO) - Senior Consultant,Clarkston,https://www.indeed.com/viewjob?jk=8626f685a659a548,"Philadelphia, PA, US",PA,N/A
+338,Supply Chain Senior Consultant - Life Sciences,Clarkston,https://www.indeed.com/viewjob?jk=c240cadac826ef59,"Philadelphia, PA, US",PA,N/A
+339,SAP IBP Solution Architect - Principal,Clarkston,https://www.indeed.com/viewjob?jk=a9360af01c0a161a,"Philadelphia, PA, US",PA,N/A
+340,Salesforce Senior Consultant,Deloitte,https://www.indeed.com/viewjob?jk=67bbc0ab54eb7984,"Philadelphia, PA, US",PA,"$113,300"
+341,Associate/Scientific Director,Lumanity,https://www.indeed.com/viewjob?jk=62c59a55e4eb7a55,"Yardley, PA, US",PA,N/A
+342,"Technical Sales Manager - Life Sciences, Manufacturing; Cell & Gene Therapy",Saint-Gobain,https://www.indeed.com/viewjob?jk=b3def56cce98d567,"Malvern, PA, US",PA,"$102,000"
+343,Industrial Quality Parts Inspector,Ingersoll-Rand,https://www.indeed.com/viewjob?jk=c2e25f1f7c6ec067,"Richboro, PA, US",PA,N/A
+344,Industrial Quality Parts Inspector,Ingersoll-Rand,https://www.indeed.com/viewjob?jk=22dbff66aa6bdbb9,"Hatboro, PA, US",PA,N/A
+345,Industrial Quality Parts Inspector,Ingersoll-Rand,https://www.indeed.com/viewjob?jk=b8c484d940fcf228,"Philadelphia, PA, US",PA,N/A
+346,CNC Lathe Programmer (2nd Shift),Ingersoll-Rand,https://www.indeed.com/viewjob?jk=bfe51ccbf2c966c6,"Newtown, PA, US",PA,N/A
+347,Industrial Quality Parts Inspector,Ingersoll-Rand,https://www.indeed.com/viewjob?jk=85a1c0ebeaf15664,"Newtown, PA, US",PA,N/A
+348,Industrial Quality Parts Inspector,Ingersoll-Rand,https://www.indeed.com/viewjob?jk=42f83f22c41af88f,"Warrington, PA, US",PA,N/A
+349,CNC Lathe Programmer (2nd Shift),Ingersoll-Rand,https://www.indeed.com/viewjob?jk=90a6b9efb640a67d,"Lansdale, PA, US",PA,N/A
+350,CNC Lathe Programmer (2nd Shift),Ingersoll-Rand,https://www.indeed.com/viewjob?jk=7a516fe3d24f832c,"Hatfield, PA, US",PA,N/A
+351,"Key Account Surgical Specialist, RWS Philadelphia",LifeNet Health,https://www.indeed.com/viewjob?jk=925a50fb183445b0,"Philadelphia, PA, US",PA,"$109,953"
+352,Accounting Manager,nan,https://www.indeed.com/viewjob?jk=0e81320e9981a7d5,"Philadelphia, PA, US",PA,N/A
+353,"Associate Account Executive - Philadelphia, PA - Johnson & Johnson MedTech, Surgery",Johnson & Johnson,https://www.indeed.com/viewjob?jk=4783ee0cc344e349,"Philadelphia, PA, US",PA,N/A
+354,Associate Software Engineer,Globus Medical,https://www.indeed.com/viewjob?jk=1e323d3e65cb2fe2,"Audubon, PA, US",PA,N/A
+355,"Proposal Lead, Clinical Supply & Specialty Services",Catalent Pharma Solutions,https://www.indeed.com/viewjob?jk=480154a6d725325d,"Philadelphia, PA, US",PA,N/A
+356,"Director, Quality Control Microbiology",Resilience,https://www.indeed.com/viewjob?jk=0abc331086479968,"East Norriton, PA, US",PA,"$160,000"
+357,Shipping Associate,Ingersoll-Rand,https://www.indeed.com/viewjob?jk=fea1c1735ee19c84,"Ivyland, PA, US",PA,N/A
+358,Product Development - Digital Engineering - Senior Associate,PwC,https://www.indeed.com/viewjob?jk=b6b36fb24b69848d,"Philadelphia, PA, US",PA,"$77,000"
+359,District Manager - Water,Ecolab,https://www.indeed.com/viewjob?jk=1fffd0f7999d31ca,"Philadelphia, PA, US",PA,"$142,100"
+360,"Technical Sales Specialist, Flow Cytometry Reagents",Thermo Fisher Scientific,https://www.indeed.com/viewjob?jk=f79cb7368aed9204,"Philadelphia, PA, US",PA,$25
+361,"Senior Associate, Electrical",JB&B,https://www.indeed.com/viewjob?jk=e1790b6c5bbe592f,"Philadelphia, PA, US",PA,"$1610,000"
+362,"Senior Principal, Data Engineering",Jazz Pharmaceuticals,https://www.indeed.com/viewjob?jk=da3f7bc00d442cba,"Philadelphia, PA, US",PA,"$142,400"
+363,"Lead, Trial Delivery Manager - Oncology",Johnson & Johnson,https://www.indeed.com/viewjob?jk=94249a04b46bf837,"Spring House, PA, US",PA,"$105,000"
+364,QUALITY CONTROL FINAL TEST TECHNICIAN,"Process Insights, Inc.",https://www.indeed.com/viewjob?jk=d2fdb41b7e47f6d6,"Horsham, PA, US",PA,N/A
+365,Head of NA and EU Sales - Specialty Gas (Remote),EMD Electronics,https://www.indeed.com/viewjob?jk=28febd19cdee65dd,"Allentown, PA, US",PA,"$175,000"
+366,Clinical Project Manager - Corporate or Remote,TELA Bio,https://www.indeed.com/viewjob?jk=d278965fec0bbe8e,"Malvern, PA, US",PA,N/A
+367,Clinical Research Specialist-Gastroenterology,Temple University Health System,https://www.indeed.com/viewjob?jk=e353fa48ab73e966,"Philadelphia, PA, US",PA,"$52,000"
+368,"Director, Business Development",KPS Life,https://www.indeed.com/viewjob?jk=0e80d629f771fbb6,"Malvern, PA, US",PA,N/A
+369,Sr. Project Manager / Pharma,AtkinsRéalis,https://www.indeed.com/viewjob?jk=5cfdba0d57b7542c,"Exton, PA, US",PA,N/A
+370,Business Development Director - Life Sciences (Philadelphia),RSM,https://www.indeed.com/viewjob?jk=047b3286af4d974e,"Philadelphia, PA, US",PA,"$136,800"
+371,Private Equity Fund Administrator - Supervisor,RSM,https://www.indeed.com/viewjob?jk=851a03e851516528,"Philadelphia, PA, US",PA,"$81,400"
+372,Financial Consulting Supervisor - Finance as a Service,RSM,https://www.indeed.com/viewjob?jk=833e055c6f4f8465,"Blue Bell, PA, US",PA,$0
+373,"Director, Medical Safety (Scientist)",Jazz Pharmaceuticals,https://www.indeed.com/viewjob?jk=91d407531fe3eb2f,"Philadelphia, PA, US",PA,"$200,000"
+374,"Sales Executive - Hereditary Cancer Screening - Allentown, PA",Myriad Genetics,https://www.indeed.com/viewjob?jk=8e3d7341cdcfb74c,"Allentown, PA, US",PA,"$180,000 – $205,000 annually"
+375,Director of Estimating,AES Cleanroom Technology,https://www.indeed.com/viewjob?jk=5f5913a6cb8ba7a0,"Montgomeryville, PA, US",PA,"$180,000"
+376,"Senior Director, Accounting",HealthVerity,https://www.indeed.com/viewjob?jk=c6ca9523bd12406f,"Philadelphia, PA, US",PA,"$150,000"
+377,Field Service Controls Engineer PA,ATC Automation,https://www.indeed.com/viewjob?jk=4cbef7f9b7ecdaa8,"Allentown, PA, US",PA,N/A
+378,Fulfillment Specialist - Specialty Pharmacy,AscellaHealth,https://www.indeed.com/viewjob?jk=73fc9dd28d3a12e0,"Berwyn, PA, US",PA,N/A
+379,Technology/Cloud Marketing Development Lead,Accenture,https://www.indeed.com/viewjob?jk=0c3b31741f4053c9,"Philadelphia, PA, US",PA,"$73,800"
+380,Equipment Service Technician,STERIS,https://www.indeed.com/viewjob?jk=a88eb815c28aaf2d,"Philadelphia, PA, US",PA,"$54,187"
+381,Mechanical Engineer I,"Hargrove Life Sciences, LLC",https://www.indeed.com/viewjob?jk=84f49ea1dd228ecf,"Philadelphia, PA, US",PA,N/A
+382,Environmental Health & Safety Associate,Triumvirate Environmental,https://www.indeed.com/viewjob?jk=f26aad0870d8d2e2,"Norristown, PA, US",PA,N/A
+383,National Business Director,nan,https://www.indeed.com/viewjob?jk=3ef97e9f9b80e07d,"Philadelphia, PA, US",PA,N/A
+384,"Sr. Manager/Associate Director, Global Recruitment Marketing",nan,https://www.indeed.com/viewjob?jk=bb80e871eb40e0de,"Newtown, PA, US",PA,N/A
+385,"Sr. Director, Strategic Execution",nan,https://www.indeed.com/viewjob?jk=1a3b065f19828a03,"Newtown, PA, US",PA,"$148,410"
+386,Oncology Sales Specialist,nan,https://www.indeed.com/viewjob?jk=45bc5273f3bcb96e,"Trenton, NJ, US",NJ,$200k
+387,Managing Director Commercial Advisory,nan,https://www.indeed.com/viewjob?jk=f5f8327e457bebe0,"Philadelphia, PA, US",PA,$3
+388,Oncology Sales Specialist,nan,https://www.indeed.com/viewjob?jk=e543619dda612701,"Philadelphia, PA, US",PA,$200k
+389,Sr. Director - Human Resources,nan,https://www.indeed.com/viewjob?jk=90c8f3cdb9b67653,"Branchburg, NJ, US",NJ,"$169,500"
+390,Milroyal Assembler,Ingersoll-Rand,https://www.indeed.com/viewjob?jk=f98b78d33d2e434e,"Ivyland, PA, US",PA,N/A
+391,"Director, Pipeline Project Manager",GSK,https://www.indeed.com/viewjob?jk=41ccd3b6a70273d2,"Collegeville, PA, US",PA,N/A
+392,Key Account Manager,nan,https://www.indeed.com/viewjob?jk=a0f8492b27a49f69,"Delaware, NJ, US",NJ,"$160,000"
+393,Manager/Senior Manager - Decision Science (1235),AXTRIA,https://www.indeed.com/viewjob?jk=cb46938301431698,"Berkeley Heights, NJ, US",NJ,"$119,500"
+394,Associate Director - IC & Commercial Excellence,AXTRIA,https://www.indeed.com/viewjob?jk=5914357c7e0176d8,"Berkeley Heights, NJ, US",NJ,"$131,200"
+395,Technology/Cloud Marketing Development Lead,Accenture,https://www.indeed.com/viewjob?jk=3d66b5a4c965f3ef,"Morristown, NJ, US",NJ,"$73,800"
+396,Senior Environmental Health & Safety Consultant,Triumvirate Environmental,https://www.indeed.com/viewjob?jk=e0f151172a779877,"Florham Park, NJ, US",NJ,N/A
+397,"Sr. Manager/Associate Director, Global Recruitment Marketing",nan,https://www.indeed.com/viewjob?jk=931f07e7e83e4620,"Bridgewater, NJ, US",NJ,N/A
+398,"Exec Director, Cloud Ops and Infrastructure",nan,https://www.indeed.com/viewjob?jk=72c9e329db436f4d,"Bridgewater, NJ, US",NJ,N/A
+399,"Sr. Director, Strategic Execution",nan,https://www.indeed.com/viewjob?jk=1bf5f95d87bfe5c7,"Bridgewater, NJ, US",NJ,"$148,410"
+400,"Executive Director, Business Development - Core",nan,https://www.indeed.com/viewjob?jk=d23d0ac58cefd144,"Bridgewater, NJ, US",NJ,N/A
+401,Associate Consultant - R&D Advisory - US,nan,https://www.indeed.com/viewjob?jk=a123ad5e05e2854f,"Bridgewater, NJ, US",NJ,"$89,000"
+402,Veeva Solution Architect-5,Realign,https://www.indeed.com/viewjob?jk=495894b163c5121e,"Raritan, NJ, US",NJ,N/A
+403,"Director, Global Strategy",Zoetis,https://www.indeed.com/viewjob?jk=125cd7c5d89c8d90,"Parsippany-Troy Hills, NJ, US",NJ,"$185,000"
+404,Senior Event Manager,Impact XM,https://www.indeed.com/viewjob?jk=a848edc27536e4fe,"Dayton, NJ, US",NJ,N/A
+405,Forsyth Health Sales Leader,The Cigna Group,https://www.indeed.com/viewjob?jk=dfd68a4170fa32e4,"Morris Plains, NJ, US",NJ,N/A
+406,Field Clinical Specialist,InspireMD,https://www.indeed.com/viewjob?jk=dae766fe3fcb52f0,"Morristown, NJ, US",NJ,N/A
+407,Director Global Market Access & Reimbursement – Precision Medicine,Merck,https://www.indeed.com/viewjob?jk=a50e8a7265dc5f9a,"Rahway, NJ, US",NJ,"$190,800"
+408,Programmatic Activation Specialist - IQVIA Digital (Remote),IQVIA,https://www.indeed.com/viewjob?jk=242e901bee42ecea,"Wayne, NJ, US",NJ,"$49,500"
+409,"Associate, In-Process QA, MG/PG",US PharmaLab Inc.,https://www.indeed.com/viewjob?jk=5cf4f7fe190eaf2c,"North Brunswick, NJ, US",NJ,N/A
+410,Data Product Manager,Zoetis,https://www.indeed.com/viewjob?jk=cb2cc57330661691,"Parsippany-Troy Hills, NJ, US",NJ,"$105,000"
+411,Service Desk/ServiceNow Presales DEMO Solutions Architect,Accenture,https://www.indeed.com/viewjob?jk=d2a4200fbe8ff454,"Morristown, NJ, US",NJ,"$73,800"
+412,JDE & Infor Solutions Architect - Manufacturing / Supply Chain*,Accenture,https://www.indeed.com/viewjob?jk=f11474d33789e41e,"Morristown, NJ, US",NJ,"$73,800"
+413,Data Analytics/AI - Solutions Architect*,Accenture,https://www.indeed.com/viewjob?jk=f3629b8e8c006e54,"Morristown, NJ, US",NJ,"$73,800"
+414,Oracle Hyperion/Fusion Solutions Architect *,Accenture,https://www.indeed.com/viewjob?jk=c4748b5e3766d35e,"Morristown, NJ, US",NJ,"$73,800"
+415,"Technology Strategy Manager/Sr Manager, Life Sciences or Industrial",Accenture,https://www.indeed.com/viewjob?jk=a47533de389c26fd,"Morristown, NJ, US",NJ,"$87,400"
+416,IBM iSeries Solutions Architect*,Accenture,https://www.indeed.com/viewjob?jk=2de6197fd8e33717,"Morristown, NJ, US",NJ,"$73,800"
+417,ServiceNow ITSM Solutions Architect,Accenture,https://www.indeed.com/viewjob?jk=d89c03146c02c42c,"Morristown, NJ, US",NJ,"$73,800"
+418,Network and Security Services Solutions Architect*,Accenture,https://www.indeed.com/viewjob?jk=a960d5627ec4d638,"Morristown, NJ, US",NJ,"$73,800"
+419,AWS Modernization Solutions Architect*,Accenture,https://www.indeed.com/viewjob?jk=de1be658b9073c90,"Morristown, NJ, US",NJ,"$73,800"
+420,"Associate, In-Process QA, MG/PG",US PharmaLab Inc.,https://www.indeed.com/viewjob?jk=4ba76dfbaa1ae35a,"North Brunswick, NJ, US",NJ,N/A
+421,Regulatory Affairs Senior Manager,Katalyst Healthcares & Life Sciences,https://www.indeed.com/viewjob?jk=c9a3edf95a19c525,"Madison, NJ, US",NJ,N/A
+422,Middle School Science Teacher (Leave Replacement),The Pennington School,https://www.indeed.com/viewjob?jk=27b6a98ca438bd8c,"Pennington, NJ, US",NJ,"$4,000"
+423,"VP, Global Sales Intelligence",Information Technology Senior Management Forum,https://www.indeed.com/viewjob?jk=a89462766ded2370,"Franklin Lakes, NJ, US",NJ,N/A
+424,"Senior Director, Global Sales Training",BD,https://www.indeed.com/viewjob?jk=8d35a8ff1be03f5b,"Franklin Lakes, NJ, US",NJ,N/A
+425,"VP, Global Sales Intelligence",BD,https://www.indeed.com/viewjob?jk=376264c9b2217740,"Franklin Lakes, NJ, US",NJ,N/A
+426,Sr. Product Manager (CA),Getinge,https://www.indeed.com/viewjob?jk=89372928ca13d238,"Wayne, NJ, US",NJ,"$175,000"
+427,NJ Construction Project Engineer,spear group,https://www.indeed.com/viewjob?jk=0ba2a4ee93b40cc6,"Linden, NJ, US",NJ,N/A
+428,NJ Construction Project Engineer,spear group,https://www.indeed.com/viewjob?jk=1d45ba5a97a1c47c,"New Brunswick, NJ, US",NJ,N/A
+429,Medical Services Assistant (Multiple Vacancies),Rutgers University,https://www.indeed.com/viewjob?jk=7efa1965f5a3989c,"New Brunswick, NJ, US",NJ,N/A
+430,Data Scientist,Johnson & Johnson,https://www.indeed.com/viewjob?jk=12ad612547ed0d28,"New Brunswick, NJ, US",NJ,"$89,000"
+431,Dental Assistant II,Rutgers University,https://www.indeed.com/viewjob?jk=38f59b829ebdf548,"Newark, NJ, US",NJ,N/A
+432,Athletic Trainer,Rutgers University,https://www.indeed.com/viewjob?jk=21b67638b0a7f1eb,"New Brunswick, NJ, US",NJ,N/A
+433,Postdoctoral Associate,Rutgers University,https://www.indeed.com/viewjob?jk=8ebda4a16ef3d4f4,"Newark, NJ, US",NJ,N/A
+434,Head Clerk,Rutgers University,https://www.indeed.com/viewjob?jk=41dd203feb729af1,"Newark, NJ, US",NJ,N/A
+435,Central Sterile Tech I,Rutgers University,https://www.indeed.com/viewjob?jk=7544bae150421eba,"Newark, NJ, US",NJ,N/A
+436,Medical Assistant (Multiple Vacancies),Rutgers University,https://www.indeed.com/viewjob?jk=e1c53ad5b0ab6b81,"New Brunswick, NJ, US",NJ,N/A
+437,"Hematology/Oncology, Rutgers Cancer Institute at University Hospital",Rutgers University,https://www.indeed.com/viewjob?jk=a476dd88d9d84a39,"Newark, NJ, US",NJ,"$269,922"
+438,"Division Chief, Surgical Oncology (Associate Professor - Professor Rank)",Rutgers University,https://www.indeed.com/viewjob?jk=81e35c9195385100,"New Brunswick, NJ, US",NJ,"$451,000"
+439,"Senior Medical Director, Immunology Clinical Development",AbbVie,https://www.indeed.com/viewjob?jk=80b6a1759a746635,"Florham Park, NJ, US",NJ,N/A
+440,"Senior Scientist, Multispecific Antibody Engineering (Oncology)",AbbVie,https://www.indeed.com/viewjob?jk=c469c9a0ac4261ed,"Worcester, MA, US",MA,N/A
+441,"Engineer, Technology II",AbbVie,https://www.indeed.com/viewjob?jk=08d2b90d2977b7d1,"Worcester, MA, US",MA,"$158,974/yr"
+442,"Senior Medical Director, Immunology Clinical Development",AbbVie,https://www.indeed.com/viewjob?jk=ee594c47f4bd209c,"Cambridge, MA, US",MA,N/A
+443,"Senior Applied AI Scientist, Translational AI Lab (TRAIL)",Genentech,https://www.indeed.com/viewjob?jk=72c6e4a76436fddf,"New York, NY, US",NY,"$141,300"
+444,"Senior Applied AI Scientist, Translational AI Lab (TRAIL)",Genentech,https://www.indeed.com/viewjob?jk=0ef70854dd73392d,"New York, NY, US",NY,"$141,300"
+445,BioNTech-Health Economics and Outcomes Research (HEOR) Postdoctoral Research Fellow,Northeastern University,https://www.indeed.com/viewjob?jk=dbef87531ffa4a2c,"Boston, MA, US",MA,"$59,425"
+446,Senior Principal DSX Data Scientist,Genentech,https://www.indeed.com/viewjob?jk=a971fa156209df5c,"Boston, MA, US",MA,"$189,400"
+447,Senior Principal DSX Data Scientist,Genentech,https://www.indeed.com/viewjob?jk=15b958a2beaf45a6,"Boston, MA, US",MA,"$189,400"
+448,"Senior Director, Global Program Team Lead",Alexion Pharmaceuticals,https://www.indeed.com/viewjob?jk=7d16d37a1006cdd4,"Boston, MA, US",MA,N/A
+449,"Group Leader - Senior Director, Quantitative Pharmacology and Pharmacometrics (Hybrid or Remote)",Merck,https://www.indeed.com/viewjob?jk=b7861a09b067b42b,"Rahway, NJ, US",NJ,"$210,400"
+450,"Senior Specialist, Engineering (Onsite)",Merck,https://www.indeed.com/viewjob?jk=93d60767d24e5b81,"Rahway, NJ, US",NJ,"$117,000"
+451,"Scientist, Analytical R&D",Merck,https://www.indeed.com/viewjob?jk=802f8afef42c38c8,"Rahway, NJ, US",NJ,"$87,300"
+452,"Director, Clinical Research, Cardiovascular and Respiratory",Merck,https://www.indeed.com/viewjob?jk=82f38296bdbd8e4a,"Boston, MA, US",MA,"$255,800"
+453,Senior Scientist – Downstream Vaccines and Advanced Biotechnologies Process R&D,Merck,https://www.indeed.com/viewjob?jk=d345f2eee98a33cb,"West Point, PA, US",PA,"$117,000"
+454,"Senior Scientist, Epidemiology",Merck,https://www.indeed.com/viewjob?jk=0cb365a392f9f40c,"West Point, PA, US",PA,"$117,000"
+455,"Distinguished Scientist, Clinical Research, Thoracic Malignancies",Merck,https://www.indeed.com/viewjob?jk=c667b558d37e4850,"Upper Gwynedd, PA, US",PA,"$310,900"
+456,Associate Principal Scientist (Associate Director) - Outcomes Research - Hematology,Merck,https://www.indeed.com/viewjob?jk=eafb7d2e3f0256a5,"North Wales, PA, US",PA,"$153,800"
+457,"Associate Principal Scientist, Drug Metabolism & Pharmacokinetics",Merck,https://www.indeed.com/viewjob?jk=343f7cc9f52634c4,"West Point, PA, US",PA,"$142,400"
+458,FSP -- Sr. Scientist -- Neutralizing Antibody Assays (NAb),Thermo Fisher Scientific,https://www.indeed.com/viewjob?jk=547d157ce2662d77,"Lawrenceville, NJ, US",NJ,"$79,100"
+459,"Senior Director, RWE/Epi Scientist Internal Medicine - Migraine",Pfizer,https://www.indeed.com/viewjob?jk=47f87d704d54c20c,"New York, NY, US",NY,"$230,900"
+460,"Manager, Platform Engineer",Pfizer,https://www.indeed.com/viewjob?jk=b8bf764141593fb8,"New York, NY, US",NY,"$99,200"
+461,Clinical Scientist,Sanofi,https://www.indeed.com/viewjob?jk=55c202f3b92de019,"Morristown, NJ, US",NJ,N/A
+462,Clinical Scientist,Sanofi,https://www.indeed.com/viewjob?jk=6fb937aa2267173f,"Cambridge, MA, US",MA,N/A
+463,Senior Scientist - Lab Automation - Purification Process Development,Sanofi,https://www.indeed.com/viewjob?jk=a5877c021ab9d6b7,"Framingham, MA, US",MA,N/A
+464,Associate Scientist,Sanofi,https://www.indeed.com/viewjob?jk=96064c3e91ec4946,"Framingham, MA, US",MA,N/A
+465,Biorepository Center of Excellence (BCOE) Expert,Sanofi,https://www.indeed.com/viewjob?jk=be8e061493eeca7a,"Cambridge, MA, US",MA,N/A
+466,"Product Manager, AI",Versant,https://www.indeed.com/viewjob?jk=bee1aae790bd7950,"Englewood Cliffs, NJ, US",NJ,"$130,000"
+467,"Sr Data Scientist, Personalization",PayPal,https://www.indeed.com/viewjob?jk=ed338637ec726e2b,"New York, NY, US",NY,"$123,500"
+468,Lead AI Engineer,Granite Telecommunications,https://www.indeed.com/viewjob?jk=0ba689a09f8637eb,"Quincy, MA, US",MA,$1
+469,"Associate Director, Analytical AI Forecasting and Predictive Solutions",Bristol Myers Squibb,https://www.indeed.com/viewjob?jk=9f669f2cca98599b,"Princeton, NJ, US",NJ,"$167,540"
+470,Senior Scientist Stability,Bristol Myers Squibb,https://www.indeed.com/viewjob?jk=704b148c3f8c2cdb,"New Brunswick, NJ, US",NJ,"$115,790"
+471,"Senior Specialist, Cross Study Operations and Specimen Management Product",Bristol Myers Squibb,https://www.indeed.com/viewjob?jk=7ac62e521576f1e2,"Princeton, NJ, US",NJ,N/A
+472,Senior Scientist Stability,Bristol Myers Squibb,https://www.indeed.com/viewjob?jk=0dd3ee8df84be51e,"Devens, MA, US",MA,"$115,790"
+473,Senior Principal Software Engineer - R&D Tech,GSK,https://www.indeed.com/viewjob?jk=edab5b68f2550a32,"Collegeville, PA, US",PA,N/A
+474,"Senior Director, Head of Data Governance & Compliance",GSK,https://www.indeed.com/viewjob?jk=c1e5e64a9955aa06,"Collegeville, PA, US",PA,N/A
+475,"Senior Director, Head of Data Governance & Compliance",GSK,https://www.indeed.com/viewjob?jk=db69623eea3ec0cd,"Upper Providence, PA, US",PA,N/A
+476,Senior Scientist-Bioinformatics,Regeneron,https://www.indeed.com/viewjob?jk=7f630262c624b96f,"Tarrytown, NY, US",NY,"$93,900"
+477,Senior Associate Scientist - Therapeutic Proteins,Regeneron,https://www.indeed.com/viewjob?jk=96c772d5886ec672,"Tarrytown, NY, US",NY,"$80,300"
+478,Senior Associate Scientist - Therapeutic Proteins,Regeneron,https://www.indeed.com/viewjob?jk=1429b96490a8d45c,"Tarrytown, NY, US",NY,"$80,300"
+479,Senior Scientist-Bioinformatics,Regeneron,https://www.indeed.com/viewjob?jk=153fdc1befbb5f37,"Tarrytown, NY, US",NY,"$93,900"
+480,"Associate Scientist, Flow Cytometry",Regeneron,https://www.indeed.com/viewjob?jk=a9f3d015b1522f8b,"Tarrytown, NY, US",NY,"$70,300"
+481,"Associate Scientist, Flow Cytometry",Regeneron,https://www.indeed.com/viewjob?jk=714f5dc8a60f1494,"Tarrytown, NY, US",NY,"$70,300"
+482,"Associate Scientist - Genetic Medicines, In Vivo",Regeneron,https://www.indeed.com/viewjob?jk=afdc4206f9ba5886,"Tarrytown, NY, US",NY,"$70,300"
+483,Associate Scientist - Immunology and Inflammation,Regeneron,https://www.indeed.com/viewjob?jk=bcc62853f4b035a2,"Tarrytown, NY, US",NY,"$93,900"
+484,"Associate Scientist - Genetic Medicines, In Vivo",Regeneron,https://www.indeed.com/viewjob?jk=638687f9747d8e74,"Tarrytown, NY, US",NY,"$70,300"
+485,Associate Scientist - Immunology and Inflammation,Regeneron,https://www.indeed.com/viewjob?jk=3dcfdba7c80a7284,"Tarrytown, NY, US",NY,"$93,900"
+486,Associate Scientist-Biomolecular Interactions,Regeneron,https://www.indeed.com/viewjob?jk=453c6818bf5d11d2,"Tarrytown, NY, US",NY,"$93,900"
+487,Associate Scientist-Biomolecular Interactions,Regeneron,https://www.indeed.com/viewjob?jk=9db8f28a2075fc18,"Tarrytown, NY, US",NY,"$93,900"

@@ -41,6 +41,13 @@ class SiteConfig:
     job_sites: Optional[List[str]] = None
     results_wanted: Optional[int] = None
     hours_old: Optional[int] = None
+    # Workday-specific fields
+    workday_url: Optional[str] = None
+    search_term: Optional[str] = None
+    max_results: Optional[int] = None
+    # Playwright-specific fields
+    career_url: Optional[str] = None
+    ats_system: Optional[str] = None
 
 
 @dataclass
@@ -85,8 +92,8 @@ def _load_detail_page(raw: Dict[str, Any]) -> DetailPageConfig:
 def _load_site(raw: Dict[str, Any]) -> SiteConfig:
     site_type = raw.get("type", "generic")
 
-    # For JobSpy sites, make certain fields optional
-    if site_type == "jobspy":
+    # For JobSpy, Workday, and Playwright sites, make certain fields optional
+    if site_type in ("jobspy", "workday", "playwright"):
         list_item_selector = raw.get("list_item_selector", "")
         title_selector = raw.get("title_selector", "")
         url_selector = raw.get("url_selector", "")
@@ -120,6 +127,13 @@ def _load_site(raw: Dict[str, Any]) -> SiteConfig:
         job_sites=raw.get("job_sites"),
         results_wanted=raw.get("results_wanted"),
         hours_old=raw.get("hours_old"),
+        # Workday-specific configuration
+        workday_url=raw.get("workday_url"),
+        search_term=raw.get("search_term"),
+        max_results=raw.get("max_results"),
+        # Playwright-specific configuration
+        career_url=raw.get("career_url"),
+        ats_system=raw.get("ats_system"),
     )
 
 

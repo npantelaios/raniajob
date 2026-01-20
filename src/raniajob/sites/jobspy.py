@@ -96,71 +96,49 @@ def parse_jobspy_sites(
                             f"JobSpy: Searching '{search_term}' in '{location}' on {job_sites} (attempt {retry_count + 1})"
                         )
 
-                        # Full-time positions only
-                        job_types_to_try = [None, "fulltime"]
-                        remote_options = [False, True]  # Try both remote and on-site
+                        # IMPORTANT: JobSpy has parameter conflicts!
+                        # Only ONE of these can be used: hours_old, job_type, is_remote, easy_apply
+                        # We use only hours_old as it's most useful for finding recent jobs
+                        search_params = {
+                            "site_name": job_sites,
+                            "search_term": search_term,
+                            "location": location,
+                            "results_wanted": results_wanted,
+                            "hours_old": hours_old,  # Keep only this filter
+                            "country_indeed": "USA",
+                        }
 
-                        jobs_found_this_search = []
+                        logger.info(
+                            f"JobSpy search params: {search_params}"
+                        )
 
-                        for job_type in job_types_to_try:
-                            for is_remote in remote_options:
-                                try:
-                                    search_params = {
-                                        "site_name": job_sites,
-                                        "search_term": search_term,
-                                        "location": location,
-                                        "results_wanted": results_wanted,
-                                        "hours_old": hours_old,
-                                        "is_remote": is_remote,
-                                        "country_indeed": "USA",
-                                    }
+                        jobs_df = scrape_jobs(**search_params)
 
-                                    # Only add job_type if it's not None
-                                    if job_type:
-                                        search_params["job_type"] = job_type
-
-                                    logger.debug(
-                                        f"Trying search with params: job_type={job_type}, is_remote={is_remote}"
-                                    )
-
-                                    jobs_df = scrape_jobs(**search_params)
-
-                                    if jobs_df is not None and not jobs_df.empty:
-                                        logger.info(
-                                            f"Found {len(jobs_df)} raw jobs for {search_term} in {location} (job_type={job_type}, remote={is_remote})"
-                                        )
-                                        jobs_found_this_search.append(jobs_df)
-
-                                    # Add small delay between API calls to be respectful
-                                    time.sleep(1)
-
-                                except Exception as search_error:
-                                    logger.debug(
-                                        f"Search variant failed (job_type={job_type}, remote={is_remote}): {search_error}"
-                                    )
-                                    continue
-
-                        # Combine all DataFrames from this search
-                        if jobs_found_this_search:
-                            combined_df = pd.concat(
-                                jobs_found_this_search, ignore_index=True
-                            )
-                            # Remove duplicates based on job_url
-                            combined_df = combined_df.drop_duplicates(
-                                subset=["job_url"], keep="first"
-                            )
+                        if jobs_df is not None and not jobs_df.empty:
+                            # Log per-site results
+                            if "site" in jobs_df.columns:
+                                site_counts = jobs_df["site"].value_counts().to_dict()
+                                logger.info(
+                                    f"JobSpy results by site for '{search_term}' in '{location}': {site_counts}"
+                                )
+                            else:
+                                logger.info(
+                                    f"Found {len(jobs_df)} jobs for '{search_term}' in '{location}'"
+                                )
 
                             # Convert DataFrame to JobPosting objects
-                            jobs = _convert_dataframe_to_jobs(combined_df, source)
+                            jobs = _convert_dataframe_to_jobs(jobs_df, source)
                             all_jobs.extend(jobs)
                             search_stats["successful_searches"] += 1
                             search_stats["total_jobs_found"] += len(jobs)
                             logger.info(
-                                f"JobSpy: Successfully found {len(jobs)} unique jobs for '{search_term}' in '{location}'"
+                                f"JobSpy: Successfully found {len(jobs)} jobs for '{search_term}' in '{location}'"
                             )
+                            # Add delay between searches to be respectful
+                            time.sleep(2)
                             break  # Success, exit retry loop
                         else:
-                            raise Exception("No jobs found with any search variant")
+                            raise Exception("No jobs found")
 
                     except Exception as e:
                         retry_count += 1

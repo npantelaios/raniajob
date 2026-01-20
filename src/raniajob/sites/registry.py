@@ -4,11 +4,15 @@ from typing import Callable, Dict
 
 from .generic import parse_generic_site
 from .jobspy import parse_jobspy_sites
+from .workday import parse_workday_site
+from .playwright_scraper import parse_playwright_site
 
 
 PARSERS: Dict[str, Callable] = {
     "generic": parse_generic_site,
     "jobspy": parse_jobspy_sites,
+    "workday": parse_workday_site,
+    "playwright": parse_playwright_site,
 }
 
 

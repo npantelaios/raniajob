@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable, List, Set
@@ -196,6 +197,8 @@ def _generate_output_paths(base_name: str, output_format: str) -> tuple:
 
 
 def run_pipeline(config: AppConfig, output_base_name: str, output_format: str, extra_keywords: List[str], send_email: bool = False) -> List[JobPosting]:
+    start_time = time.time()
+
     include_keywords = normalize_keywords(config.include_keywords + extra_keywords)
     exclude_keywords = normalize_keywords(config.exclude_keywords)
     job_titles = normalize_keywords(config.job_titles)
@@ -276,6 +279,10 @@ def run_pipeline(config: AppConfig, output_base_name: str, output_format: str, e
     # Send email report if requested
     if send_email:
         send_email_report(unfiltered_sorted, ordered, unfiltered_path, filtered_path)
+
+    # Print total run time
+    elapsed = time.time() - start_time
+    print(f"\n⏱️  Total run time: {elapsed:.1f} seconds ({elapsed/60:.1f} minutes)", file=sys.stderr)
 
     return ordered
 

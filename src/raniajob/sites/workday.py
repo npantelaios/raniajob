@@ -16,6 +16,7 @@ from urllib.parse import urljoin
 import requests
 
 from ..models import JobPosting
+from ..location_filters import filter_jobs_by_location, get_default_target_states
 
 
 # Workday URLs for major pharma companies (12 companies use Workday)
@@ -59,8 +60,14 @@ def parse_workday_site(
 
     try:
         jobs = _fetch_workday_jobs(workday_url, search_term, max_results, source, logger)
-        logger.info(f"Workday: Found {len(jobs)} jobs from {source}")
-        return jobs
+        logger.info(f"Workday: Found {len(jobs)} total jobs from {source}")
+
+        # Apply US location filtering (MA, NY, NJ, PA only)
+        target_states = get_default_target_states()
+        filtered_jobs = filter_jobs_by_location(jobs, target_states)
+        logger.info(f"Workday: After US location filter (MA/NY/NJ/PA): {len(filtered_jobs)}/{len(jobs)} jobs from {source}")
+
+        return filtered_jobs
     except Exception as e:
         logger.error(f"Workday: Error scraping {source}: {e}")
         return []
@@ -226,6 +233,10 @@ def _parse_workday_job(
     job_data: Dict[str, Any], base_url: str, source: str
 ) -> Optional[JobPosting]:
     """Parse a single Workday job posting from JSON."""
+    from datetime import timedelta
+    import re
+    from ..filters import extract_all_dates
+
     try:
         title = job_data.get("title", "").strip()
         if not title:
@@ -246,29 +257,39 @@ def _parse_workday_job(
         location = ", ".join(location_parts) if location_parts else None
 
         # Extract posted date
-        posted_at = None
+        date_posted = None
         posted_on = job_data.get("postedOn")
         if posted_on:
             try:
                 # Workday typically returns dates like "Posted 30+ Days Ago" or "Posted Today"
                 # or ISO format dates
                 if "Today" in posted_on:
-                    posted_at = datetime.now(timezone.utc)
+                    date_posted = datetime.now(timezone.utc)
                 elif "Yesterday" in posted_on:
-                    from datetime import timedelta
-                    posted_at = datetime.now(timezone.utc) - timedelta(days=1)
+                    date_posted = datetime.now(timezone.utc) - timedelta(days=1)
                 elif "Days Ago" in posted_on:
-                    import re
                     match = re.search(r"(\d+)", posted_on)
                     if match:
-                        from datetime import timedelta
                         days = int(match.group(1))
-                        posted_at = datetime.now(timezone.utc) - timedelta(days=days)
+                        date_posted = datetime.now(timezone.utc) - timedelta(days=days)
                 else:
                     # Try ISO format
-                    posted_at = datetime.fromisoformat(posted_on.replace("Z", "+00:00"))
+                    date_posted = datetime.fromisoformat(posted_on.replace("Z", "+00:00"))
             except Exception:
                 pass
+
+        # Extract expiration/closing date if available
+        expiration_date = None
+        end_date_fields = ["endDate", "closingDate", "expirationDate", "applicationDeadline", "postingEndDate"]
+        for field in end_date_fields:
+            if job_data.get(field):
+                try:
+                    field_value = job_data[field]
+                    if isinstance(field_value, str):
+                        expiration_date = datetime.fromisoformat(field_value.replace("Z", "+00:00"))
+                    break
+                except Exception:
+                    continue
 
         # Extract company name from source or use site name
         company = source.replace("_careers", "").replace("_", " ").title()
@@ -279,36 +300,49 @@ def _parse_workday_job(
             for bullet in job_data["bulletFields"]:
                 description_parts.append(str(bullet))
 
-        # Look for salary information in various Workday fields
+        # Look for salary information - ONLY if it has $ symbol
         salary_info = None
         salary_fields = ["salary", "compensation", "payRange", "salaryRange", "pay", "wage"]
         for field in salary_fields:
             if job_data.get(field):
-                salary_info = str(job_data[field])
-                break
-
-        # Also check bulletFields for salary-like text
-        if not salary_info and description_parts:
-            import re
-            for part in description_parts:
-                if re.search(r'\$[\d,]+|\d+k|\d+K|salary|compensation', str(part), re.IGNORECASE):
-                    salary_info = str(part)
+                field_value = str(job_data[field])
+                # Only use if it contains $ symbol
+                if '$' in field_value:
+                    salary_info = field_value
                     break
 
-        # Add salary to description if found
-        if salary_info:
+        # Also check bulletFields for salary with $ symbol only
+        if not salary_info and description_parts:
+            for part in description_parts:
+                # Only match if $ is directly before the number
+                match = re.search(r'\$[\d,]+(?:\.\d{2})?\s*[kK]?(?:\s*[-–]\s*\$[\d,]+(?:\.\d{2})?\s*[kK]?)?', str(part))
+                if match:
+                    salary_info = match.group(0)
+                    break
+
+        # Add salary to description if found (must have $)
+        if salary_info and '$' in salary_info:
             description_parts.append(f"Salary: {salary_info}")
 
         description = " | ".join(description_parts) if description_parts else ""
+
+        # Also extract dates from description if not found from fields
+        if not date_posted or not expiration_date:
+            desc_posted, desc_expiration = extract_all_dates(description)
+            if not date_posted:
+                date_posted = desc_posted
+            if not expiration_date:
+                expiration_date = desc_expiration
 
         return JobPosting(
             title=title,
             company=company,
             url=job_url,
             description=description,
-            posted_at=posted_at,
+            date_posted=date_posted,
             source=f"{source}_workday",
             location=location,
+            expiration_date=expiration_date,
         )
 
     except Exception as e:

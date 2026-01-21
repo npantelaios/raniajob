@@ -135,7 +135,7 @@ def _scrape_taleo(
                             company="Johnson & Johnson",
                             url=url,
                             description="",
-                            posted_at=datetime.now(timezone.utc),
+                            date_posted=datetime.now(timezone.utc),
                             source=f"{source}_taleo",
                             location=location,
                         ))
@@ -206,7 +206,7 @@ def _scrape_eightfold(
                             company="AstraZeneca",
                             url=url,
                             description="",
-                            posted_at=datetime.now(timezone.utc),
+                            date_posted=datetime.now(timezone.utc),
                             source=f"{source}_eightfold",
                             location=location,
                         ))
@@ -282,7 +282,7 @@ def _scrape_successfactors(
                             company="Novo Nordisk",
                             url=url,
                             description="",
-                            posted_at=datetime.now(timezone.utc),
+                            date_posted=datetime.now(timezone.utc),
                             source=f"{source}_successfactors",
                             location=location,
                         ))
@@ -353,7 +353,7 @@ def _scrape_yello(
                             company="Gilead Sciences",
                             url=url,
                             description="",
-                            posted_at=datetime.now(timezone.utc),
+                            date_posted=datetime.now(timezone.utc),
                             source=f"{source}_yello",
                             location=location,
                         ))
@@ -424,7 +424,7 @@ def _scrape_attrax(
                             company="AbbVie",
                             url=url,
                             description="",
-                            posted_at=datetime.now(timezone.utc),
+                            date_posted=datetime.now(timezone.utc),
                             source=f"{source}_attrax",
                             location=location,
                         ))
@@ -500,7 +500,7 @@ def _scrape_generic(
                             company=source.replace("_careers", "").replace("_", " ").title(),
                             url=url,
                             description="",
-                            posted_at=datetime.now(timezone.utc),
+                            date_posted=datetime.now(timezone.utc),
                             source=f"{source}_playwright",
                             location=location,
                         ))

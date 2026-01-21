@@ -1,12 +1,19 @@
 from __future__ import annotations
 
 import logging
+import re
 import sys
 import time
 from datetime import datetime, timezone
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Tuple
 
 from ..models import JobPosting
+
+# Regex patterns to extract JSON-LD date fields from Indeed HTML/description
+# Matches: "datePosted":"2026-01-16T22:02:28.162Z"
+_DATE_POSTED_JSON_RE = re.compile(r'"datePosted"\s*:\s*"([^"]+)"')
+# Matches: "validThrough":"2026-05-21T00:27:38.974Z"
+_VALID_THROUGH_JSON_RE = re.compile(r'"validThrough"\s*:\s*"([^"]+)"')
 from ..location_filters import (
     filter_jobs_by_location,
     get_default_target_states,
@@ -198,24 +205,105 @@ def parse_jobspy_sites(
         return []
 
 
+def _parse_iso_datetime(date_str: str) -> Optional[datetime]:
+    """Parse ISO 8601 datetime string to datetime object.
+
+    Handles formats like:
+    - 2026-01-16T22:02:28.162Z
+    - 2026-01-16T22:02:28Z
+    - 2026-01-16
+    """
+    if not date_str:
+        return None
+    try:
+        # Handle Z suffix (UTC)
+        date_str = date_str.replace("Z", "+00:00")
+        # Handle milliseconds - fromisoformat doesn't like more than 6 decimal places
+        if "." in date_str:
+            parts = date_str.split(".")
+            if len(parts) == 2:
+                # Truncate microseconds to 6 digits max
+                decimal_part = parts[1]
+                tz_part = ""
+                if "+" in decimal_part:
+                    decimal_part, tz_part = decimal_part.split("+")
+                    tz_part = "+" + tz_part
+                elif "-" in decimal_part and len(decimal_part) > 6:
+                    # Might be timezone like -05:00
+                    idx = decimal_part.rfind("-")
+                    if idx > 0:
+                        tz_part = decimal_part[idx:]
+                        decimal_part = decimal_part[:idx]
+                decimal_part = decimal_part[:6]
+                date_str = f"{parts[0]}.{decimal_part}{tz_part}"
+
+        parsed = datetime.fromisoformat(date_str)
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone.utc)
+        return parsed
+    except (ValueError, OverflowError):
+        return None
+
+
+def _extract_json_ld_dates(text: str) -> Tuple[Optional[datetime], Optional[datetime]]:
+    """Extract datePosted and validThrough from JSON-LD structured data in text.
+
+    Indeed.com embeds these in their HTML like:
+    - "datePosted":"2026-01-16T22:02:28.162Z"
+    - "validThrough":"2026-05-21T00:27:38.974Z"
+
+    Returns:
+        (date_posted, expiration_date) tuple
+    """
+    date_posted = None
+    expiration_date = None
+
+    # Extract datePosted
+    match = _DATE_POSTED_JSON_RE.search(text)
+    if match:
+        date_posted = _parse_iso_datetime(match.group(1))
+
+    # Extract validThrough (expiration date)
+    match = _VALID_THROUGH_JSON_RE.search(text)
+    if match:
+        expiration_date = _parse_iso_datetime(match.group(1))
+
+    return (date_posted, expiration_date)
+
+
 def _convert_dataframe_to_jobs(df: pd.DataFrame, source: str) -> List[JobPosting]:
     """Convert JobSpy DataFrame to JobPosting objects"""
+    from ..filters import extract_all_dates
+
     jobs = []
 
     for _, row in df.iterrows():
         try:
-            # Parse date_posted if available
-            posted_at: Optional[datetime] = None
+            # Parse date_posted if available from JobSpy
+            date_posted: Optional[datetime] = None
             if pd.notna(row.get("date_posted")):
                 try:
                     # JobSpy typically returns dates as pandas timestamps
                     if isinstance(row["date_posted"], pd.Timestamp):
-                        posted_at = row["date_posted"].to_pydatetime()
+                        date_posted = row["date_posted"].to_pydatetime()
                         # Ensure timezone aware
-                        if posted_at.tzinfo is None:
-                            posted_at = posted_at.replace(tzinfo=timezone.utc)
+                        if date_posted.tzinfo is None:
+                            date_posted = date_posted.replace(tzinfo=timezone.utc)
                 except Exception:
-                    posted_at = None
+                    date_posted = None
+
+            # Check for expiration_date field from JobSpy
+            expiration_date: Optional[datetime] = None
+            for exp_field in ["job_expiration_date", "expiration_date", "closing_date", "application_deadline", "valid_through"]:
+                if pd.notna(row.get(exp_field)):
+                    try:
+                        if isinstance(row[exp_field], pd.Timestamp):
+                            expiration_date = row[exp_field].to_pydatetime()
+                            if expiration_date.tzinfo is None:
+                                expiration_date = expiration_date.replace(tzinfo=timezone.utc)
+                            break
+                    except Exception:
+                        continue
 
             # Extract and clean fields
             title = str(row.get("title", "")).strip()
@@ -239,14 +327,41 @@ def _convert_dataframe_to_jobs(df: pd.DataFrame, source: str) -> List[JobPosting
             if pd.notna(row.get("benefits")):
                 full_description += f" Benefits: {row['benefits']}"
 
+            # For Indeed jobs, extract JSON-LD dates (datePosted, validThrough)
+            # These are embedded in the HTML/description as JSON-LD structured data
+            is_indeed = "indeed" in url.lower() or "indeed" in str(row.get("site", "")).lower()
+            if is_indeed or not date_posted or not expiration_date:
+                json_ld_posted, json_ld_expiration = _extract_json_ld_dates(full_description)
+                # JSON-LD dates take priority for Indeed since they're most accurate
+                if is_indeed:
+                    if json_ld_posted:
+                        date_posted = json_ld_posted
+                    if json_ld_expiration:
+                        expiration_date = json_ld_expiration
+                else:
+                    # For non-Indeed, only use if we don't have dates yet
+                    if not date_posted and json_ld_posted:
+                        date_posted = json_ld_posted
+                    if not expiration_date and json_ld_expiration:
+                        expiration_date = json_ld_expiration
+
+            # Fallback: scan description for other date formats
+            if not date_posted or not expiration_date:
+                desc_posted, desc_expiration = extract_all_dates(full_description)
+                if not date_posted:
+                    date_posted = desc_posted
+                if not expiration_date:
+                    expiration_date = desc_expiration
+
             job = JobPosting(
                 title=title,
                 company=company,
                 url=url,
                 description=full_description,
-                posted_at=posted_at,
+                date_posted=date_posted,
                 source=f"{source}_jobspy",
                 location=location,
+                expiration_date=expiration_date,
             )
 
             jobs.append(job)

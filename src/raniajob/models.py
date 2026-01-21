@@ -11,8 +11,9 @@ class JobPosting:
     company: str
     url: str
     description: str
-    posted_at: Optional[datetime]
+    date_posted: Optional[datetime]
     source: str
     location: Optional[str] = None
     state: Optional[str] = None
     salary: Optional[str] = None
+    expiration_date: Optional[datetime] = None

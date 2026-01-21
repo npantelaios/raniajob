@@ -72,8 +72,8 @@ def test_workday_pfizer():
             print(f"   Company: {job.company}")
             print(f"   Location: {job.location or 'N/A'}")
             print(f"   URL: {job.url[:80]}...")
-            if job.posted_at:
-                print(f"   Posted: {job.posted_at.strftime('%Y-%m-%d')}")
+            if job.date_posted:
+                print(f"   Posted: {job.date_posted.strftime('%Y-%m-%d')}")
         return True
     else:
         print("\n❌ No jobs found. The Workday API may have changed or there's a connection issue.")

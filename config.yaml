@@ -1,5 +1,5 @@
 schedule:
-  days_back: 30  # Increased from 2 to 30 days
+  days_back: 9999  # No date limit - get ALL jobs regardless of age
   sleep_seconds: 1.0
 
 # Anti-bot detection settings
@@ -9,58 +9,14 @@ fetcher:
   use_cloudscraper: true      # Use cloudscraper for Cloudflare bypass
   timeout: 45                 # Increased request timeout (seconds)
 
-# Keywords matched against title + description - very permissive
-include_keywords:
-  - science
-  - scientist
-  - research
-  - researcher
-  - biology
-  - biotech
-  - biotechnology
-  - life sciences
-  - pharmaceutical
-  - pharma
-  - drug
-  - discovery
-  - development
-  - CRISPR
-  - gene
-  - genetic
-  - genomics
-  - molecular
-  - cellular
-  - biochemistry
-  - microbiology
-  - therapeutics
-  - clinical
-  - lab
-  - laboratory
-  - assay
-  - protein
-  - DNA
-  - RNA
-  - cell
-  - tissue
-  - medical
-  - health
-  - diagnostic
-  - vaccine
-  - antibody
-  - enzyme
-  - chemistry
-  - chemical
+# NO KEYWORD FILTERS - Only location filter (MA, NY, NJ, PA) is active
+# All jobs from target states will be included regardless of keywords
+include_keywords: []  # Empty = no keyword filtering
 
-# Keywords that exclude listings even if they match include_keywords - minimal exclusions
-exclude_keywords:
-  - "customer service"
-  - "sales representative"
-  - "administrative assistant"
-  - "receptionist"
-  - "janitor"
-  - "security guard"
+# NO EXCLUDE FILTERS - All jobs pass through
+exclude_keywords: []  # Empty = no exclusions
 
-# Job titles matched against the title only - leave empty for no filtering by title
+# NO JOB TITLE FILTERS
 job_titles: []
 
 sites:
@@ -125,84 +81,84 @@ sites:
     type: workday
     enabled: true
     workday_url: "https://pfizer.wd1.myworkdayjobs.com/PfizerCareers"
-    search_term: "scientist"
+    search_term: ""  # Empty = get ALL jobs, filter by location later
     max_results: 10000
 
   - name: amgen_careers
     type: workday
     enabled: true
     workday_url: "https://amgen.wd1.myworkdayjobs.com/Careers"
-    search_term: "scientist"
+    search_term: ""  # Empty = get ALL jobs, filter by location later
     max_results: 10000
 
   - name: regeneron_careers
     type: workday
     enabled: true
     workday_url: "https://regeneron.wd1.myworkdayjobs.com/Careers"
-    search_term: "scientist"
+    search_term: ""  # Empty = get ALL jobs, filter by location later
     max_results: 10000
 
   - name: novartis_careers
     type: workday
     enabled: true
     workday_url: "https://novartis.wd3.myworkdayjobs.com/Novartis_Careers"
-    search_term: "scientist"
+    search_term: ""  # Empty = get ALL jobs, filter by location later
     max_results: 10000
 
   - name: roche_careers
     type: workday
     enabled: true
     workday_url: "https://roche.wd3.myworkdayjobs.com/roche-ext"
-    search_term: "scientist"
+    search_term: ""  # Empty = get ALL jobs, filter by location later
     max_results: 10000
 
   - name: sanofi_careers
     type: workday
     enabled: true
     workday_url: "https://sanofi.wd3.myworkdayjobs.com/SanofiCareers"
-    search_term: "scientist"
+    search_term: ""  # Empty = get ALL jobs, filter by location later
     max_results: 10000
 
   - name: lilly_careers
     type: workday
     enabled: true
     workday_url: "https://lilly.wd5.myworkdayjobs.com/en-US/LLY"
-    search_term: "scientist"
+    search_term: ""  # Empty = get ALL jobs, filter by location later
     max_results: 10000
 
   - name: merck_careers
     type: workday
     enabled: true
     workday_url: "https://msd.wd5.myworkdayjobs.com/SearchJobs"
-    search_term: "scientist"
+    search_term: ""  # Empty = get ALL jobs, filter by location later
     max_results: 10000
 
   - name: thermofisher_careers
     type: workday
     enabled: true
     workday_url: "https://thermofisher.wd5.myworkdayjobs.com/ThermoFisherCareers"
-    search_term: "scientist"
+    search_term: ""  # Empty = get ALL jobs, filter by location later
     max_results: 10000
 
   - name: bms_careers
     type: workday
     enabled: true
     workday_url: "https://bristolmyerssquibb.wd5.myworkdayjobs.com/BMS"
-    search_term: "scientist"
+    search_term: ""  # Empty = get ALL jobs, filter by location later
     max_results: 10000
 
   - name: gsk_careers
     type: workday
     enabled: true
     workday_url: "https://gsk.wd5.myworkdayjobs.com/GSKCareers"
-    search_term: "scientist"
+    search_term: ""  # Empty = get ALL jobs, filter by location later
     max_results: 10000
 
   - name: vertex_careers
     type: workday
     enabled: true
     workday_url: "https://vrtx.wd5.myworkdayjobs.com/en-US/Vertex_Careers"
-    search_term: "scientist"
+    search_term: ""  # Empty = get ALL jobs, filter by location later
     max_results: 10000
 
   # ============================================================
@@ -216,7 +172,7 @@ sites:
     enabled: false  # Disabled: Taleo has heavy anti-bot, covered by JobSpy
     career_url: "https://jobs.jnj.com/en/jobs"
     ats_system: "taleo"
-    search_term: "scientist"
+    search_term: ""  # Empty = get ALL jobs, filter by location later
     max_results: 100
 
   - name: astrazeneca_careers
@@ -224,7 +180,7 @@ sites:
     enabled: false  # Disabled: Eightfold AI blocks scraping, covered by JobSpy
     career_url: "https://careers.astrazeneca.com/search-jobs"
     ats_system: "eightfold"
-    search_term: "scientist"
+    search_term: ""  # Empty = get ALL jobs, filter by location later
     max_results: 100
 
   - name: novonordisk_careers
@@ -232,7 +188,7 @@ sites:
     enabled: false  # Disabled: SuccessFactors timeouts, covered by JobSpy
     career_url: "https://www.novonordisk.com/careers/find-a-job.html"
     ats_system: "successfactors"
-    search_term: "scientist"
+    search_term: ""  # Empty = get ALL jobs, filter by location later
     max_results: 100
 
   - name: gilead_careers
@@ -240,7 +196,7 @@ sites:
     enabled: false  # Disabled: Yello blocks scraping, covered by JobSpy
     career_url: "https://gilead.yello.co/jobs"
     ats_system: "yello"
-    search_term: "scientist"
+    search_term: ""  # Empty = get ALL jobs, filter by location later
     max_results: 100
 
   - name: abbvie_careers
@@ -248,7 +204,7 @@ sites:
     enabled: false  # Disabled: Attrax timeouts, covered by JobSpy
     career_url: "https://careers.abbvie.com/en/search-jobs"
     ats_system: "attrax"
-    search_term: "scientist"
+    search_term: ""  # Empty = get ALL jobs, filter by location later
     max_results: 100
 
   # ============================================================

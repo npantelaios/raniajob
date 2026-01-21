@@ -13,7 +13,8 @@ def _as_dict(item: JobPosting) -> dict:
         "company": item.company,
         "url": item.url,
         "description": item.description,
-        "posted_at": item.posted_at.isoformat() if item.posted_at else "",
+        "date_posted": item.date_posted.isoformat() if item.date_posted else "",
+        "expiration_date": item.expiration_date.isoformat() if item.expiration_date else "",
         "source": item.source,
         "location": item.location or "",
         "state": item.state or "",
@@ -29,7 +30,7 @@ def write_json(path: str, items: Iterable[JobPosting]) -> None:
 
 def write_csv(path: str, items: Iterable[JobPosting]) -> None:
     rows: List[dict] = [_as_dict(item) for item in items]
-    fieldnames = ["title", "company", "url", "description", "posted_at", "source", "location", "state", "salary"]
+    fieldnames = ["title", "company", "url", "description", "date_posted", "expiration_date", "source", "location", "state", "salary"]
     with open(path, "w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()

@@ -16,10 +16,10 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 # Run the scraper
-python src/test1.py --config config.yaml --output jobs.json --format json
+python src/main.py --config config.yaml --output jobs.json --format json
 
 # Run with additional keywords
-python src/test1.py --config config.yaml --output jobs.json --format json --keyword "synthetic biology" --keyword "automation"
+python src/main.py --config config.yaml --output jobs.json --format json --keyword "synthetic biology" --keyword "automation"
 ```
 
 ### Testing
@@ -37,7 +37,7 @@ Currently no test framework is configured. When implementing tests, check for py
 7. **Storage** (`storage.py`): JSON or CSV output
 
 ### Key Files
-- **Entry Point**: `src/test1.py` → `raniajob/run.py:main()`
+- **Entry Point**: `src/main.py` → `raniajob/run.py:main()`
 - **Site Config**: Each site in `config.yaml` needs CSS selectors and `enabled` flag
 - **Parser Registry**: `sites/registry.py` maps site types to parser functions
 

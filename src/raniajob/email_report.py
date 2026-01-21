@@ -29,8 +29,10 @@ def _write_jobs_csv(jobs: List[JobPosting], output_path: str) -> str:
 
     with open(output_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
-        writer.writerow(["#", "Title", "Company", "URL", "Location", "State", "Salary"])
+        writer.writerow(["#", "Title", "Company", "URL", "Location", "State", "Salary", "Date Posted", "Expiration Date"])
         for idx, job in enumerate(jobs, 1):
+            date_posted_str = job.date_posted.strftime("%Y-%m-%d") if job.date_posted else "N/A"
+            expiration_str = job.expiration_date.strftime("%Y-%m-%d") if job.expiration_date else "N/A"
             writer.writerow(
                 [
                     idx,
@@ -40,6 +42,8 @@ def _write_jobs_csv(jobs: List[JobPosting], output_path: str) -> str:
                     job.location or "N/A",
                     job.state or "N/A",
                     job.salary or "N/A",
+                    date_posted_str,
+                    expiration_str,
                 ]
             )
     return output_path
@@ -80,21 +84,23 @@ def _write_jobs_pdf(jobs: List[JobPosting], output_path: str, title: str) -> str
     )
     elements.append(Spacer(1, 0.2*inch))
 
-    # Column widths: #, Title, Company, URL, Location, State, Salary
-    col_widths = [0.35*inch, 2.0*inch, 1.4*inch, 2.8*inch, 1.2*inch, 0.5*inch, 1.2*inch]
+    # Column widths: #, Title, Company, URL, Location, State, Salary, Date Posted, Expiration
+    col_widths = [0.3*inch, 1.7*inch, 1.2*inch, 2.3*inch, 1.0*inch, 0.4*inch, 0.9*inch, 0.7*inch, 0.7*inch]
 
     # Header row
-    table_data = [["#", "Title", "Company", "URL", "Location", "State", "Salary"]]
+    table_data = [["#", "Title", "Company", "URL", "Location", "State", "Salary", "Posted", "Expires"]]
 
     # Data rows with text truncation and wrapping
     for idx, job in enumerate(jobs, 1):
         # Truncate long fields
-        title_text = job.title[:60] + "..." if len(job.title) > 60 else job.title
-        company_text = job.company[:30] + "..." if len(job.company) > 30 else job.company
-        url_text = job.url[:55] + "..." if len(job.url) > 55 else job.url
-        location_text = (job.location or "N/A")[:25]
+        title_text = job.title[:50] + "..." if len(job.title) > 50 else job.title
+        company_text = job.company[:25] + "..." if len(job.company) > 25 else job.company
+        url_text = job.url[:45] + "..." if len(job.url) > 45 else job.url
+        location_text = (job.location or "N/A")[:20]
         state_text = job.state or "N/A"
-        salary_text = (job.salary or "N/A")[:20]
+        salary_text = (job.salary or "N/A")[:15]
+        date_posted_text = job.date_posted.strftime("%m/%d") if job.date_posted else "N/A"
+        expiration_text = job.expiration_date.strftime("%m/%d") if job.expiration_date else "N/A"
 
         table_data.append([
             str(idx),
@@ -104,6 +110,8 @@ def _write_jobs_pdf(jobs: List[JobPosting], output_path: str, title: str) -> str
             Paragraph(location_text, cell_style),
             state_text,
             Paragraph(salary_text, cell_style),
+            date_posted_text,
+            expiration_text,
         ])
 
     table = Table(table_data, colWidths=col_widths, repeatRows=1)

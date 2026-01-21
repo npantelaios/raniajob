@@ -66,9 +66,9 @@ def _apply_filters(
         filter_stats['total_input'] += 1
 
         # Date filtering
-        if not filter_by_date(item.posted_at, days_back, now=now):
+        if not filter_by_date(item.date_posted, days_back, now=now):
             filter_stats['date_filtered'] += 1
-            print(f"DEBUG: Date filtered out: {item.title} (posted: {item.posted_at})", file=sys.stderr)
+            print(f"DEBUG: Date filtered out: {item.title} (posted: {item.date_posted})", file=sys.stderr)
             continue
 
         # Job title filtering (only if job_titles is not empty)
@@ -114,7 +114,7 @@ def _apply_filters(
 
 
 def _sort_items(items: Iterable[JobPosting]) -> List[JobPosting]:
-    return sorted(items, key=lambda item: item.posted_at or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
+    return sorted(items, key=lambda item: item.date_posted or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
 
 
 def _enrich_jobs(items: Iterable[JobPosting]) -> List[JobPosting]:
@@ -129,11 +129,12 @@ def _enrich_jobs(items: Iterable[JobPosting]) -> List[JobPosting]:
                 company=item.company,
                 url=item.url,
                 description=item.description,
-                posted_at=item.posted_at,
+                date_posted=item.date_posted,
                 source=item.source,
                 location=item.location,
                 state=state,
                 salary=salary,
+                expiration_date=item.expiration_date,
             )
         )
     return enriched
@@ -233,9 +234,10 @@ def run_pipeline(config: AppConfig, output_base_name: str, output_format: str, e
                         company=item.company,
                         url=item.url,
                         description=detail_description,
-                        posted_at=item.posted_at,
+                        date_posted=item.date_posted,
                         source=item.source,
                         location=item.location,
+                        expiration_date=item.expiration_date,
                     )
                 )
             parsed_items = enriched_items

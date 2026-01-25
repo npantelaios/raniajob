@@ -4,7 +4,7 @@ import logging
 import re
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from typing import List, Optional, Dict, Any, Tuple
 
 from ..models import JobPosting
@@ -33,13 +33,23 @@ except ImportError as exc:
 
 
 def parse_jobspy_sites(
-    pages: List[str], site_config, base_url: str, source: str
+    pages: List[str], site_config, base_url: str, source: str, fetcher=None
 ) -> List[JobPosting]:
     """
     JobSpy parser that uses the JobSpy library to scrape job sites directly.
     This bypasses the normal HTML parsing and uses JobSpy's API instead.
 
     The 'pages' parameter is ignored for JobSpy - we use the site config directly.
+
+    Args:
+        pages: Ignored for JobSpy
+        site_config: Site configuration
+        base_url: Base URL (ignored for JobSpy)
+        source: Source name for job postings
+        fetcher: Optional Fetcher instance for HTML fetching to extract dates
+
+    Returns:
+        List of JobPosting objects
     """
     if scrape_jobs is None:
         print(
@@ -51,6 +61,12 @@ def parse_jobspy_sites(
     # Set up logging for detailed debugging
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
+
+    # Create fetcher if not provided (for HTML fetching to extract dates)
+    if fetcher is None:
+        from ..fetcher import Fetcher
+        fetcher = Fetcher()
+        logger.info("Created Fetcher instance for HTML date extraction")
 
     try:
         # Extract JobSpy configuration from site_config with validation
@@ -133,8 +149,8 @@ def parse_jobspy_sites(
                                     f"Found {len(jobs_df)} jobs for '{search_term}' in '{location}'"
                                 )
 
-                            # Convert DataFrame to JobPosting objects
-                            jobs = _convert_dataframe_to_jobs(jobs_df, source)
+                            # Convert DataFrame to JobPosting objects (with fetcher for HTML date extraction)
+                            jobs = _convert_dataframe_to_jobs(jobs_df, source, fetcher)
                             all_jobs.extend(jobs)
                             search_stats["successful_searches"] += 1
                             search_stats["total_jobs_found"] += len(jobs)
@@ -271,24 +287,70 @@ def _extract_json_ld_dates(text: str) -> Tuple[Optional[datetime], Optional[date
     return (date_posted, expiration_date)
 
 
-def _convert_dataframe_to_jobs(df: pd.DataFrame, source: str) -> List[JobPosting]:
-    """Convert JobSpy DataFrame to JobPosting objects"""
+def _validate_date_sanity(dt: Optional[datetime], max_age_days: int = 365) -> Optional[datetime]:
+    """Validate date is not too old or too far in future.
+
+    Args:
+        dt: Date to validate
+        max_age_days: Maximum age in days (default 365)
+
+    Returns:
+        Validated datetime or None if invalid
+    """
+    if not dt:
+        return None
+
+    now = datetime.now(timezone.utc)
+
+    # Reject dates older than max_age_days
+    if dt < now - timedelta(days=max_age_days):
+        logging.getLogger(__name__).warning(
+            f"Rejecting date {dt.date()} - older than {max_age_days} days"
+        )
+        return None
+
+    # Reject dates more than 30 days in future
+    if dt > now + timedelta(days=30):
+        logging.getLogger(__name__).warning(
+            f"Rejecting date {dt.date()} - more than 30 days in future"
+        )
+        return None
+
+    return dt
+
+
+def _convert_dataframe_to_jobs(df: pd.DataFrame, source: str, fetcher=None) -> List[JobPosting]:
+    """Convert JobSpy DataFrame to JobPosting objects.
+
+    Args:
+        df: JobSpy DataFrame with job data
+        source: Source name for job postings
+        fetcher: Optional Fetcher instance for HTML fetching
+
+    Returns:
+        List of JobPosting objects
+    """
     from ..filters import extract_all_dates
 
     jobs = []
+    html_fetch_count = 0
+    MAX_HTML_FETCHES = 50  # Limit per batch to avoid anti-bot triggers
+    logger = logging.getLogger(__name__)
 
     for _, row in df.iterrows():
         try:
-            # Parse date_posted if available from JobSpy
+            # Tier 1: Parse date_posted if available from JobSpy DataFrame
             date_posted: Optional[datetime] = None
             if pd.notna(row.get("date_posted")):
                 try:
                     # JobSpy typically returns dates as pandas timestamps
                     if isinstance(row["date_posted"], pd.Timestamp):
-                        date_posted = row["date_posted"].to_pydatetime()
+                        dt = row["date_posted"].to_pydatetime()
                         # Ensure timezone aware
-                        if date_posted.tzinfo is None:
-                            date_posted = date_posted.replace(tzinfo=timezone.utc)
+                        if dt.tzinfo is None:
+                            dt = dt.replace(tzinfo=timezone.utc)
+                        # Validate date sanity
+                        date_posted = _validate_date_sanity(dt)
                 except Exception:
                     date_posted = None
 
@@ -298,10 +360,13 @@ def _convert_dataframe_to_jobs(df: pd.DataFrame, source: str) -> List[JobPosting
                 if pd.notna(row.get(exp_field)):
                     try:
                         if isinstance(row[exp_field], pd.Timestamp):
-                            expiration_date = row[exp_field].to_pydatetime()
-                            if expiration_date.tzinfo is None:
-                                expiration_date = expiration_date.replace(tzinfo=timezone.utc)
-                            break
+                            dt = row[exp_field].to_pydatetime()
+                            if dt.tzinfo is None:
+                                dt = dt.replace(tzinfo=timezone.utc)
+                            # Validate date sanity
+                            expiration_date = _validate_date_sanity(dt)
+                            if expiration_date:
+                                break
                     except Exception:
                         continue
 
@@ -320,6 +385,27 @@ def _convert_dataframe_to_jobs(df: pd.DataFrame, source: str) -> List[JobPosting
             if not title or not company or not url:
                 continue
 
+            # Tier 2: Fetch Indeed HTML to extract JSON-LD datePosted
+            # Only if date_posted is still missing and we have a fetcher
+            if not date_posted and 'indeed.com' in url.lower() and fetcher:
+                if html_fetch_count < MAX_HTML_FETCHES:
+                    try:
+                        logger.info(f"Fetching Indeed HTML for date extraction: {url}")
+                        html_content = fetcher.get(url)
+                        if html_content:
+                            json_ld_posted, json_ld_expiration = _extract_json_ld_dates(html_content)
+                            if json_ld_posted:
+                                date_posted = _validate_date_sanity(json_ld_posted)
+                                logger.info(f"Extracted date_posted from Indeed HTML: {date_posted}")
+                            if not expiration_date and json_ld_expiration:
+                                expiration_date = _validate_date_sanity(json_ld_expiration)
+                                logger.info(f"Extracted expiration_date from Indeed HTML: {expiration_date}")
+                        html_fetch_count += 1
+                    except Exception as e:
+                        logger.warning(f"Failed to fetch HTML for {url}: {e}")
+                else:
+                    logger.info(f"Reached HTML fetch limit ({MAX_HTML_FETCHES}), skipping HTML fetch for remaining jobs")
+
             # Combine multiple description fields if available
             full_description = description
             if pd.notna(row.get("job_function")):
@@ -327,31 +413,24 @@ def _convert_dataframe_to_jobs(df: pd.DataFrame, source: str) -> List[JobPosting
             if pd.notna(row.get("benefits")):
                 full_description += f" Benefits: {row['benefits']}"
 
-            # For Indeed jobs, extract JSON-LD dates (datePosted, validThrough)
-            # These are embedded in the HTML/description as JSON-LD structured data
-            is_indeed = "indeed" in url.lower() or "indeed" in str(row.get("site", "")).lower()
-            if is_indeed or not date_posted or not expiration_date:
-                json_ld_posted, json_ld_expiration = _extract_json_ld_dates(full_description)
-                # JSON-LD dates take priority for Indeed since they're most accurate
-                if is_indeed:
-                    if json_ld_posted:
-                        date_posted = json_ld_posted
-                    if json_ld_expiration:
-                        expiration_date = json_ld_expiration
-                else:
-                    # For non-Indeed, only use if we don't have dates yet
-                    if not date_posted and json_ld_posted:
-                        date_posted = json_ld_posted
-                    if not expiration_date and json_ld_expiration:
-                        expiration_date = json_ld_expiration
-
-            # Fallback: scan description for other date formats
+            # Tier 3: Extract dates from description using extract_all_dates()
+            # Note: extract_all_dates now has built-in sanity checking
             if not date_posted or not expiration_date:
                 desc_posted, desc_expiration = extract_all_dates(full_description)
-                if not date_posted:
-                    date_posted = desc_posted
-                if not expiration_date:
-                    expiration_date = desc_expiration
+
+                # Use description extraction as fallback, with validation
+                if not date_posted and desc_posted:
+                    date_posted = _validate_date_sanity(desc_posted)
+                if not expiration_date and desc_expiration:
+                    expiration_date = _validate_date_sanity(desc_expiration)
+
+            # Tier 4: Try JSON-LD on Markdown as last resort (rarely works)
+            if not date_posted or not expiration_date:
+                json_ld_posted, json_ld_expiration = _extract_json_ld_dates(full_description)
+                if not date_posted and json_ld_posted:
+                    date_posted = _validate_date_sanity(json_ld_posted)
+                if not expiration_date and json_ld_expiration:
+                    expiration_date = _validate_date_sanity(json_ld_expiration)
 
             job = JobPosting(
                 title=title,

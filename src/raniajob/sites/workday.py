@@ -125,7 +125,7 @@ def _fetch_workday_jobs(
         max_retries = 3
         for attempt in range(max_retries):
             try:
-                resp = requests.post(api_url, json=payload, headers=headers, timeout=30)
+                resp = requests.post(api_url, json=payload, headers=headers, timeout=7)
 
                 # Handle 4XX errors gracefully
                 if 400 <= resp.status_code < 500:
@@ -174,7 +174,7 @@ def _fetch_workday_jobs(
             payload["limit"] = 20
 
             try:
-                resp = requests.post(api_url, json=payload, headers=headers, timeout=30)
+                resp = requests.post(api_url, json=payload, headers=headers, timeout=7)
 
                 # Handle 4XX errors during pagination
                 if 400 <= resp.status_code < 500:
@@ -229,6 +229,38 @@ def _fetch_workday_jobs(
         return []
 
 
+def _validate_date_sanity_workday(dt: Optional[datetime], max_age_days: int = 365) -> Optional[datetime]:
+    """Validate Workday date sanity.
+
+    Args:
+        dt: Date to validate
+        max_age_days: Maximum age in days (default 365)
+
+    Returns:
+        Validated datetime or None if invalid
+    """
+    if not dt:
+        return None
+
+    now = datetime.now(timezone.utc)
+
+    # Reject dates older than max_age_days
+    if dt < now - timedelta(days=max_age_days):
+        logging.getLogger(__name__).warning(
+            f"Rejecting Workday date {dt.date()} - older than {max_age_days} days"
+        )
+        return None
+
+    # Reject dates more than 30 days in future
+    if dt > now + timedelta(days=30):
+        logging.getLogger(__name__).warning(
+            f"Rejecting Workday date {dt.date()} - more than 30 days in future"
+        )
+        return None
+
+    return dt
+
+
 def _parse_workday_job(
     job_data: Dict[str, Any], base_url: str, source: str
 ) -> Optional[JobPosting]:
@@ -256,27 +288,41 @@ def _parse_workday_job(
 
         location = ", ".join(location_parts) if location_parts else None
 
-        # Extract posted date
+        # Extract posted date - check multiple possible field names
         date_posted = None
-        posted_on = job_data.get("postedOn")
-        if posted_on:
-            try:
-                # Workday typically returns dates like "Posted 30+ Days Ago" or "Posted Today"
-                # or ISO format dates
-                if "Today" in posted_on:
-                    date_posted = datetime.now(timezone.utc)
-                elif "Yesterday" in posted_on:
-                    date_posted = datetime.now(timezone.utc) - timedelta(days=1)
-                elif "Days Ago" in posted_on:
-                    match = re.search(r"(\d+)", posted_on)
-                    if match:
-                        days = int(match.group(1))
-                        date_posted = datetime.now(timezone.utc) - timedelta(days=days)
-                else:
-                    # Try ISO format
-                    date_posted = datetime.fromisoformat(posted_on.replace("Z", "+00:00"))
-            except Exception:
-                pass
+        posted_date_fields = [
+            "postedOn", "postedDate", "postingDate", "datePosted",
+            "publishedDate", "startDate", "createdDate", "openDate"
+        ]
+        for field in posted_date_fields:
+            field_value = job_data.get(field)
+            if field_value:
+                try:
+                    # Workday typically returns dates like "Posted 30+ Days Ago" or "Posted Today"
+                    # or ISO format dates
+                    field_str = str(field_value)
+                    dt = None
+                    if "Today" in field_str:
+                        dt = datetime.now(timezone.utc)
+                    elif "Yesterday" in field_str:
+                        dt = datetime.now(timezone.utc) - timedelta(days=1)
+                    elif "Days Ago" in field_str or "days ago" in field_str:
+                        # Handle "30+ Days Ago" format
+                        match = re.search(r"(\d+)\+?", field_str)
+                        if match:
+                            days = int(match.group(1))
+                            dt = datetime.now(timezone.utc) - timedelta(days=days)
+                    else:
+                        # Try ISO format
+                        dt = datetime.fromisoformat(field_str.replace("Z", "+00:00"))
+
+                    # Validate date sanity
+                    if dt:
+                        date_posted = _validate_date_sanity_workday(dt)
+                        if date_posted:
+                            break  # Found a valid date, stop checking other fields
+                except Exception:
+                    continue  # Try next field
 
         # Extract expiration/closing date if available
         expiration_date = None
@@ -285,20 +331,46 @@ def _parse_workday_job(
             if job_data.get(field):
                 try:
                     field_value = job_data[field]
+                    dt = None
                     if isinstance(field_value, str):
-                        expiration_date = datetime.fromisoformat(field_value.replace("Z", "+00:00"))
-                    break
+                        dt = datetime.fromisoformat(field_value.replace("Z", "+00:00"))
+
+                    # Validate date sanity
+                    if dt:
+                        expiration_date = _validate_date_sanity_workday(dt)
+                        if expiration_date:
+                            break
                 except Exception:
                     continue
 
         # Extract company name from source or use site name
         company = source.replace("_careers", "").replace("_", " ").title()
 
-        # Build description from available fields
+        # Build description from ALL available text fields
         description_parts = []
+
+        # Primary description fields
+        desc_fields = [
+            "jobDescription", "description", "jobPostingDescription",
+            "requisitionDescription", "summary", "jobSummary", "overview"
+        ]
+        for field in desc_fields:
+            if job_data.get(field):
+                description_parts.append(str(job_data[field]))
+
+        # Bullet fields (usually a summary)
         if job_data.get("bulletFields"):
             for bullet in job_data["bulletFields"]:
                 description_parts.append(str(bullet))
+
+        # Job category/type fields that might contain relevant keywords
+        category_fields = [
+            "jobCategory", "jobType", "jobFamily", "jobFamilyGroup",
+            "managementLevel", "workerSubType", "jobProfile", "primaryJobFamily"
+        ]
+        for field in category_fields:
+            if job_data.get(field):
+                description_parts.append(str(job_data[field]))
 
         # Look for salary information - ONLY if it has $ symbol
         salary_info = None
@@ -327,12 +399,14 @@ def _parse_workday_job(
         description = " | ".join(description_parts) if description_parts else ""
 
         # Also extract dates from description if not found from fields
+        # Note: extract_all_dates now has built-in sanity checking
         if not date_posted or not expiration_date:
             desc_posted, desc_expiration = extract_all_dates(description)
-            if not date_posted:
-                date_posted = desc_posted
-            if not expiration_date:
-                expiration_date = desc_expiration
+            # Validate dates from description extraction
+            if not date_posted and desc_posted:
+                date_posted = _validate_date_sanity_workday(desc_posted)
+            if not expiration_date and desc_expiration:
+                expiration_date = _validate_date_sanity_workday(desc_expiration)
 
         return JobPosting(
             title=title,

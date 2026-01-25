@@ -101,7 +101,7 @@ def _scrape_taleo(
         try:
             # Navigate to the careers page
             logger.info(f"Taleo: Navigating to {career_url}")
-            page.goto(career_url, wait_until="networkidle", timeout=60000)
+            page.goto(career_url, wait_until="networkidle", timeout=30000)
             time.sleep(3)  # Wait for dynamic content
 
             # Try to search for the term
@@ -129,12 +129,23 @@ def _scrape_taleo(
                     location_el = card.query_selector('[class*="location"]')
                     location = location_el.inner_text().strip() if location_el else None
 
+                    # Try to extract description/summary from the card
+                    desc_el = card.query_selector('[class*="description"], [class*="summary"], [class*="snippet"], p')
+                    description = desc_el.inner_text().strip() if desc_el else ""
+                    # If no description element, use the full card text (minus title)
+                    if not description:
+                        card_text = card.inner_text().strip()
+                        if title and card_text.startswith(title):
+                            description = card_text[len(title):].strip()
+                        else:
+                            description = card_text
+
                     if title and url:
                         jobs.append(JobPosting(
                             title=title,
                             company="Johnson & Johnson",
                             url=url,
-                            description="",
+                            description=description,
                             date_posted=datetime.now(timezone.utc),
                             source=f"{source}_taleo",
                             location=location,
@@ -172,8 +183,8 @@ def _scrape_eightfold(
 
         try:
             logger.info(f"Eightfold: Navigating to {career_url}")
-            page.goto(career_url, wait_until="networkidle", timeout=60000)
-            time.sleep(5)  # Eightfold sites are heavy on JS
+            page.goto(career_url, wait_until="networkidle", timeout=30000)
+            time.sleep(2)  # Eightfold sites are heavy on JS
 
             # Try to search
             search_input = page.query_selector('input[type="text"], input[placeholder*="Search"], input[aria-label*="Search"]')
@@ -200,12 +211,18 @@ def _scrape_eightfold(
                     location_el = card.query_selector('[class*="location"]')
                     location = location_el.inner_text().strip() if location_el else None
 
+                    # Extract description from card
+                    desc_el = card.query_selector('[class*="description"], [class*="summary"], [class*="snippet"], p')
+                    description = desc_el.inner_text().strip() if desc_el else ""
+                    if not description:
+                        description = card.inner_text().strip()
+
                     if title and url:
                         jobs.append(JobPosting(
                             title=title,
                             company="AstraZeneca",
                             url=url,
-                            description="",
+                            description=description,
                             date_posted=datetime.now(timezone.utc),
                             source=f"{source}_eightfold",
                             location=location,
@@ -243,8 +260,8 @@ def _scrape_successfactors(
 
         try:
             logger.info(f"SuccessFactors: Navigating to {career_url}")
-            page.goto(career_url, wait_until="networkidle", timeout=60000)
-            time.sleep(5)
+            page.goto(career_url, wait_until="networkidle", timeout=30000)
+            time.sleep(2)
 
             # SuccessFactors search
             search_input = page.query_selector('input[type="text"], input[id*="search"], input[name*="keyword"]')
@@ -276,12 +293,18 @@ def _scrape_successfactors(
                     location_el = card.query_selector('[class*="location"], td:nth-child(2)')
                     location = location_el.inner_text().strip() if location_el else None
 
+                    # Extract description from card
+                    desc_el = card.query_selector('[class*="description"], [class*="summary"], p')
+                    description = desc_el.inner_text().strip() if desc_el else ""
+                    if not description:
+                        description = card.inner_text().strip()
+
                     if title and url:
                         jobs.append(JobPosting(
                             title=title,
                             company="Novo Nordisk",
                             url=url,
-                            description="",
+                            description=description,
                             date_posted=datetime.now(timezone.utc),
                             source=f"{source}_successfactors",
                             location=location,
@@ -319,7 +342,7 @@ def _scrape_yello(
 
         try:
             logger.info(f"Yello: Navigating to {career_url}")
-            page.goto(career_url, wait_until="networkidle", timeout=60000)
+            page.goto(career_url, wait_until="networkidle", timeout=30000)
             time.sleep(3)
 
             # Search
@@ -347,12 +370,18 @@ def _scrape_yello(
                     location_el = card.query_selector('[class*="location"]')
                     location = location_el.inner_text().strip() if location_el else None
 
+                    # Extract description from card
+                    desc_el = card.query_selector('[class*="description"], [class*="summary"], p')
+                    description = desc_el.inner_text().strip() if desc_el else ""
+                    if not description:
+                        description = card.inner_text().strip()
+
                     if title and url:
                         jobs.append(JobPosting(
                             title=title,
                             company="Gilead Sciences",
                             url=url,
-                            description="",
+                            description=description,
                             date_posted=datetime.now(timezone.utc),
                             source=f"{source}_yello",
                             location=location,
@@ -390,8 +419,8 @@ def _scrape_attrax(
 
         try:
             logger.info(f"Attrax: Navigating to {career_url}")
-            page.goto(career_url, wait_until="networkidle", timeout=60000)
-            time.sleep(5)
+            page.goto(career_url, wait_until="networkidle", timeout=30000)
+            time.sleep(2)
 
             # Search
             search_input = page.query_selector('input[type="text"], input[id*="search"], input[name*="keyword"]')
@@ -418,12 +447,18 @@ def _scrape_attrax(
                     location_el = card.query_selector('[class*="location"]')
                     location = location_el.inner_text().strip() if location_el else None
 
+                    # Extract description from card
+                    desc_el = card.query_selector('[class*="description"], [class*="summary"], p')
+                    description = desc_el.inner_text().strip() if desc_el else ""
+                    if not description:
+                        description = card.inner_text().strip()
+
                     if title and url:
                         jobs.append(JobPosting(
                             title=title,
                             company="AbbVie",
                             url=url,
-                            description="",
+                            description=description,
                             date_posted=datetime.now(timezone.utc),
                             source=f"{source}_attrax",
                             location=location,
@@ -461,7 +496,7 @@ def _scrape_generic(
 
         try:
             logger.info(f"Generic: Navigating to {career_url}")
-            page.goto(career_url, wait_until="networkidle", timeout=60000)
+            page.goto(career_url, wait_until="networkidle", timeout=30000)
             time.sleep(3)
 
             # Try to find job listings with common selectors
@@ -494,12 +529,18 @@ def _scrape_generic(
                     location_el = card.query_selector('[class*="location"]')
                     location = location_el.inner_text().strip() if location_el else None
 
+                    # Extract description from card
+                    desc_el = card.query_selector('[class*="description"], [class*="summary"], p')
+                    description = desc_el.inner_text().strip() if desc_el else ""
+                    if not description:
+                        description = card.inner_text().strip()
+
                     if title and url:
                         jobs.append(JobPosting(
                             title=title,
                             company=source.replace("_careers", "").replace("_", " ").title(),
                             url=url,
-                            description="",
+                            description=description,
                             date_posted=datetime.now(timezone.utc),
                             source=f"{source}_playwright",
                             location=location,

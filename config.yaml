@@ -4,10 +4,10 @@ schedule:
 
 # Anti-bot detection settings
 fetcher:
-  sleep_seconds: 5.0          # Increased delay between requests (seconds)
+  sleep_seconds: 2.0          # Delay between requests (seconds)
   rotate_user_agents: true    # Rotate between different browser user-agents
   use_cloudscraper: true      # Use cloudscraper for Cloudflare bypass
-  timeout: 45                 # Increased request timeout (seconds)
+  timeout: 30                 # Request timeout (seconds) - skip if no response
 
 # NO KEYWORD FILTERS - Only location filter (MA, NY, NJ, PA) is active
 # All jobs from target states will be included regardless of keywords
@@ -16,8 +16,26 @@ include_keywords: []  # Empty = no keyword filtering
 # NO EXCLUDE FILTERS - All jobs pass through
 exclude_keywords: []  # Empty = no exclusions
 
-# NO JOB TITLE FILTERS
-job_titles: []
+# Job title filters - keeps jobs that have ANY of these keywords in title OR description
+# Matching is case-insensitive and partial (e.g., "scientist" matches "Senior Scientist")
+job_titles:
+  - "research scientist"
+  - "molecular biologist"
+  - "molecular biology"
+  - "functional genomics"
+  - "genomics scientist"
+  - "genomics"
+  - "discovery scientist"
+  - "project manager"
+  - "crispr scientist"
+  - "crispr"
+  - "genome editing"
+  - "therapeutics scientist"
+  - "microbiology researcher"
+  - "microbiologist"
+  - "microbiology"
+  - "biology scientist"
+  - "biologist"
 
 sites:
   # JobSpy-powered job search (Indeed only - ZipRecruiter not working)

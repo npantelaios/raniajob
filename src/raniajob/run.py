@@ -68,32 +68,30 @@ def _apply_filters(
         # Date filtering
         if not filter_by_date(item.date_posted, days_back, now=now):
             filter_stats['date_filtered'] += 1
-            print(f"DEBUG: Date filtered out: {item.title} (posted: {item.date_posted})", file=sys.stderr)
             continue
 
+        # Combined text for filtering (title + description)
+        combined_text = f"{item.title} {item.description}"
+
         # Job title filtering (only if job_titles is not empty)
-        if job_titles and not include_keyword_match(item.title, job_titles):
+        # Checks BOTH title AND description for any matching job title keyword
+        if job_titles and not include_keyword_match(combined_text, job_titles):
             filter_stats['job_title_filtered'] += 1
-            print(f"DEBUG: Job title filtered out: {item.title}", file=sys.stderr)
             continue
 
         # Include keyword filtering
-        combined_text = f"{item.title} {item.description}"
         if not include_keyword_match(combined_text, include_keywords):
             filter_stats['include_keyword_filtered'] += 1
-            print(f"DEBUG: Include keyword filtered out: {item.title} (no match in: {combined_text[:100]}...)", file=sys.stderr)
             continue
 
         # Exclude keyword filtering
         if not exclude_keyword_match(combined_text, exclude_keywords):
             filter_stats['exclude_keyword_filtered'] += 1
-            print(f"DEBUG: Exclude keyword filtered out: {item.title} (excluded term found)", file=sys.stderr)
             continue
 
         # Hourly job filtering - exclude jobs that pay per hour
         if is_hourly_job(combined_text):
             filter_stats['hourly_filtered'] += 1
-            print(f"DEBUG: Hourly job filtered out: {item.title}", file=sys.stderr)
             continue
 
         filter_stats['passed_all_filters'] += 1
@@ -219,7 +217,12 @@ def run_pipeline(config: AppConfig, output_base_name: str, output_format: str, e
             continue
         parser = get_parser(site.type)
         pages = _fetch_site(fetcher, site)
-        parsed_items = parser(pages, site, site.base_url or "", site.name)
+
+        # Pass fetcher to JobSpy parser for HTML date extraction
+        if site.type == "jobspy":
+            parsed_items = parser(pages, site, site.base_url or "", site.name, fetcher)
+        else:
+            parsed_items = parser(pages, site, site.base_url or "", site.name)
         if site.detail_page.enabled and site.detail_page.description_selector:
             enriched_items: List[JobPosting] = []
             for item in parsed_items:

@@ -72,7 +72,17 @@ class Fetcher:
             user_agent = random.choice(self._user_agents)
             self._session.headers.update({"User-Agent": user_agent})
 
-    def get(self, url: str) -> str:
+    def get(self, url: str, silent: bool = False, raise_on_error: bool = False) -> str:
+        """Fetch URL content.
+
+        Args:
+            url: URL to fetch
+            silent: If True, suppress error warnings (useful when errors are expected/handled)
+            raise_on_error: If True, raise exception instead of returning empty string
+
+        Returns:
+            HTML content or empty string on error (unless raise_on_error=True)
+        """
         try:
             # Rotate user agent if enabled
             self._rotate_headers()
@@ -81,7 +91,12 @@ class Fetcher:
             response.raise_for_status()
             return response.text
         except requests.RequestException as exc:
-            print(f"fetch warning: {url} -> {exc}", file=sys.stderr)
+            # Only print warning if not in silent mode
+            if not silent:
+                print(f"fetch warning: {url} -> {exc}", file=sys.stderr)
+            # Re-raise if requested, otherwise return empty string
+            if raise_on_error:
+                raise
             return ""
         finally:
             if self._sleep_seconds > 0:

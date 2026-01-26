@@ -334,7 +334,10 @@ def _convert_dataframe_to_jobs(df: pd.DataFrame, source: str, fetcher=None) -> L
 
     jobs = []
     html_fetch_count = 0
+    html_fetch_failures = 0
     MAX_HTML_FETCHES = 50  # Limit per batch to avoid anti-bot triggers
+    MAX_CONSECUTIVE_FAILURES = 5  # Stop trying after 5 consecutive 403/401 errors
+    html_fetch_disabled = False  # Flag to disable HTML fetching if Indeed is blocking
     logger = logging.getLogger(__name__)
 
     for _, row in df.iterrows():
@@ -387,24 +390,41 @@ def _convert_dataframe_to_jobs(df: pd.DataFrame, source: str, fetcher=None) -> L
 
             # Tier 2: Fetch Indeed HTML to extract JSON-LD datePosted
             # Only if date_posted is still missing and we have a fetcher
-            if not date_posted and 'indeed.com' in url.lower() and fetcher:
+            if not date_posted and 'indeed.com' in url.lower() and fetcher and not html_fetch_disabled:
                 if html_fetch_count < MAX_HTML_FETCHES:
                     try:
-                        logger.info(f"Fetching Indeed HTML for date extraction: {url}")
-                        html_content = fetcher.get(url)
+                        logger.debug(f"Attempting to fetch Indeed HTML for date extraction: {url}")
+                        # Use silent=True and raise_on_error=True to handle errors ourselves
+                        html_content = fetcher.get(url, silent=True, raise_on_error=True)
                         if html_content:
                             json_ld_posted, json_ld_expiration = _extract_json_ld_dates(html_content)
                             if json_ld_posted:
                                 date_posted = _validate_date_sanity(json_ld_posted)
-                                logger.info(f"Extracted date_posted from Indeed HTML: {date_posted}")
+                                logger.info(f"Successfully extracted date_posted from Indeed HTML: {date_posted}")
+                                html_fetch_failures = 0  # Reset failure count on success
                             if not expiration_date and json_ld_expiration:
                                 expiration_date = _validate_date_sanity(json_ld_expiration)
-                                logger.info(f"Extracted expiration_date from Indeed HTML: {expiration_date}")
                         html_fetch_count += 1
                     except Exception as e:
-                        logger.warning(f"Failed to fetch HTML for {url}: {e}")
-                else:
+                        html_fetch_count += 1  # Count this attempt
+                        # Check if this is an anti-bot error (403 Forbidden, 401 Unauthorized)
+                        error_str = str(e).lower()
+                        if '403' in error_str or '401' in error_str or 'forbidden' in error_str or 'unauthorized' in error_str:
+                            html_fetch_failures += 1
+                            if html_fetch_failures >= MAX_CONSECUTIVE_FAILURES:
+                                logger.warning(
+                                    f"Indeed is blocking HTML requests ({html_fetch_failures} consecutive failures). "
+                                    f"Disabling HTML fetching for remaining jobs. Falling back to description extraction."
+                                )
+                                html_fetch_disabled = True
+                            else:
+                                logger.debug(f"Indeed blocked request ({html_fetch_failures}/{MAX_CONSECUTIVE_FAILURES}): {e}")
+                        else:
+                            # Other errors (network issues, etc.)
+                            logger.debug(f"Failed to fetch HTML: {e}")
+                elif not html_fetch_disabled:
                     logger.info(f"Reached HTML fetch limit ({MAX_HTML_FETCHES}), skipping HTML fetch for remaining jobs")
+                    html_fetch_disabled = True
 
             # Combine multiple description fields if available
             full_description = description

@@ -105,6 +105,19 @@ def parse_jobspy_sites(
             "failed_searches": 0,
             "total_jobs_found": 0,
         }
+        # Accumulate date extraction statistics
+        cumulative_stats = {
+            'total_jobs': 0,
+            'indeed_jobs': 0,
+            'other_jobs': 0,
+            'indeed_with_date_posted': 0,
+            'indeed_with_expiration': 0,
+            'other_with_date_posted': 0,
+            'other_with_expiration': 0,
+            'html_fetch_attempted': 0,
+            'html_fetch_succeeded': 0,
+            'html_fetch_blocked': 0,
+        }
 
         # Search each combination of search terms and locations with comprehensive error handling
         for search_term in search_terms:
@@ -150,10 +163,14 @@ def parse_jobspy_sites(
                                 )
 
                             # Convert DataFrame to JobPosting objects (with fetcher for HTML date extraction)
-                            jobs = _convert_dataframe_to_jobs(jobs_df, source, fetcher)
+                            jobs, batch_stats = _convert_dataframe_to_jobs(jobs_df, source, fetcher)
                             all_jobs.extend(jobs)
                             search_stats["successful_searches"] += 1
                             search_stats["total_jobs_found"] += len(jobs)
+
+                            # Accumulate date extraction statistics
+                            for key in cumulative_stats:
+                                cumulative_stats[key] += batch_stats[key]
                             logger.info(
                                 f"JobSpy: Successfully found {len(jobs)} jobs for '{search_term}' in '{location}'"
                             )
@@ -190,6 +207,44 @@ def parse_jobspy_sites(
             f"  Total jobs found before filtering: {search_stats['total_jobs_found']}"
         )
         logger.info(f"  Unique jobs before location filtering: {len(all_jobs)}")
+
+        # Log date extraction statistics
+        logger.info("")
+        logger.info("=" * 60)
+        logger.info("Date Extraction Statistics:")
+        logger.info("=" * 60)
+
+        if cumulative_stats['indeed_jobs'] > 0:
+            indeed_date_pct = (cumulative_stats['indeed_with_date_posted'] / cumulative_stats['indeed_jobs']) * 100
+            indeed_exp_pct = (cumulative_stats['indeed_with_expiration'] / cumulative_stats['indeed_jobs']) * 100
+            logger.info(f"Indeed.com:")
+            logger.info(f"  date_posted:     {cumulative_stats['indeed_with_date_posted']}/{cumulative_stats['indeed_jobs']} ({indeed_date_pct:.1f}%)")
+            logger.info(f"  expiration_date: {cumulative_stats['indeed_with_expiration']}/{cumulative_stats['indeed_jobs']} ({indeed_exp_pct:.1f}%)")
+            if cumulative_stats['html_fetch_attempted'] > 0:
+                logger.info(f"  HTML fetch stats:")
+                logger.info(f"    - Attempted: {cumulative_stats['html_fetch_attempted']}")
+                logger.info(f"    - Succeeded: {cumulative_stats['html_fetch_succeeded']}")
+                logger.info(f"    - Blocked:   {cumulative_stats['html_fetch_blocked']}")
+            logger.info("")
+
+        if cumulative_stats['other_jobs'] > 0:
+            other_date_pct = (cumulative_stats['other_with_date_posted'] / cumulative_stats['other_jobs']) * 100
+            other_exp_pct = (cumulative_stats['other_with_expiration'] / cumulative_stats['other_jobs']) * 100
+            logger.info(f"Other sources:")
+            logger.info(f"  date_posted:     {cumulative_stats['other_with_date_posted']}/{cumulative_stats['other_jobs']} ({other_date_pct:.1f}%)")
+            logger.info(f"  expiration_date: {cumulative_stats['other_with_expiration']}/{cumulative_stats['other_jobs']} ({other_exp_pct:.1f}%)")
+            logger.info("")
+
+        if cumulative_stats['total_jobs'] > 0:
+            total_date_posted = cumulative_stats['indeed_with_date_posted'] + cumulative_stats['other_with_date_posted']
+            total_expiration = cumulative_stats['indeed_with_expiration'] + cumulative_stats['other_with_expiration']
+            total_date_pct = (total_date_posted / cumulative_stats['total_jobs']) * 100
+            total_exp_pct = (total_expiration / cumulative_stats['total_jobs']) * 100
+            logger.info(f"TOTAL:")
+            logger.info(f"  date_posted:     {total_date_posted}/{cumulative_stats['total_jobs']} ({total_date_pct:.1f}%)")
+            logger.info(f"  expiration_date: {total_expiration}/{cumulative_stats['total_jobs']} ({total_exp_pct:.1f}%)")
+        logger.info("=" * 60)
+        logger.info("")
 
         # Apply location filtering to ensure only NY, NJ, PA, MA jobs
         filtered_jobs = filter_jobs_by_location(all_jobs, target_states)
@@ -319,7 +374,7 @@ def _validate_date_sanity(dt: Optional[datetime], max_age_days: int = 365) -> Op
     return dt
 
 
-def _convert_dataframe_to_jobs(df: pd.DataFrame, source: str, fetcher=None) -> List[JobPosting]:
+def _convert_dataframe_to_jobs(df: pd.DataFrame, source: str, fetcher=None) -> Tuple[List[JobPosting], Dict[str, Any]]:
     """Convert JobSpy DataFrame to JobPosting objects.
 
     Args:
@@ -328,7 +383,7 @@ def _convert_dataframe_to_jobs(df: pd.DataFrame, source: str, fetcher=None) -> L
         fetcher: Optional Fetcher instance for HTML fetching
 
     Returns:
-        List of JobPosting objects
+        Tuple of (List of JobPosting objects, statistics dict)
     """
     from ..filters import extract_all_dates
 
@@ -339,6 +394,20 @@ def _convert_dataframe_to_jobs(df: pd.DataFrame, source: str, fetcher=None) -> L
     MAX_CONSECUTIVE_FAILURES = 5  # Stop trying after 5 consecutive 403/401 errors
     html_fetch_disabled = False  # Flag to disable HTML fetching if Indeed is blocking
     logger = logging.getLogger(__name__)
+
+    # Statistics tracking
+    stats = {
+        'total_jobs': 0,
+        'indeed_jobs': 0,
+        'other_jobs': 0,
+        'indeed_with_date_posted': 0,
+        'indeed_with_expiration': 0,
+        'other_with_date_posted': 0,
+        'other_with_expiration': 0,
+        'html_fetch_attempted': 0,
+        'html_fetch_succeeded': 0,
+        'html_fetch_blocked': 0,
+    }
 
     for _, row in df.iterrows():
         try:
@@ -390,8 +459,10 @@ def _convert_dataframe_to_jobs(df: pd.DataFrame, source: str, fetcher=None) -> L
 
             # Tier 2: Fetch Indeed HTML to extract JSON-LD datePosted
             # Only if date_posted is still missing and we have a fetcher
+            html_fetch_success = False
             if not date_posted and 'indeed.com' in url.lower() and fetcher and not html_fetch_disabled:
                 if html_fetch_count < MAX_HTML_FETCHES:
+                    stats['html_fetch_attempted'] += 1
                     try:
                         logger.debug(f"Attempting to fetch Indeed HTML for date extraction: {url}")
                         # Use silent=True and raise_on_error=True to handle errors ourselves
@@ -402,8 +473,11 @@ def _convert_dataframe_to_jobs(df: pd.DataFrame, source: str, fetcher=None) -> L
                                 date_posted = _validate_date_sanity(json_ld_posted)
                                 logger.info(f"Successfully extracted date_posted from Indeed HTML: {date_posted}")
                                 html_fetch_failures = 0  # Reset failure count on success
+                                html_fetch_success = True
                             if not expiration_date and json_ld_expiration:
                                 expiration_date = _validate_date_sanity(json_ld_expiration)
+                        if html_fetch_success:
+                            stats['html_fetch_succeeded'] += 1
                         html_fetch_count += 1
                     except Exception as e:
                         html_fetch_count += 1  # Count this attempt
@@ -411,6 +485,7 @@ def _convert_dataframe_to_jobs(df: pd.DataFrame, source: str, fetcher=None) -> L
                         error_str = str(e).lower()
                         if '403' in error_str or '401' in error_str or 'forbidden' in error_str or 'unauthorized' in error_str:
                             html_fetch_failures += 1
+                            stats['html_fetch_blocked'] += 1
                             if html_fetch_failures >= MAX_CONSECUTIVE_FAILURES:
                                 logger.warning(
                                     f"Indeed is blocking HTML requests ({html_fetch_failures} consecutive failures). "
@@ -465,8 +540,25 @@ def _convert_dataframe_to_jobs(df: pd.DataFrame, source: str, fetcher=None) -> L
 
             jobs.append(job)
 
+            # Track statistics
+            stats['total_jobs'] += 1
+            is_indeed = 'indeed.com' in url.lower()
+
+            if is_indeed:
+                stats['indeed_jobs'] += 1
+                if date_posted:
+                    stats['indeed_with_date_posted'] += 1
+                if expiration_date:
+                    stats['indeed_with_expiration'] += 1
+            else:
+                stats['other_jobs'] += 1
+                if date_posted:
+                    stats['other_with_date_posted'] += 1
+                if expiration_date:
+                    stats['other_with_expiration'] += 1
+
         except Exception as e:
             print(f"JobSpy warning: Failed to parse job row: {e}", file=sys.stderr)
             continue
 
-    return jobs
+    return jobs, stats

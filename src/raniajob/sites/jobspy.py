@@ -342,12 +342,13 @@ def _extract_json_ld_dates(text: str) -> Tuple[Optional[datetime], Optional[date
     return (date_posted, expiration_date)
 
 
-def _validate_date_sanity(dt: Optional[datetime], max_age_days: int = 365) -> Optional[datetime]:
+def _validate_date_sanity(dt: Optional[datetime], max_age_days: int = 365, max_future_days: int = 30) -> Optional[datetime]:
     """Validate date is not too old or too far in future.
 
     Args:
         dt: Date to validate
         max_age_days: Maximum age in days (default 365)
+        max_future_days: Maximum days in future (default 30 for posted dates, use 365 for expiration dates)
 
     Returns:
         Validated datetime or None if invalid
@@ -364,10 +365,10 @@ def _validate_date_sanity(dt: Optional[datetime], max_age_days: int = 365) -> Op
         )
         return None
 
-    # Reject dates more than 30 days in future
-    if dt > now + timedelta(days=30):
+    # Reject dates too far in future
+    if dt > now + timedelta(days=max_future_days):
         logging.getLogger(__name__).warning(
-            f"Rejecting date {dt.date()} - more than 30 days in future"
+            f"Rejecting date {dt.date()} - more than {max_future_days} days in future"
         )
         return None
 
@@ -435,8 +436,8 @@ def _convert_dataframe_to_jobs(df: pd.DataFrame, source: str, fetcher=None) -> T
                             dt = row[exp_field].to_pydatetime()
                             if dt.tzinfo is None:
                                 dt = dt.replace(tzinfo=timezone.utc)
-                            # Validate date sanity
-                            expiration_date = _validate_date_sanity(dt)
+                            # Validate date sanity (allow up to 365 days in future for expiration)
+                            expiration_date = _validate_date_sanity(dt, max_future_days=365)
                             if expiration_date:
                                 break
                     except Exception:
@@ -475,7 +476,7 @@ def _convert_dataframe_to_jobs(df: pd.DataFrame, source: str, fetcher=None) -> T
                                 html_fetch_failures = 0  # Reset failure count on success
                                 html_fetch_success = True
                             if not expiration_date and json_ld_expiration:
-                                expiration_date = _validate_date_sanity(json_ld_expiration)
+                                expiration_date = _validate_date_sanity(json_ld_expiration, max_future_days=365)
                         if html_fetch_success:
                             stats['html_fetch_succeeded'] += 1
                         html_fetch_count += 1
@@ -517,7 +518,7 @@ def _convert_dataframe_to_jobs(df: pd.DataFrame, source: str, fetcher=None) -> T
                 if not date_posted and desc_posted:
                     date_posted = _validate_date_sanity(desc_posted)
                 if not expiration_date and desc_expiration:
-                    expiration_date = _validate_date_sanity(desc_expiration)
+                    expiration_date = _validate_date_sanity(desc_expiration, max_future_days=365)
 
             # Tier 4: Try JSON-LD on Markdown as last resort (rarely works)
             if not date_posted or not expiration_date:
@@ -525,7 +526,7 @@ def _convert_dataframe_to_jobs(df: pd.DataFrame, source: str, fetcher=None) -> T
                 if not date_posted and json_ld_posted:
                     date_posted = _validate_date_sanity(json_ld_posted)
                 if not expiration_date and json_ld_expiration:
-                    expiration_date = _validate_date_sanity(json_ld_expiration)
+                    expiration_date = _validate_date_sanity(json_ld_expiration, max_future_days=365)
 
             job = JobPosting(
                 title=title,

@@ -253,12 +253,13 @@ def _fetch_workday_jobs(
         return []
 
 
-def _validate_date_sanity_workday(dt: Optional[datetime], max_age_days: int = 365) -> Optional[datetime]:
+def _validate_date_sanity_workday(dt: Optional[datetime], max_age_days: int = 365, max_future_days: int = 30) -> Optional[datetime]:
     """Validate Workday date sanity.
 
     Args:
         dt: Date to validate
         max_age_days: Maximum age in days (default 365)
+        max_future_days: Maximum days in future (default 30 for posted dates, use 365 for expiration dates)
 
     Returns:
         Validated datetime or None if invalid
@@ -275,10 +276,10 @@ def _validate_date_sanity_workday(dt: Optional[datetime], max_age_days: int = 36
         )
         return None
 
-    # Reject dates more than 30 days in future
-    if dt > now + timedelta(days=30):
+    # Reject dates too far in future
+    if dt > now + timedelta(days=max_future_days):
         logging.getLogger(__name__).warning(
-            f"Rejecting Workday date {dt.date()} - more than 30 days in future"
+            f"Rejecting Workday date {dt.date()} - more than {max_future_days} days in future"
         )
         return None
 
@@ -361,7 +362,7 @@ def _parse_workday_job(
 
                     # Validate date sanity
                     if dt:
-                        expiration_date = _validate_date_sanity_workday(dt)
+                        expiration_date = _validate_date_sanity_workday(dt, max_future_days=365)
                         if expiration_date:
                             break
                 except Exception:
@@ -430,7 +431,7 @@ def _parse_workday_job(
             if not date_posted and desc_posted:
                 date_posted = _validate_date_sanity_workday(desc_posted)
             if not expiration_date and desc_expiration:
-                expiration_date = _validate_date_sanity_workday(desc_expiration)
+                expiration_date = _validate_date_sanity_workday(desc_expiration, max_future_days=365)
 
         return JobPosting(
             title=title,

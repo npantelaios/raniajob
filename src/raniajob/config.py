@@ -71,6 +71,7 @@ class AppConfig:
     include_keywords: List[str]
     exclude_keywords: List[str]
     job_titles: List[str]
+    title_must_contain: List[str]
     sites: List[SiteConfig]
 
 
@@ -159,6 +160,7 @@ def load_config(path: str) -> AppConfig:
     include_keywords = [str(item).strip() for item in include_keywords_raw if str(item).strip()]
     exclude_keywords = [str(item).strip() for item in raw.get("exclude_keywords", []) if str(item).strip()]
     job_titles = [str(item).strip() for item in raw.get("job_titles", []) if str(item).strip()]
+    title_must_contain = [str(item).strip() for item in raw.get("title_must_contain", []) if str(item).strip()]
     sites = [_load_site(item) for item in raw.get("sites", [])]
     if not sites:
         raise ValueError("Config must include at least one site")
@@ -169,5 +171,6 @@ def load_config(path: str) -> AppConfig:
         include_keywords=include_keywords,
         exclude_keywords=exclude_keywords,
         job_titles=job_titles,
+        title_must_contain=title_must_contain,
         sites=sites,
     )

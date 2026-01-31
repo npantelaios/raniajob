@@ -19,23 +19,22 @@ exclude_keywords: []  # Empty = no exclusions
 # Job title filters - keeps jobs that have ANY of these keywords in title OR description
 # Matching is case-insensitive and partial (e.g., "scientist" matches "Senior Scientist")
 job_titles:
-  - "research scientist"
-  - "molecular biologist"
-  - "molecular biology"
-  - "functional genomics"
-  - "genomics scientist"
-  - "genomics"
-  - "discovery scientist"
-  - "project manager"
-  - "crispr scientist"
-  - "crispr"
-  - "genome editing"
-  - "therapeutics scientist"
-  - "microbiology researcher"
-  - "microbiologist"
-  - "microbiology"
-  - "biology scientist"
+  - "biology"
   - "biologist"
+  - "biological"
+  - "microbiology"
+  - "microbiologist"
+  - "molecular"
+  - "genomics"
+  - "genome"
+  - "editing"
+  - "discovery"
+  - "crispr"
+  - "therapeutics"
+  - "bioengineer"
+  - "cellular"
+  - "functional"
+  - "dna"
 
 sites:
   # JobSpy-powered job search (Indeed only - ZipRecruiter not working)
@@ -43,10 +42,22 @@ sites:
     type: jobspy
     enabled: true
     search_terms:
-      - "biotech scientist"
-      - "molecular biology"
+      - "biology"
+      - "biologist"
+      - "biological"
+      - "microbiology"
+      - "microbiologist"
+      - "molecular"
       - "genomics"
-      - "life sciences"
+      - "genome"
+      - "editing"
+      - "discovery"
+      - "crispr"
+      - "therapeutics"
+      - "bioengineer"
+      - "cellular"
+      - "functional"
+      - "dna"
     locations:
       - "New York, NY"
       - "Boston, MA"
@@ -63,23 +74,22 @@ sites:
     type: jobspy
     enabled: true
     search_terms:
-      - "Eli Lilly scientist"
-      - "Johnson & Johnson scientist"
-      - "AbbVie scientist"
-      - "Roche scientist"
-      - "AstraZeneca scientist"
-      - "Novo Nordisk scientist"
-      - "Novartis scientist"
-      - "Merck scientist"
-      - "Thermo Fisher scientist"
-      - "Amgen scientist"
-      - "Gilead scientist"
-      - "Pfizer scientist"
-      - "Sanofi scientist"
-      - "Vertex scientist"
-      - "Bristol-Myers Squibb scientist"
-      - "GSK scientist"
-      - "Regeneron scientist"
+      - "biology"
+      - "biologist"
+      - "biological"
+      - "microbiology"
+      - "microbiologist"
+      - "molecular"
+      - "genomics"
+      - "genome"
+      - "editing"
+      - "discovery"
+      - "crispr"
+      - "therapeutics"
+      - "bioengineer"
+      - "cellular"
+      - "functional"
+      - "dna"
     locations:
       - "New York, NY"
       - "Boston, MA"
@@ -99,84 +109,276 @@ sites:
     type: workday
     enabled: true
     workday_url: "https://pfizer.wd1.myworkdayjobs.com/PfizerCareers"
-    search_term: ""  # Empty = get ALL jobs, filter by location later
+    search_terms:
+      - "biology"
+      - "biologist"
+      - "biological"
+      - "microbiology"
+      - "microbiologist"
+      - "molecular"
+      - "genomics"
+      - "genome"
+      - "editing"
+      - "discovery"
+      - "crispr"
+      - "therapeutics"
+      - "bioengineer"
+      - "cellular"
+      - "functional"
+      - "dna"
     max_results: 10000
 
   - name: amgen_careers
     type: workday
     enabled: true
     workday_url: "https://amgen.wd1.myworkdayjobs.com/Careers"
-    search_term: ""  # Empty = get ALL jobs, filter by location later
+    search_terms:
+      - "biology"
+      - "biologist"
+      - "biological"
+      - "microbiology"
+      - "microbiologist"
+      - "molecular"
+      - "genomics"
+      - "genome"
+      - "editing"
+      - "discovery"
+      - "crispr"
+      - "therapeutics"
+      - "bioengineer"
+      - "cellular"
+      - "functional"
+      - "dna"
     max_results: 10000
 
   - name: regeneron_careers
     type: workday
     enabled: true
     workday_url: "https://regeneron.wd1.myworkdayjobs.com/Careers"
-    search_term: ""  # Empty = get ALL jobs, filter by location later
+    search_terms:
+      - "biology"
+      - "biologist"
+      - "biological"
+      - "microbiology"
+      - "microbiologist"
+      - "molecular"
+      - "genomics"
+      - "genome"
+      - "editing"
+      - "discovery"
+      - "crispr"
+      - "therapeutics"
+      - "bioengineer"
+      - "cellular"
+      - "functional"
+      - "dna"
     max_results: 10000
 
   - name: novartis_careers
     type: workday
     enabled: true
     workday_url: "https://novartis.wd3.myworkdayjobs.com/Novartis_Careers"
-    search_term: ""  # Empty = get ALL jobs, filter by location later
+    search_terms:
+      - "biology"
+      - "biologist"
+      - "biological"
+      - "microbiology"
+      - "microbiologist"
+      - "molecular"
+      - "genomics"
+      - "genome"
+      - "editing"
+      - "discovery"
+      - "crispr"
+      - "therapeutics"
+      - "bioengineer"
+      - "cellular"
+      - "functional"
+      - "dna"
     max_results: 10000
 
   - name: roche_careers
     type: workday
     enabled: true
     workday_url: "https://roche.wd3.myworkdayjobs.com/roche-ext"
-    search_term: ""  # Empty = get ALL jobs, filter by location later
+    search_terms:
+      - "biology"
+      - "biologist"
+      - "biological"
+      - "microbiology"
+      - "microbiologist"
+      - "molecular"
+      - "genomics"
+      - "genome"
+      - "editing"
+      - "discovery"
+      - "crispr"
+      - "therapeutics"
+      - "bioengineer"
+      - "cellular"
+      - "functional"
+      - "dna"
     max_results: 10000
 
   - name: sanofi_careers
     type: workday
     enabled: true
     workday_url: "https://sanofi.wd3.myworkdayjobs.com/SanofiCareers"
-    search_term: ""  # Empty = get ALL jobs, filter by location later
+    search_terms:
+      - "biology"
+      - "biologist"
+      - "biological"
+      - "microbiology"
+      - "microbiologist"
+      - "molecular"
+      - "genomics"
+      - "genome"
+      - "editing"
+      - "discovery"
+      - "crispr"
+      - "therapeutics"
+      - "bioengineer"
+      - "cellular"
+      - "functional"
+      - "dna"
     max_results: 10000
 
   - name: lilly_careers
     type: workday
     enabled: true
     workday_url: "https://lilly.wd5.myworkdayjobs.com/en-US/LLY"
-    search_term: ""  # Empty = get ALL jobs, filter by location later
+    search_terms:
+      - "biology"
+      - "biologist"
+      - "biological"
+      - "microbiology"
+      - "microbiologist"
+      - "molecular"
+      - "genomics"
+      - "genome"
+      - "editing"
+      - "discovery"
+      - "crispr"
+      - "therapeutics"
+      - "bioengineer"
+      - "cellular"
+      - "functional"
+      - "dna"
     max_results: 10000
 
   - name: merck_careers
     type: workday
     enabled: true
     workday_url: "https://msd.wd5.myworkdayjobs.com/SearchJobs"
-    search_term: ""  # Empty = get ALL jobs, filter by location later
+    search_terms:
+      - "biology"
+      - "biologist"
+      - "biological"
+      - "microbiology"
+      - "microbiologist"
+      - "molecular"
+      - "genomics"
+      - "genome"
+      - "editing"
+      - "discovery"
+      - "crispr"
+      - "therapeutics"
+      - "bioengineer"
+      - "cellular"
+      - "functional"
+      - "dna"
     max_results: 10000
 
   - name: thermofisher_careers
     type: workday
     enabled: true
     workday_url: "https://thermofisher.wd5.myworkdayjobs.com/ThermoFisherCareers"
-    search_term: ""  # Empty = get ALL jobs, filter by location later
+    search_terms:
+      - "biology"
+      - "biologist"
+      - "biological"
+      - "microbiology"
+      - "microbiologist"
+      - "molecular"
+      - "genomics"
+      - "genome"
+      - "editing"
+      - "discovery"
+      - "crispr"
+      - "therapeutics"
+      - "bioengineer"
+      - "cellular"
+      - "functional"
+      - "dna"
     max_results: 10000
 
   - name: bms_careers
     type: workday
     enabled: true
     workday_url: "https://bristolmyerssquibb.wd5.myworkdayjobs.com/BMS"
-    search_term: ""  # Empty = get ALL jobs, filter by location later
+    search_terms:
+      - "biology"
+      - "biologist"
+      - "biological"
+      - "microbiology"
+      - "microbiologist"
+      - "molecular"
+      - "genomics"
+      - "genome"
+      - "editing"
+      - "discovery"
+      - "crispr"
+      - "therapeutics"
+      - "bioengineer"
+      - "cellular"
+      - "functional"
+      - "dna"
     max_results: 10000
 
   - name: gsk_careers
     type: workday
     enabled: true
     workday_url: "https://gsk.wd5.myworkdayjobs.com/GSKCareers"
-    search_term: ""  # Empty = get ALL jobs, filter by location later
+    search_terms:
+      - "biology"
+      - "biologist"
+      - "biological"
+      - "microbiology"
+      - "microbiologist"
+      - "molecular"
+      - "genomics"
+      - "genome"
+      - "editing"
+      - "discovery"
+      - "crispr"
+      - "therapeutics"
+      - "bioengineer"
+      - "cellular"
+      - "functional"
+      - "dna"
     max_results: 10000
 
   - name: vertex_careers
     type: workday
     enabled: true
     workday_url: "https://vrtx.wd5.myworkdayjobs.com/en-US/Vertex_Careers"
-    search_term: ""  # Empty = get ALL jobs, filter by location later
+    search_terms:
+      - "biology"
+      - "biologist"
+      - "biological"
+      - "microbiology"
+      - "microbiologist"
+      - "molecular"
+      - "genomics"
+      - "genome"
+      - "editing"
+      - "discovery"
+      - "crispr"
+      - "therapeutics"
+      - "bioengineer"
+      - "cellular"
+      - "functional"
+      - "dna"
     max_results: 10000
 
   # ============================================================

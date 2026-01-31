@@ -43,6 +43,7 @@ def parse_workday_site(
     Scrape Workday career portal using their JSON API.
 
     The 'pages' parameter is ignored - we use the site config's workday_url instead.
+    Supports both search_terms (list) and search_term (string) for backwards compatibility.
     """
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
@@ -53,19 +54,42 @@ def parse_workday_site(
         logger.error(f"No workday_url configured for site: {source}")
         return []
 
-    search_term = getattr(site_config, "search_term", None)
+    # Support both search_terms (list) and search_term (string) for backwards compatibility
+    search_terms = getattr(site_config, "search_terms", None)
+    if not search_terms:
+        # Fallback to single search_term
+        single_term = getattr(site_config, "search_term", None)
+        search_terms = [single_term] if single_term else [""]  # Empty string = all jobs
+
     max_results = getattr(site_config, "max_results", 10000)  # No limit by default
 
-    logger.info(f"Workday: Scraping {workday_url} (search: {search_term or 'all jobs'})")
+    logger.info(f"Workday: Scraping {workday_url} with {len(search_terms)} search terms")
 
     try:
-        jobs = _fetch_workday_jobs(workday_url, search_term, max_results, source, logger)
-        logger.info(f"Workday: Found {len(jobs)} total jobs from {source}")
+        all_jobs: List[JobPosting] = []
+        seen_urls: set = set()
+
+        # Iterate through each search term
+        for search_term in search_terms:
+            logger.info(f"Workday: Searching '{search_term}' on {source}")
+            jobs = _fetch_workday_jobs(workday_url, search_term, max_results, source, logger)
+
+            # Deduplicate by URL
+            for job in jobs:
+                if job.url not in seen_urls:
+                    seen_urls.add(job.url)
+                    all_jobs.append(job)
+
+            # Small delay between searches to be respectful
+            if len(search_terms) > 1:
+                time.sleep(1)
+
+        logger.info(f"Workday: Found {len(all_jobs)} unique jobs from {source}")
 
         # Apply US location filtering (MA, NY, NJ, PA only)
         target_states = get_default_target_states()
-        filtered_jobs = filter_jobs_by_location(jobs, target_states)
-        logger.info(f"Workday: After US location filter (MA/NY/NJ/PA): {len(filtered_jobs)}/{len(jobs)} jobs from {source}")
+        filtered_jobs = filter_jobs_by_location(all_jobs, target_states)
+        logger.info(f"Workday: After US location filter (MA/NY/NJ/PA): {len(filtered_jobs)}/{len(all_jobs)} jobs from {source}")
 
         return filtered_jobs
     except Exception as e:

@@ -1,0 +1,12 @@
+# PDF files
+*.pdf
+
+# CSV files
+*.csv
+
+# JSON output files
+*.json
+
+# Python bytecode/cache
+*.pyc
+__pycache__/

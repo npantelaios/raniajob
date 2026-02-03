@@ -47,6 +47,7 @@ def _apply_filters(
     exclude_keywords: List[str],
     job_titles: List[str],
     title_must_contain: List[str],
+    title_exclude: List[str],
     days_back: int,
 ) -> List[JobPosting]:
     now = datetime.now(timezone.utc)
@@ -58,6 +59,7 @@ def _apply_filters(
         'date_filtered': 0,
         'job_title_filtered': 0,
         'title_must_contain_filtered': 0,
+        'title_exclude_filtered': 0,
         'include_keyword_filtered': 0,
         'exclude_keyword_filtered': 0,
         'hourly_filtered': 0,
@@ -84,6 +86,11 @@ def _apply_filters(
         # Title must contain filtering - checks TITLE ONLY for required words
         if title_must_contain and not include_keyword_match(item.title, title_must_contain):
             filter_stats['title_must_contain_filtered'] += 1
+            continue
+
+        # Title exclude filtering - reject if title contains any excluded word
+        if title_exclude and not exclude_keyword_match(item.title, title_exclude):
+            filter_stats['title_exclude_filtered'] += 1
             continue
 
         # Include keyword filtering
@@ -212,6 +219,7 @@ def run_pipeline(config: AppConfig, output_base_name: str, output_format: str, e
     exclude_keywords = normalize_keywords(config.exclude_keywords)
     job_titles = normalize_keywords(config.job_titles)
     title_must_contain = normalize_keywords(config.title_must_contain)
+    title_exclude = normalize_keywords(config.title_exclude)
     fetcher = Fetcher(
         sleep_seconds=config.fetcher.sleep_seconds,
         timeout=config.fetcher.timeout,
@@ -276,7 +284,7 @@ def run_pipeline(config: AppConfig, output_base_name: str, output_format: str, e
     print(f"Location filtering: kept {len(location_filtered)}/{len(enriched)} jobs from target states (NY, NJ, PA, MA)", file=sys.stderr)
 
     # Apply other filters (keywords, dates, etc.)
-    filtered = _apply_filters(location_filtered, include_keywords, exclude_keywords, job_titles, title_must_contain, config.schedule.days_back)
+    filtered = _apply_filters(location_filtered, include_keywords, exclude_keywords, job_titles, title_must_contain, title_exclude, config.schedule.days_back)
     ordered = _sort_items(filtered)
 
     # Write filtered results

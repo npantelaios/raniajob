@@ -43,6 +43,11 @@ title_must_contain:
   - "Postdoctoral"
   - "Genome"
   - "Therapeutics"
+  - "Genetic"
+
+# Reject jobs if title contains ANY of these words (case-insensitive)
+title_exclude:
+  - "chemistry"
 
 sites:
   # JobSpy-powered job search (Indeed only - ZipRecruiter not working)

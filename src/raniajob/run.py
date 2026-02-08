@@ -1,15 +1,16 @@
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Iterable, List, Set
+from typing import Iterable, List, Optional, Set, Tuple
 
 from .config import AppConfig, load_config
 from .fetcher import Fetcher
-from .filters import exclude_keyword_match, filter_by_date, include_keyword_match, normalize_keywords, is_hourly_job, extract_state, extract_salary
+from .filters import exclude_keyword_match, filter_by_date, include_keyword_match, normalize_keywords, is_hourly_job, extract_state, extract_salary, count_keyword_matches
 from .location_filters import filter_jobs_by_location, get_default_target_states
 from .models import JobPosting
 from .parser import extract_detail_description
@@ -125,8 +126,83 @@ def _apply_filters(
     return filtered
 
 
+def _get_date_priority(date_posted: Optional[datetime], now: datetime) -> int:
+    """Return sort priority: 0=today, 1=yesterday, 2=2days ago, 3=N/A, 4+=older"""
+    if date_posted is None:
+        return 3  # N/A after 2 days ago, before older
+
+    today = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    post_date = date_posted.replace(hour=0, minute=0, second=0, microsecond=0)
+    days_diff = (today - post_date).days
+
+    if days_diff == 0:
+        return 0  # Today
+    elif days_diff == 1:
+        return 1  # Yesterday
+    elif days_diff == 2:
+        return 2  # 2 days ago
+    else:
+        return 3 + days_diff  # Older dates: 4, 5, 6...
+
+
+def _get_state_priority(state: Optional[str]) -> int:
+    """Return state priority: NY=0, NJ=1, PA=2, MA=3, CA=4, other=5"""
+    state_order = {'NY': 0, 'NJ': 1, 'PA': 2, 'MA': 3, 'CA': 4}
+    return state_order.get(state.upper(), 5) if state else 5
+
+
+def _parse_salary_value(salary: Optional[str]) -> Optional[float]:
+    """Parse salary string to get the first numeric value.
+
+    Examples:
+        "$50,000" -> 50000.0
+        "$120K" -> 120000.0
+        "$50,000 - $100,000" -> 50000.0 (uses first value)
+    """
+    if not salary:
+        return None
+
+    # Find first number with optional K suffix
+    match = re.search(r'\$?([\d,]+(?:\.\d+)?)\s*[kK]?', salary)
+    if not match:
+        return None
+
+    num_str = match.group(1).replace(',', '')
+    try:
+        value = float(num_str)
+        # Check if K suffix follows
+        if re.search(r'[\d,]+(?:\.\d+)?\s*[kK]', salary):
+            value *= 1000
+        return value
+    except ValueError:
+        return None
+
+
+def _get_salary_priority(salary: Optional[str]) -> Tuple[int, float]:
+    """Return salary priority: (bucket, -value for decreasing sort).
+
+    Bucket 0: salary <= $50,000 (sorted decreasing)
+    Bucket 1: N/A (no salary)
+    Bucket 2: salary > $50,000 (sorted decreasing)
+    """
+    value = _parse_salary_value(salary)
+
+    if value is None:
+        return (1, 0)  # N/A bucket
+    elif value <= 50000:
+        return (0, -value)  # Low salary bucket, negative for decreasing
+    else:
+        return (2, -value)  # High salary bucket, negative for decreasing
+
+
 def _sort_items(items: Iterable[JobPosting]) -> List[JobPosting]:
-    return sorted(items, key=lambda item: item.date_posted or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
+    """Sort by date priority, then state priority, then salary priority."""
+    now = datetime.now(timezone.utc)
+    return sorted(items, key=lambda item: (
+        _get_date_priority(item.date_posted, now),
+        _get_state_priority(item.state),
+        _get_salary_priority(item.salary)
+    ))
 
 
 def _enrich_jobs(items: Iterable[JobPosting]) -> List[JobPosting]:
@@ -192,7 +268,7 @@ def _print_stats_report(unfiltered: List[JobPosting], filtered: List[JobPosting]
 
 
 def _generate_output_paths(base_name: str, output_format: str) -> tuple:
-    """Generate timestamped output paths for filtered and unfiltered results."""
+    """Generate timestamped output paths for filtered, unfiltered, and super-filtered results."""
     # Get project root and create outputs directory
     project_root = Path(__file__).parent.parent.parent
     outputs_dir = project_root / "outputs"
@@ -205,11 +281,13 @@ def _generate_output_paths(base_name: str, output_format: str) -> tuple:
     ext = f".{output_format}"
     filtered_filename = f"{base_name}_{timestamp}{ext}"
     unfiltered_filename = f"NO_FILTERING_{base_name}_{timestamp}{ext}"
+    super_filtered_filename = f"SUPER_FILTERED_{base_name}_{timestamp}{ext}"
 
     filtered_path = outputs_dir / filtered_filename
     unfiltered_path = outputs_dir / unfiltered_filename
+    super_filtered_path = outputs_dir / super_filtered_filename
 
-    return str(filtered_path), str(unfiltered_path)
+    return str(filtered_path), str(unfiltered_path), str(super_filtered_path)
 
 
 def run_pipeline(config: AppConfig, output_base_name: str, output_format: str, extra_keywords: List[str], send_email: bool = False) -> List[JobPosting]:
@@ -268,7 +346,7 @@ def run_pipeline(config: AppConfig, output_base_name: str, output_format: str, e
     enriched = _enrich_jobs(deduped)
 
     # Generate output paths with timestamps
-    filtered_path, unfiltered_path = _generate_output_paths(output_base_name, output_format)
+    filtered_path, unfiltered_path, super_filtered_path = _generate_output_paths(output_base_name, output_format)
 
     # Write unfiltered results (all enriched items, sorted by date)
     unfiltered_sorted = _sort_items(enriched)
@@ -281,7 +359,7 @@ def run_pipeline(config: AppConfig, output_base_name: str, output_format: str, e
     # Apply location filtering to ensure only NY, NJ, PA, MA jobs
     target_states = get_default_target_states()
     location_filtered = filter_jobs_by_location(enriched, target_states)
-    print(f"Location filtering: kept {len(location_filtered)}/{len(enriched)} jobs from target states (NY, NJ, PA, MA)", file=sys.stderr)
+    print(f"Location filtering: kept {len(location_filtered)}/{len(enriched)} jobs from target states (NY, NJ, PA, MA, CA)", file=sys.stderr)
 
     # Apply other filters (keywords, dates, etc.)
     filtered = _apply_filters(location_filtered, include_keywords, exclude_keywords, job_titles, title_must_contain, title_exclude, config.schedule.days_back)
@@ -297,12 +375,25 @@ def run_pipeline(config: AppConfig, output_base_name: str, output_format: str, e
 
     print(f"Wrote {len(ordered)} filtered jobs to: {filtered_path}", file=sys.stderr)
 
+    # Create super-filtered output (jobs with 2+ keyword matches)
+    # Use job_titles for super-filtering (include_keywords is often empty)
+    super_filtered = [
+        item for item in ordered
+        if count_keyword_matches(f"{item.title} {item.description}", job_titles) >= 2
+    ]
+    super_ordered = _sort_items(super_filtered)
+    if output_format == "json":
+        write_json(super_filtered_path, super_ordered)
+    elif output_format == "csv":
+        write_csv(super_filtered_path, super_ordered)
+    print(f"Wrote {len(super_ordered)} super-filtered jobs (2+ keyword matches) to: {super_filtered_path}", file=sys.stderr)
+
     # Print final stats report
     _print_stats_report(unfiltered_sorted, ordered, unfiltered_path, filtered_path)
 
     # Send email report if requested
     if send_email:
-        send_email_report(unfiltered_sorted, ordered, unfiltered_path, filtered_path)
+        send_email_report(unfiltered_sorted, ordered, unfiltered_path, filtered_path, super_filtered=super_ordered)
 
     # Print total run time
     elapsed = time.time() - start_time

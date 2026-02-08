@@ -69,7 +69,9 @@ def extract_us_state_from_location(location: str) -> Optional[str]:
         'boston': 'MA', 'cambridge': 'MA', 'worcester': 'MA', 'springfield': 'MA',
         'new york': 'NY', 'nyc': 'NY', 'brooklyn': 'NY', 'manhattan': 'NY', 'albany': 'NY',
         'philadelphia': 'PA', 'pittsburgh': 'PA', 'harrisburg': 'PA',
-        'newark': 'NJ', 'jersey city': 'NJ', 'trenton': 'NJ', 'princeton': 'NJ'
+        'newark': 'NJ', 'jersey city': 'NJ', 'trenton': 'NJ', 'princeton': 'NJ',
+        'san francisco': 'CA', 'san diego': 'CA', 'los angeles': 'CA', 'south san francisco': 'CA',
+        'san jose': 'CA', 'palo alto': 'CA', 'berkeley': 'CA', 'oakland': 'CA', 'la jolla': 'CA'
     }
 
     for city, state in city_to_state.items():
@@ -153,8 +155,8 @@ def filter_jobs_by_location(jobs: List, target_states: Set[str]) -> List:
 
 
 def get_default_target_states() -> Set[str]:
-    """Get the default target states: NY, NJ, PA, MA"""
-    return {'NY', 'NJ', 'PA', 'MA'}
+    """Get the default target states: NY, NJ, PA, MA, CA"""
+    return {'NY', 'NJ', 'PA', 'MA', 'CA'}
 
 
 def get_target_state_locations() -> List[str]:
@@ -167,5 +169,9 @@ def get_target_state_locations() -> List[str]:
         "Cambridge, MA",
         "Pittsburgh, PA",
         "Jersey City, NJ",
-        "Albany, NY"
+        "Albany, NY",
+        "San Francisco, CA",
+        "San Diego, CA",
+        "Los Angeles, CA",
+        "South San Francisco, CA",
     ]

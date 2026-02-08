@@ -125,6 +125,14 @@ def include_keyword_match(text: str, keywords: Iterable[str]) -> bool:
     return any(keyword in haystack for keyword in keywords)
 
 
+def count_keyword_matches(text: str, keywords: Iterable[str]) -> int:
+    """Count how many keywords match in the text."""
+    if not keywords:
+        return 0
+    haystack = text.lower()
+    return sum(1 for keyword in keywords if keyword in haystack)
+
+
 def exclude_keyword_match(text: str, keywords: Iterable[str]) -> bool:
     if not keywords:
         return True

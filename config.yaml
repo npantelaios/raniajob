@@ -72,6 +72,9 @@ sites:
       - "Boston, MA"
       - "Philadelphia, PA"
       - "New Jersey"
+      - "San Francisco, CA"
+      - "San Diego, CA"
+      - "Los Angeles, CA"
     job_sites:
       - "indeed"
     results_wanted: 1000  # No limit - get all available
@@ -100,6 +103,9 @@ sites:
       - "Boston, MA"
       - "Philadelphia, PA"
       - "New Jersey"
+      - "San Francisco, CA"
+      - "San Diego, CA"
+      - "Los Angeles, CA"
     job_sites:
       - "indeed"
     results_wanted: 1000  # No limit - get all available

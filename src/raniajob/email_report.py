@@ -14,12 +14,6 @@ from email.mime.text import MIMEText
 from pathlib import Path
 from typing import List, Optional
 
-from reportlab.lib import colors
-from reportlab.lib.pagesizes import LETTER, landscape
-from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
-from reportlab.lib.units import inch
-from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
-
 from .models import JobPosting
 
 
@@ -49,108 +43,12 @@ def _write_jobs_csv(jobs: List[JobPosting], output_path: str) -> str:
     return output_path
 
 
-# PDF writing helper
-def _write_jobs_pdf(jobs: List[JobPosting], output_path: str, title: str) -> str:
-    """Write job postings to a PDF file and return the file path."""
-    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
-
-    # Use landscape orientation for better table fit
-    doc = SimpleDocTemplate(
-        output_path,
-        pagesize=landscape(LETTER),
-        leftMargin=0.5*inch,
-        rightMargin=0.5*inch,
-        topMargin=0.5*inch,
-        bottomMargin=0.5*inch
-    )
-    styles = getSampleStyleSheet()
-
-    # Create custom style for table cells
-    cell_style = ParagraphStyle(
-        'CellStyle',
-        parent=styles['Normal'],
-        fontSize=8,
-        leading=10,
-    )
-
-    elements = []
-
-    elements.append(Paragraph(title, styles["Title"]))
-    elements.append(
-        Paragraph(
-            f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Total: {len(jobs)} jobs",
-            styles["Normal"],
-        )
-    )
-    elements.append(Spacer(1, 0.2*inch))
-
-    # Column widths: #, Title, Company, URL, Location, State, Salary, Date Posted, Expiration
-    col_widths = [0.3*inch, 1.7*inch, 1.2*inch, 2.3*inch, 1.0*inch, 0.4*inch, 0.9*inch, 0.7*inch, 0.7*inch]
-
-    # Header row
-    table_data = [["#", "Title", "Company", "URL", "Location", "State", "Salary", "Posted", "Expires"]]
-
-    # Data rows with text truncation and wrapping
-    for idx, job in enumerate(jobs, 1):
-        # Truncate long fields
-        title_text = job.title[:50] + "..." if len(job.title) > 50 else job.title
-        company_text = job.company[:25] + "..." if len(job.company) > 25 else job.company
-        url_text = job.url[:45] + "..." if len(job.url) > 45 else job.url
-        location_text = (job.location or "N/A")[:20]
-        state_text = job.state or "N/A"
-        salary_text = (job.salary or "N/A")[:15]
-        date_posted_text = job.date_posted.strftime("%m/%d") if job.date_posted else "N/A"
-        expiration_text = job.expiration_date.strftime("%m/%d") if job.expiration_date else "N/A"
-
-        table_data.append([
-            str(idx),
-            Paragraph(title_text, cell_style),
-            Paragraph(company_text, cell_style),
-            Paragraph(url_text, cell_style),
-            Paragraph(location_text, cell_style),
-            state_text,
-            Paragraph(salary_text, cell_style),
-            date_posted_text,
-            expiration_text,
-        ])
-
-    table = Table(table_data, colWidths=col_widths, repeatRows=1)
-    table.setStyle(
-        TableStyle([
-            # Header styling
-            ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#3498db")),
-            ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
-            ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-            ("FONTSIZE", (0, 0), (-1, 0), 9),
-            ("ALIGN", (0, 0), (-1, 0), "CENTER"),
-            # Cell styling
-            ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
-            ("FONTSIZE", (0, 1), (-1, -1), 8),
-            ("ALIGN", (0, 1), (0, -1), "CENTER"),  # # column centered
-            ("VALIGN", (0, 0), (-1, -1), "TOP"),
-            # Grid
-            ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
-            # Alternating row colors
-            ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#f8f9fa")]),
-            # Padding
-            ("LEFTPADDING", (0, 0), (-1, -1), 4),
-            ("RIGHTPADDING", (0, 0), (-1, -1), 4),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
-            ("TOPPADDING", (0, 0), (-1, -1), 6),
-        ])
-    )
-
-    elements.append(table)
-    doc.build(elements)
-
-    return output_path
-
-
 def send_email_report(
     unfiltered: List[JobPosting],
     filtered: List[JobPosting],
     unfiltered_path: str,
     filtered_path: str,
+    super_filtered: Optional[List[JobPosting]] = None,
     recipient_emails: Optional[List[str]] = None,
     sender_email: Optional[str] = None,
     app_password: Optional[str] = None,
@@ -163,6 +61,7 @@ def send_email_report(
     - REPORT_RECIPIENTS: Comma-separated list of email addresses to send report to
 
     Args:
+        super_filtered: Optional list of super-filtered jobs (2+ keyword matches)
         recipient_emails: List of recipient email addresses (overrides env var)
     """
     # Get credentials from environment or arguments
@@ -198,38 +97,35 @@ def send_email_report(
 
     filtered_csv_path = output_dir / f"filtered_jobs_{date_str}.csv"
     unfiltered_csv_path = output_dir / f"unfiltered_jobs_{date_str}.csv"
-
-    filtered_pdf_path = output_dir / f"filtered_jobs_{date_str}.pdf"
-    unfiltered_pdf_path = output_dir / f"unfiltered_jobs_{date_str}.pdf"
+    super_filtered_csv_path = output_dir / f"super_filtered_jobs_{date_str}.csv"
 
     # Write CSV files
     _write_jobs_csv(filtered, str(filtered_csv_path))
     _write_jobs_csv(unfiltered, str(unfiltered_csv_path))
-
-    # Write PDF files
-    _write_jobs_pdf(filtered, str(filtered_pdf_path), "Filtered Job Results")
-    _write_jobs_pdf(unfiltered, str(unfiltered_pdf_path), "Unfiltered Job Results")
+    if super_filtered:
+        _write_jobs_csv(super_filtered, str(super_filtered_csv_path))
 
     try:
         # Create message with attachments
         msg = MIMEMultipart("mixed")
+        super_count = len(super_filtered) if super_filtered else 0
         msg["Subject"] = (
-            f"Job Report - {datetime.now().strftime('%Y-%m-%d')} - {len(filtered)} filtered / {len(unfiltered)} total"
+            f"Job Report - {datetime.now().strftime('%Y-%m-%d')} - {super_count} super / {len(filtered)} filtered / {len(unfiltered)} total"
         )
         msg["From"] = sender
         msg["To"] = ", ".join(recipients)
 
         # Simple text body
-        text_content = f"Job scraping report attached.\n\nFiltered: {len(filtered)} jobs\nUnfiltered: {len(unfiltered)} jobs"
+        text_content = f"Job scraping report attached.\n\nSuper-filtered (2+ keywords): {super_count} jobs\nFiltered: {len(filtered)} jobs\nUnfiltered: {len(unfiltered)} jobs"
         msg.attach(MIMEText(text_content, "plain"))
 
-        # Attach CSV and PDF files
-        for path in [
-            filtered_csv_path,
-            unfiltered_csv_path,
-            filtered_pdf_path,
-            unfiltered_pdf_path,
-        ]:
+        # Attach CSV files (super_filtered first)
+        attachments = []
+        if super_filtered:
+            attachments.append(super_filtered_csv_path)
+        attachments.extend([filtered_csv_path, unfiltered_csv_path])
+
+        for path in attachments:
             with open(path, "rb") as f:
                 part = MIMEBase("application", "octet-stream")
                 part.set_payload(f.read())
